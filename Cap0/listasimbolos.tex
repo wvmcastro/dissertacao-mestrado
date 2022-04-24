@@ -1,10 +1,13 @@
-\begin{longtable}{ll}
-$a$ & Distância\\
-$\textbf{a}$ & Vetor de distâncias\\
-$\textbf{e}_{j}$ & Vetor unitário de dimensão $n$ e com o $j$-ésimo componente igual a $1$ \\
-$\textbf{K}$ & Matriz de rigidez\\
-$m_1$ & Massa do cumpim\\
-$\delta_{k-k_f}$ & Delta de Kronecker no instante $k_f$\\
 
+\begin{longtable}{ll}
+$\bsubvec{x}{t}$ & Pose do robô no instante t \\
+$\bsubvec{x}{0:t}$ & Conjunto das poses do robô do instante 0 até t \\
+$\bsubvec{u}{t}$ & Entrada de controle no instante t\\
+$\bsubvec{u}{0:t}$ & Conjunto das entradas de controle to instante 0 até t\\
+$\bsubvec{z}{t}$ & Medida do sensor extrínseco no instante t \\
+$\bsubvec{z}{0:t}$ & Conjunto das medidas do sensor extrínseco do instante 0 até t \\
+$\bvec{m}$ & mapa do ambiente, constituído das coordenadas das \textit{landmarks} \\
+$\pr{\bsubvec{x}{t}, \bvec{m} \given \bsubvec{z}{1:t}, \bsubvec{u}{1:t}, \bsubvec{x}{0}}$ & Distribuição do problema online SLAM \\
+$\pr{\bsubvec{x}{0:t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, \bsubvec{x}{0}}$ & Distribuição do problema full SLAM
 \end{longtable}
 
