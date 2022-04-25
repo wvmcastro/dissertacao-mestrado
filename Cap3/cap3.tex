@@ -1,17 +1,20 @@
-\section{Controle combinado}
-Conforme vimos na seção \ref{ectq3} podemos controlar um sistema nao linear como  através da técnica do torque computado, usando um controlador PD dado por:
-\begin{equation} \label{ectq3}
-\tau'=\ddot{q}_d+K_v(\dot{q}_d-\dot{q})+K_p(q_d-q) \; ,
-\end{equation}
-sendo $q_{d}$, $\dot{q}_{d}$ e $\ddot{q}_{d}$ a posição desejada, a velocidade desejada e a aceleração desejada; $K_p$
-e $K_v$ são matrizes diagonais $n \times n$, sendo que cada elemento da diagonal é um ganho positivo e escalar.
+Neste capítulo serão descritas as alterações necessárias no clássico Filtro de Kalman Extendido (EKF) para que ele possa ser aplicado na resolução do problema de SLAM, resultando na técnica EKF-SLAM. Além disso, também serão abordadas técnicas decorrentes da EKF-SLAM como EIF-SLAM e SEIF-SLAM, sendo esta última a técnica de estimação utilizada neste trabalho.
 
-Aqui $M_{est}$ e $b_{est}$ são modelos estimados da matriz de inércia, $M$, e do vetor de torques não inerciais, $b$, do robô real,  respectivamente. A equação de malha fechada do sistema é:
-\begin{equation} \label{ectq4}
-\ddot{e}+K_v\dot{e}+K_pe=M_{est}^{-1}[(M-M_{est})\ddot{q}+(b-b_{est})] \; .
-\end{equation}
+\section{Filtro de Kalman Extendido}
+O Filtro de Kalman (KF)
+As equações do EKF clássico, para sistemas discretos, são as equações de \ref{eq:ekf-prediction} até \ref{eq:ekf-estimate-error-covariance}.
+\begin{align}
+  \predmean{t} &= \mb{g}(\mean{t-1}, \bsubvec{u}{t})
+  \label{eq:ekf-prediction}\\
+  \predcov{t} &= \bsubvec{G}{t}\cov{t-1}\bsubvecT{G}{t} + \bsubvec{R}{t}
+  \label{eq:ekf-prediction-error-covariance}\\
+  \bsubvec{K}{t} &=   \predcov{t}\bsubvecT{H}{t} (\bsubvec{H}{t}\predcov{t}\bsubvecT{H}{t} + \bsubvec{Q}{t})^{-1}
+  \label{eq:ekk-gain}\\
+  \mean{t} &= \predmean{t} + \bsubvec{K}{t}(\bsubvec{y}{t} - \mb{h}(\predmean{t}))
+  \label{eq:ekf-update}\\
+  \cov{t} &= (\bvec{I} - \bsubvec{K}{t}\bsubvec{H}{t})\,\predcov{t}\,(\bvec{I} - \bsubvec{K}{t}\bsubvec{H}{t})^T + \bsubvec{K}{t}\bsubvec{Q}{t}\bsubvecT{K}{t}
+  \label{eq:ekf-estimate-error-covariance}
+\end{align}
 
-Em um manipulador real, podem existir distúrbios externos tais como atrito, variação de torque dos atuadores, e perturbações em virtude  das cargas no robô. Se a soma destes distúrbios for definida como $d_{ext}$ e adicionada à (\ref{ectq4}), teremos
-\begin{equation} \label{ectq5}
-\ddot{e}+K_v\dot{e}+K_pe=M_{est}^{-1}[(M-M_{est})\ddot{q}+(b-b_{est})+d_{ext}] \; .
-\end{equation}
+\section{EKF-SLAM}
+pipi popopopo
