@@ -212,7 +212,7 @@ que é resultado da concatenação do vetor atual, com a posição da nova
 \begin{equation}
       \mb{\sigma}(\bsubvec{x}{t}, \bvec{y}^j) = \begin{bmatrix}
         \bsubvec{x}{t} \\
-        \mb{g}(\bsubvec{x}{t}, \bvec{y}{^j})
+        \mb{f}(\bsubvec{x}{t}, \bvec{y}{^j})
       \end{bmatrix}
 \end{equation}
 Porém, não basta apenas adicionar a nova \textit{landmark} no vetor de estados, é necessário adicioná-la também na matriz de covariâncias. Quando 
@@ -299,7 +299,7 @@ Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-me
 \end{algorithm}
 
 \begin{algorithm}[h]
-  \setstretch{1.5}
+  \setstretch{1.25}
   \caption{Etapa de atualização do EKF-SLAM}
   \label{alg:ekf-slam-update}
 \begin{algorithmic}[1]
@@ -324,6 +324,51 @@ Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-me
   \State $\mean{t} \gets \bvec{K} \bvec{z}$
   \State $\cov{t} \gets \predcov{t} - \bvec{K}\bvec{Z}\bvecT{K}$
   \State \Return $\mean{t}, \cov{t}$
+  \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+  \setstretch{1.5}
+  \caption{Etapa de inserção de nova \textit{landmark} do EKF-SLAM}
+  \label{alg:ekf-slam-landmark-insertion}
+\begin{algorithmic}[1]
+  \Procedure{EKF-SLAM-Inserção-Nova-Landmark}{$\predmean{t}, \predcov{t}, \bvec{y}, j$}
+    \State $\predmean{t}^* \gets \begin{bmatrix}
+      \predmean{t} \\ \mb{f}(\predmean{t}, \bvec{y})
+    \end{bmatrix}$
+    \State $\predcov{t}^* \gets \begin{bmatrix}
+      \predcov{t} & \predcov{t} \bvec{F}_X^T\\
+       \predcov{t} \bvec{F}_X &  \bvec{F}_X \predcov{t} \bvec{F}_X^T 
+       + \bvec{F}_Y \bvec{Q} \bvec{F}_Y^T
+    \end{bmatrix}$
+    \State \Return $\predmean{t}^*, \predcov{t}^*$
+  \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[h]
+  \setstretch{1.25}
+  \caption{EKF-SLAM}
+  \label{alg:ekf-slam-full}
+\begin{algorithmic}[1]
+  \Procedure{EKF-SLAM}{$\mean{t-1}, \cov{t-1}, \bsubvec{u}{t}, \bvec{y}^{1:k}, \bvec{c}^{1:k}$} 
+    \State $\predmean{t}, \predcov{t} \gets \textproc{EKF-SLAM-Predição}(\mean{t-1}, \cov{t-1}, \bsubvec{u}{t})$
+    \State $\mathcal{L}^{*} \gets \{\}$ \Comment{Conjunto de novas landmarks}
+    \For {$(\bvec{y}^i \in \bvec{y}^{1:k})$}
+      \State $j \gets \bvec{c}^i$
+      \If {landmark $j$ está no mapa $\bsubvec{x}{M}$}
+        \State $\predmean{t}, \predcov{t} \gets \textproc{EKF-SLAM-Atualização}(\predmean{t}, \predcov{t}, \bvec{y}^i, j)$
+      \Else
+        \State $\mathcal{L}^* \gets \mathcal{L}^* + \{(j, \bvec{y}^i)\}$
+      \EndIf
+    \EndFor
+    \For {$\mathcal{L}^i \in \mathcal{L}^*$}
+      \State $j, \bvec{y}^i \gets \mathcal{L}^i$
+      \State $\predmean{t}, \predcov{t} \gets \textproc{EKF-SLAM-Inserção-Nova-Landmark}(\predmean{t}, \predcov{t}, \bvec{y}^i, j)$
+    \EndFor
+    \State $\mean{t}, \cov{t} \gets \predmean{t}, \predcov{t}$
+    \State \Return $\mean{t}, \cov{t}$
   \EndProcedure
 \end{algorithmic}
 \end{algorithm}
