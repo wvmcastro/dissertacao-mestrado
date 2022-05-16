@@ -1,20 +1,325 @@
-Neste capítulo serão descritas as alterações necessárias no clássico Filtro de Kalman Extendido (EKF) para que ele possa ser aplicado na resolução do problema de SLAM, resultando na técnica EKF-SLAM. Além disso, também serão abordadas técnicas decorrentes da EKF-SLAM como EIF-SLAM e SEIF-SLAM, sendo esta última a técnica de estimação utilizada neste trabalho.
+O famoso Filtro de Kalman (KF) é uma técnica de estimação ótima para sistemas lineares com ruídos gaussianos, nele a distribuição de probabilidade do estado estimado é representada por uma gaussiana, parametrizada pelos momentos média e covariância. Ele foi desenvolvido simultaneamente em 1958 por Peter Swerling, e em 1960 por Rudolf Kalman \cite[p.~40]{bongard2006probabilistic}. Apesar de sua otimalidade ser garantida apenas para sistemas lineares, ele é aplicado em sistemas não lineares também. Para isso, é feita uma aproximação linear em torno da estimativa do estado atual do sistema, utilizando-se série de Taylor, e a premissa de que os termos de ordem maior ou igual a dois são desprezíveis.
+
+Essa técnica derivada do KF para sistemas não lineares é conhecida como Filtro de Kalman Extendido (EKF). O EKF é muito utilizado em aplicações reais, pois a grande maioria dos sistemas reais são não lineares, como o movimento de um robô diferencial, por exemplo. Além disso o modelo de medida do sensor é, muitas vezes, uma função não linear do estado do sistema.
+
+Neste capítulo, serão descritas as alterações necessárias no EKF clássico para que ele possa ser aplicado na resolução do problema de SLAM, estimando a pose do robô e a posição das \textit{landmarks}, o que é conhecido como EKF-SLAM. Além disso, também serão abordadas técnicas decorrentes do EKF-SLAM como EIF-SLAM e SEIF-SLAM, sendo este última a técnica de estimação utilizada neste trabalho.
 
 \section{Filtro de Kalman Extendido}
-O Filtro de Kalman (KF)
-As equações do EKF clássico, para sistemas discretos, são as equações de \ref{eq:ekf-prediction} até \ref{eq:ekf-estimate-error-covariance}.
+Para que seja possível estimar o estado de um sistema utilizando-se KF, é 
+necessário conhecer duas equações: a primeira, denominada modelo do sistema, 
+modela a transição de estado do sistema a partir do estado anterior e da entrada aplicada, Eq. \ref{eq:system-model}; a segunda, chamada de modelo de medida, relaciona o estado do sistema com a medida esperada, gerada pelo sensor, Eq. \ref{eq:measurement-model}. 
+\begin{align}
+  \bsubvec{x}{t} &= \mb{g}(\bsubvec{x}{t-1}, \bsubvec{u}{t}) + \mb{\epsilon}_t
+  \label{eq:system-model}\\
+  \bsubvec{y}{t} &= \mb{h}(\bsubvec{x}{t}) + \mb{\delta}_t
+  \label{eq:measurement-model}
+\end{align}
+Como o modelo do sistema $\mb{g}(\mathord{\bullet}, \mathord{\bullet})$, e o modelo de medida $\mb{h}(\mathord{\bullet}, \mathord{\bullet})$ não são exatos, suas incertezas e erros de modelagem são aproximados por ruídos gaussianos $\mb{\epsilon}_t \sim \normal{\bvec{0}}{\bsubvec{R}{t}}$ e $\mb{\delta}_t \sim \normal{\bvec{0}}{\bsubvec{Q}{t}}$. Quando $\mb{g}(\mathord{\bullet}, \mathord{\bullet})$ e/ou $\mb{h}(\mathord{\bullet}, \mathord{\bullet})$ não são lineares, o EKF pode ser utilizado para estimar o estado 
+do sistema. 
+
+As Equações de \ref{eq:ekf-prediction} até \ref{eq:ekf-estimate-error-covariance} definem o EKF \footnote{O leitor pode estanhar a Equação \ref{eq:ekf-estimate-error-covariance} do erro da estimativa. Normalmente ela é escrita na forma $\cov{t} = (\bvec{I} - \bsubvec{K}{t} \bsubvec{H}{t}) \predcov{t}$, porém de acordo com \cite[p.~ 73]{lewis2017optimal}, a forma em \ref{eq:ekf-estimate-error-covariance} é uma alternativa melhor na presença de erros de arredondamento, e é frequentemente utilizada em implementações de software.} para o sistema não linear acima. Onde $\bsubvec{G}{t}$ é o jacobiano do modelo do sistema no ponto $\mean{t-1}$, e $\bsubvec{H}{t}$ é o jacobiano do modelo de medida no ponto $\predmean{t}$.
 \begin{align}
   \predmean{t} &= \mb{g}(\mean{t-1}, \bsubvec{u}{t})
   \label{eq:ekf-prediction}\\
   \predcov{t} &= \bsubvec{G}{t}\cov{t-1}\bsubvecT{G}{t} + \bsubvec{R}{t}
   \label{eq:ekf-prediction-error-covariance}\\
-  \bsubvec{K}{t} &=   \predcov{t}\bsubvecT{H}{t} (\bsubvec{H}{t}\predcov{t}\bsubvecT{H}{t} + \bsubvec{Q}{t})^{-1}
-  \label{eq:ekk-gain}\\
-  \mean{t} &= \predmean{t} + \bsubvec{K}{t}(\bsubvec{y}{t} - \mb{h}(\predmean{t}))
+  \bsubvec{z}{t} &= \bsubvec{y}{t} - \mb{h}(\predmean{t})
+  \label{eq:ekf-inovation} \\
+  \bsubvec{Z}{t} &= \bsubvec{H}{t}\predcov{t}\bsubvecT{H}{t} + \bsubvec{Q}{t}
+  \label{eq:ekf-inovation-covariance} \\
+  \bsubvec{K}{t} &=   \predcov{t}\bsubvecT{H}{t} \bsubvec{Z}{t}^{-1}
+  \label{eq:ekf-gain}\\
+  \mean{t} &= \predmean{t} + \bsubvec{K}{t} \bsubvec{z}{t}
   \label{eq:ekf-update}\\
-  \cov{t} &= (\bvec{I} - \bsubvec{K}{t}\bsubvec{H}{t})\,\predcov{t}\,(\bvec{I} - \bsubvec{K}{t}\bsubvec{H}{t})^T + \bsubvec{K}{t}\bsubvec{Q}{t}\bsubvecT{K}{t}
+  \cov{t} &= \predcov{t} - \bsubvec{K}{t}\bsubvec{Z}{t}\bsubvecT{K}{t}
   \label{eq:ekf-estimate-error-covariance}
 \end{align}
+Porém, a resolução do problema de SLAM utilizando o EKF, não é uma aplicação 
+direta das Equações acima. São necessárias algumas alterações, pois em SLAM o vetor de medidas tem tamanho variável. Esses detalhes e outras particularidades da aplicação do EKF em SLAM serão tratados na próxima Seção.
 
 \section{EKF-SLAM}
-pipi popopopo
+Para aplicar o EKF na solução de SLAM, é necessário entender 
+como o vetor de estados $\bvec{x}$ é composto (aqui o subíndice $t$ é omitido, pois não é importante para esta discussão). Como tanto a pose do 
+robô, como o mapa são estimados, o vetor de estados é composto por ambos. 
+\begin{equation}
+  \bvec{x} = \begin{bmatrix}
+    \bsubvec{x}{R} \\
+    \bsubvec{x}{M}
+  \end{bmatrix}
+  \label{eq:slam-state-vector}
+\end{equation}
+O vetor $\bsubvec{x}{M}$, que representa o mapa, é composto pela posição $(x, y)$ das \textit{landmarks} identificadas. 
+Seu tamanho é variável e cresce à medida que o robô navega pelo ambiente e 
+mede novas \textit{landmarks}.
+\begin{equation}
+  \bsubvec{x}{M} = \begin{bmatrix}
+    m_x^1\\
+    m_y^1\\
+    \vdots\\
+    m_x^n\\
+    m_y^n
+  \end{bmatrix}
+  \label{eq:feature-map}
+\end{equation}
+
+\subsection{EKF-SLAM: Predição (Movimento do robô)}
+\label{sec:ekf-slam-prediction}
+Em SLAM apenas uma parte do vetor de estados é variante no tempo, a pose do 
+robô. Isso significa que apenas a porção $\bsubvec{x}{R}$ é alterada pela entrada $\bvec{u}$, logo o modelo do sistema consiste apenas do modelo de 
+movimento do robô $\mb{g}_R$ concatenado com as posições das \textit{landmarks}:
+\begin{equation}
+  \bsubvec{x}{t} = \begin{bmatrix}
+    \mb{g}_R(\bsubvec{x}{R, \,t}, \bsubvec{u}{t}) \\
+    \bsubvec{x}{M}
+  \end{bmatrix} + \begin{bmatrix} 
+      \mb{\epsilon}_{R, \,t} \\
+      \bvec{0}
+  \end{bmatrix}
+  \label{eq:slam-prediction}
+\end{equation}
+Portanto, o passo de predição do vetor média do EKF-SLAM torna-se:
+\begin{equation}
+  \predmean{t} = \begin{bmatrix}
+    \mb{g}_R(\mean{R, \,t-1}, \bsubvec{u}{t}) \\
+      \mean{M}
+  \end{bmatrix}
+\end{equation}
+em termos de implementação, isso significa que apenas as posições de memória da 
+pose são modificadas no vetor de estados. Dessa forma, o passo de predição do 
+vetor de estados do EKF-SLAM 2D tem complexidade $\bigO{3}$ (constante), enquanto no EKF 
+essa complexidade é $\bigO{n}$, onde $n$ é o tamanho do vetor de estados.
+
+A matriz de covariância, $\cov{}$, também é parcialmente atualizada, pois o jacobiano do sistema na Equação \ref{eq:slam-prediction} possui forma esparsa:
+\begin{equation}
+  \bsubvec{G}{t} = \begin{bmatrix}
+    \bsubvec{G}{R, \,t} & \bvec{0} \\
+    \bvec{0} & \bvec{I}
+  \end{bmatrix}
+\end{equation}
+Então, a Equação do erro de predição do EKF, em \ref{eq:ekf-prediction-error-covariance}, torna-se:
+\renewcommand{\arraystretch}{1.5}
+\begin{equation}
+\begin{aligned}
+  \predcov{t} &= \begin{bmatrix}
+    \bsubvec{G}{R, \,t} & \bvec{0} \\
+    \bvec{0} & \bvec{I}
+  \end{bmatrix} \cov{t-1}  \begin{bmatrix}
+    \bsubvec{G}{R, \,t} & \bvec{0} \\
+    \bvec{0} & \bvec{I}  
+  \end{bmatrix}^T + \begin{bmatrix}
+      \bsubvec{R}{t}  & \bvec{0} \\ \bvec{0} & \bvec{0}
+    \end{bmatrix} \\
+  &= \begin{bmatrix}
+    \bsubvec{G}{R, \,t} & \bvec{0} \\
+    \bvec{0} & \bvec{I}
+  \end{bmatrix} 
+  \begin{bmatrix}
+    \cov{RR, \, t-1} & \cov{RM, \, t-1} \\
+    \cov{MR, \,t-1} & \cov{MM}
+  \end{bmatrix}  
+  \begin{bmatrix}
+    \bsubvec{G}{R, \,t} & \bvec{0} \\
+    \bvec{0} & \bvec{I}  
+  \end{bmatrix}^T + \begin{bmatrix}
+      \bsubvec{R}{t} & \bvec{0} \\ \bvec{0} & \bvec{0}
+    \end{bmatrix} \\
+  &= \begin{bmatrix}
+    \bsubvec{G}{R,\,t} \cov{RR,\, t-1} \bsubvecT{G}{R, \,t} + \bsubvec{R}{t}&  \bsubvec{G}{R,\, t} \cov{RM,\, t-1}\\
+    \cov{MR,\, t-1}\bsubvecT{G}{R,\, t} & \cov{MM} 
+  \end{bmatrix} 
+\end{aligned}
+\label{eq:ekf-slam-prediction-error-covariance}
+\end{equation}
+\renewcommand{\arraystretch}{1.0}
+a complexidade dessa operação é da ordem de $\bigO{n}$ por conta do termo $\bsubvec{G}{R,\, t} \cov{RM,\, t-1}$, enquanto no caso geral do EKF onde o jacobiano $\bsubvec{G}{t}$ é denso, essa complexidade é $\bigO{n^3}$, que é a complexidade prática da multiplicação de matrizes $n \times n$. A Figura 
+\ref{fig:ekfslam-prediction} ilustra as porções do vetor de estados, e da 
+matriz de covariância, modificadas no passo de predição do EKF-SLAM.
+
+\begin{figure}[h]
+  \centering
+  \includestandalone[width=.45\textwidth]{figs/ekfslam-prediction}
+  \caption{Partes modificadas do vetor média e da matriz de covariância durante o movimento do robô. O vetor média é representado pela barra na esquerda, e a matriz de covariância pelo quadrado na direita. As partes modificadas, em tons de cinza, correspondem ao estado do robô $\mean{R}$  e sua autocovariância $\cov{RR}$ (cinza escuro), e às covariâncias cruzadas, $\cov{RM}$ e $\cov{MR}$, entre o robô e o mapa (cinza claro). Note que as partes correspondentes ao mapa, $\mean{M}$ e $\cov{MM}$, 
+  permanecem inalteradas (branco). Adaptado de \cite[p.~10]{jsola}.}
+  \label{fig:ekfslam-prediction}
+\end{figure}
+
+
+\subsection{EKF-SLAM: Atualização}
+\label{sec:ekf-slam-update}
+Assim como na predição, no passo de atualização há algumas particularidades 
+que devem ser levadas em conta no EKF-SLAM. Ao contrário de um sistema convencional, em SLAM o vetor de medidas é variável, seu tamanho depende da 
+quantidade de \textit{landmarks} que vão sendo avistadas pelo robô enquanto 
+ele navega pelo ambiente. Ou seja, no EKF-SLAM o vetor de medidas é sempre 
+``incompleto'', e normalmente a inovação $\bsubvec{z}{t}$ é calculada para cada 
+medida de maneira individual, e é denotada por $\bsubvec{z}{t}^j$.
+\begin{equation}
+  \bsubvec{z}{t}^j = \bsubvec{y}{t}^j - \mb{h}^j(\predmean{t})
+  \label{eq:ekf-slam-innovation}
+\end{equation}
+Além disso, como o jacobiano do modelo de medida na Equação \ref{eq:measurement-model-jacobian-full} é esparso, o cálculo da covariância da inovação pode ser obtido por:
+\renewcommand{\arraystretch}{1.5}
+\begin{equation}
+  \bsubvec{Z}{t}^j = \begin{bmatrix}
+    \bsubvec{H}{R}^j & \bsubvec{H}{M}^j
+  \end{bmatrix}
+  \begin{bmatrix}
+    \predcov{RR} & \predcov{RM_j} \\
+    \predcov{RM_j}^T & \predcov{M_j M_j}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \bsubvec{H}{R}^j \\ \bsubvec{H}{M}^j
+  \end{bmatrix} + \bsubvec{Q}{t}
+  \label{eq:ekf-slam-innovation-covariance}
+\end{equation}
+\renewcommand{\arraystretch}{1.0}
+As dimensões da inovação e das matrizes na Equação acima são constantes e dependem apenas da dimensão da pose do robô, e da dimensão da medida. 
+Portanto, aqui as complexidades dos cálculos da inovação $\bsubvec{z}{t}^j$, e de sua covariância $\bsubvec{Z}{t}^j$ são constantes, enquanto no EKF essas complexidades são $\bigO{m}$ e $\bigO{nm^2}$, respectivamente, onde $m$ é o tamanho do vetor de medidas. Embora, claro, aqui esse cálculo de complexidade constante deva ser realizado para cada observação presente no vetor de medidas, ou seja, no EKF-SLAM o cálculo da
+inovação, e de sua covariância possuem complexidade linear no número de medidas obtidas.
+
+O cálculo do Ganho de Kalman, $\bsubvec{K}{t}$, também é influenciado pelo 
+tamanho constante da matriz de covariância da inovação ($2\times 2$, no caso deste trabalho), Equação \ref{eq:ekf-slam-innovation-covariance}, e pela esparsidade do jacobiano do modelo de medida, na Equação \ref{eq:measurement-model-jacobian-full}. Ademais, se todos os cálculos triviais de multiplicação por zero não forem feitos, a complexidade do cálculo do Ganho de Kalman, $\bsubvec{K}{t}^j$, é $\bigO{n}$ no EKF-SLAM.
+
+Por fim, as complexidades da atualização e sua matriz de covariância, Equações \ref{eq:ekf-update} e \ref{eq:ekf-estimate-error-covariance}, são $\bigO{n}$ e $\bigO{n^2}$, respectivamente. A Figura \ref{fig:ekf-slam-innovation} mostra as porções da 
+do vetor de estados e da matriz de covariância utilizadas no cálculo da inovação e de sua matriz de covariância.
+
+\begin{figure}[h]
+  \centering
+  \includestandalone[width=.45\textwidth]{figs/ekfslam-innovation}
+  \caption{Partes utilizadas do vetor média e da matriz de covariância durante o cálculo da inovação, quando uma \textit{landmark} é observada. O vetor média é representado pela barra na esquerda, e a matriz de covariância pelo quadrado na direita. As porções utilizadas, em tons de cinza, correspondem ao estado do robô $\mean{R}$ e à posição da \textit{landmark} $\bvec{m}^j$, e suas autocovariâncias $\cov{RR}$ e $\cov{M^j M^j}$ (cinza escuro), e às covariâncias cruzadas, $\cov{RM^j}$ e $\cov{M^jR}$, entre o robô e a j-ésima \textit{landmark} (cinza claro). Adaptado de \cite[p.~8]{jsola}.}
+  \label{fig:ekf-slam-innovation}
+\end{figure}
+
+A Figura \ref{fig:ekf-slam-update} deixa claro que todos os elementos do vetor média e da 
+matriz de covariâncias são atualizados pelas Equações \ref{eq:ekf-update} e \ref{eq:ekf-estimate-error-covariance}, mesmo o cálculo da inovação sendo esparso. Isso ocorre porque no EKF todas as \textit{landmarks} são 
+correlacionadas, mesmo que muitas dessas correlações sejam próximas de zero. 
+Esse tipo de correlação ``fraca'' será explorada pelo Filtro de Informação Extendido Esparso, a fim de obter-se um algoritmo de estimação mais eficiente.
+
+\begin{figure}[h]
+  \centering
+  \includestandalone[width=.45\textwidth]{figs/ekfslam-update}
+  \caption{O vetor média e a matriz de covariâncias são completamente atualizados durante a observação de uma \textit{landmark}. Retirado de \cite[p.~8]{jsola}.}
+  \label{fig:ekf-slam-update}
+\end{figure}
+
+\subsection{EKF-SLAM: Inserção de \textit{landmark} (aumento do vetor de estados)}
+Nas Seções anteriores, \ref{sec:ekf-slam-prediction} e \ref{sec:ekf-slam-update}, foram tratadas as diferenças 
+do EKF-SLAM para o EKF, nas já conhecidas pelo usuário comum do EKF, etapas de predição e atualização. No entanto, em EKF-SLAM uma nova operação aparece: A etapa de inserção de \textit{landmark}. Ela ocorre quando o robô observa uma \textit{landmark} que ainda não está no mapa, $\bsubvec{x}{M}$, e portanto não é possível calcular a inovação na Equação \ref{eq:ekf-slam-innovation}. Nesse caso, a nova \textit{landmark} deve ser adicionada ao vetor média e à matriz de covariância, aumentando a dimensão do sistema.
+
+Para adicionar uma nova \textit{landmark} no vetor de estado, será definida 
+a função $\mb{\sigma}(\bullet, \bullet)$, ela gera um novo vetor de estados 
+que é resultado da concatenação do vetor atual, com a posição da nova 
+\textit{landmark} calculada pelo modelo de medida inverso, descrito na Seção \ref{sec:inverse-measurement-model}, a partir da leitura $\bvec{y}^j$.
+\begin{equation}
+      \mb{\sigma}(\bsubvec{x}{t}, \bvec{y}^j) = \begin{bmatrix}
+        \bsubvec{x}{t} \\
+        \mb{g}(\bsubvec{x}{t}, \bvec{y}{^j})
+      \end{bmatrix}
+\end{equation}
+Porém, não basta apenas adicionar a nova \textit{landmark} no vetor de estados, é necessário adicioná-la também na matriz de covariâncias. Quando 
+o robô observa uma nova \textit{landmark}, é esperado que o erro de estimação 
+da posição dessa nova \textit{landmark} seja influenciado pelo erro da 
+pose do robô, no momento da leitura, e pelo erro de de medição do sensor. 
+
+Inicializar a covariância da nova \textit{landmark} com $\infty$ (ou 
+números muito grandes), como indicado em 
+\cite[p.~317]{bongard2006probabilistic}, pode ser injusto. Portanto devemos 
+calcular o erro, $\mb{\alpha}$, da nova estimativa do vetor aumentado, de 
+maneira análoga à forma como é feita nos passos de predição e atualização 
+do EKF. 
+\begin{equation}
+\begin{aligned}
+   \mb{\alpha} &= \bsubvec{x}{t}^* - \mean{t}^*\\
+   &= \begin{bmatrix}
+       \bsubvec{x}{t} \\ \mb{f}(\bsubvec{x}{t}, \bvec{y})
+   \end{bmatrix} - \begin{bmatrix}
+       \mean{t} \\ \mb{f}(\mean{t}, \bvec{y}^j)
+   \end{bmatrix} = \begin{bmatrix}
+       \bsubvec{x}{t} - \mean{t}\\
+       \mb{f}(\bsubvec{x}{t}, \bvec{y}) - \mb{f}(\mean{t}, \bvec{y}^j)
+   \end{bmatrix}\\
+   &= \begin{bmatrix}
+       \mb{\eta}_t \\
+       \cancel{\mb{f}(\mean{t}, \bvec{y}^j)} + 
+       \bvec{F}_X \mb{\eta}_t + \bvec{F}_Y \mb{\delta}
+       - \cancel{\mb{f}(\mean{t}, \bvec{y}^j)}
+   \end{bmatrix} \\
+    &= \begin{bmatrix}
+       \mb{\eta}_t \\
+       \bvec{F}_X \mb{\eta}_t + \bvec{F}_Y \mb{\delta} 
+   \end{bmatrix} \small\text{ Onde $\mb{\eta}_t = \bsubvec{x}{t} - \mean{t}$ e $\mb{\delta} = \bvec{y} - \bvec{y}^j$}
+\end{aligned}
+\end{equation}
+A matriz de covariância do sistema aumentado, $\cov{t}^*$, é obtida por
+\renewcommand{\arraystretch}{1.5}
+\begin{equation}
+\begin{aligned}
+  \cov{t}^* &= \expv{\mb{\alpha} \,\mb{\alpha}^T} \\
+  &= \begin{bmatrix}
+       \cov{t} & \cov{t} \bvec{F}_X^T\\
+       \cov{t} \bvec{F}_X &  \bvec{F}_X \cov{t} \bvec{F}_X^T 
+       + \bvec{F}_Y \bvec{Q} \bvec{F}_Y^T
+    \end{bmatrix}
+\end{aligned}
+\end{equation}
+\renewcommand{\arraystretch}{1}
+portanto, a matriz de covariância do sistema aumentado é a matriz de 
+covariância do sistema antes da inserção da nova \textit{landmark}, 
+concatenada as covariâncias cruzadas $\cov{t} \bvec{F}_X^T$ e $\bvec{F}_X \cov{t}$, e com a covariância $\bvec{F}_X \cov{t} \bvec{F}_X^T + \bvec{F}_Y 
+\bvec{Q} \bvec{F}_Y^T$, da nova \textit{landmark} inserida no mapa. 
+
+Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-measurement-model-jacobian-state-part} é esparso, logo a complexidade de $\cov{t}\bvec{F}_x$ pode ser reduzida de $\bigO{n^2}$ para $\bigO{n}$ se todos os cálculos inúteis forem ignorados, logo toda a operação de inserção de \textit{landmark} tem custo $\bigO{n}$. A Figura \ref{fig:ekf-slam-landmark-insertion} mostra o vetor média e a matriz de covariância com as novas inserções destacadas.
+
+\begin{figure}[h]
+  \centering
+  \includestandalone[width=.6\textwidth]{figs/ekfslam-landmark-insertion}
+  \caption{Vetor média e matriz de covariância aumentados após inserção de nova \textit{landmark}. As partes adicionadas, em cinza, correspondem às covariâncias cruzadas entre a nova landmark e o vetor de estados anterior (cinza claro), e à média da nova \textit{landmark} e sua covariância (cinza escuro). Adaptado de \cite[p.~11]{jsola}.}
+  \label{fig:ekf-slam-landmark-insertion}
+\end{figure}
+
+\subsection{EKF-SLAM: Algoritmo}
+
+\begin{algorithm}
+  \setstretch{1.5}
+  \caption{Etapa de predição do EKF-SLAM}
+  \label{alg:ekf-slam-prediction}
+\begin{algorithmic}[1]
+\Procedure{EKF-SLAM-Predição}{$\mean{t}, \cov{t}, \bsubvec{u}{t}$}
+  \State $\predmean{t} \gets \begin{bmatrix}
+    \mb{g}_R(\mean{R,t}, \bsubvec{u}{t}) \\ \mean{M}
+  \end{bmatrix}$
+  \State $\predcov{RR,t} \gets \bsubvec{G}{R, t}\cov{RR, t-1} \bsubvecT{G}{R,t}$
+  \State $\predcov{RM, t} \gets \bsubvec{G}{R, t} \cov{RM, t-1}$
+  \State $\predcov{t} \gets \begin{bmatrix}
+    \predcov{RR, t} & \predcov{RM, t} \\
+    \predcov{RM, t}^T & \cov{MM}
+  \end{bmatrix}$
+  \State \Return $\predmean{t}, \predcov{t}$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[h]
+  \caption{Etapa de atualização do EKF-SLAM}
+  \label{alg:ekf-slam-update}
+\begin{algorithmic}[1]
+  \Procedure{EKF-SLAM-Atualizaçã}{$\predmean{t}, \predcov{t}, \bvec{y}, j = \text{índice da \textit{landmark}}$}
+  \State $\bvec{z} \gets \bvec{y} - \mb{h}^j(\predmean{t})$
+  \State $\bvec{Z} \gets \begin{bmatrix}
+    \bsubvec{H}{R}^j & \bsubvec{H}{M}^j
+  \end{bmatrix}
+  \begin{bmatrix}
+    \predcov{RR} & \predcov{RM_j} \\
+    \predcov{RM_j}^T & \predcov{M_j M_j}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \bsubvec{H}{R}^j \\ \bsubvec{H}{M}^j
+  \end{bmatrix} + \bsubvec{Q}{t}$
+  \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\section{Filtro de Informação Extendido (EIF)}
+
+\section{SEIF-SLAM}
+
+\section{Conclusão do capítulo}

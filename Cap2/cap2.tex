@@ -1,6 +1,126 @@
+\section{O ambiente}
+
+
 \section{Modelo do robô}
 
-\section{Modelo de medida \textit{Range-Bearing}}
+\section{Medidas e o modelo de medida \textit{Range-Bearing}}
+A medida gerada pelo sensor LiDar, embarcado no TurtleBot, consiste em uma nuvem de pontos planar. Essa nuvem de pontos é processada e dela são extraídas estimativas dos centros dos cilindros presentes no ambiente. Esses 
+centros são as medidas utilizadas pelo algoritmo de SLAM, eles são descritos 
+em termos de coordenadas polares $(r, \theta)$ no sistema de coordenadas do sensor.
+
+\subsection{Modelo de medida \textit{Range-Bearing}}
+O modelo de medida calcula a medida que espera-se ser lida pelo sensor, quanto o sistema está no estado $\bsubvec{x}{t}$. Na Figura \ref{fig:range-bearing-measurement-schematic}, é representado um sistema composto por um robô e três \textit{landmarks} i, j e k. Logo o vetor de estados, $\bvec{x}$, é formado pela pose do robô, e pelas posições das landmarks no mapa:
+\begin{equation}
+  \bvec{x} = \begin{bmatrix}
+    \phi & x & y & m_x^i & m_y^i & m_x^j & m_y^j & m_x^k & m_y^k
+  \end{bmatrix}^T
+\end{equation}
+o modelo de medida para a j-ésima \textit{landmark} é dado por
+\renewcommand{\arraystretch}{1.5}
+\begin{equation}
+  \mb{h}^j(\bvec{x}) = \begin{bmatrix}
+    r^j \\ \theta^j
+  \end{bmatrix} = \begin{bmatrix}
+    \sqrt{(m_x^j - x_l)^2 + (m_y^j - y_l)^2} \\
+    \arctan\left(\dfrac{m_y^j - y_l}{m_x^j - x_l}\right) - \phi
+  \end{bmatrix}
+  \label{eq:range-bearing-measurement-model}
+\end{equation}
+\renewcommand{\arraystretch}{1}
+onde
+\begin{equation}
+  \begin{cases}
+    x_l = x + d \cos \phi\\
+    y_l = y + d \sin \phi
+  \end{cases}
+\end{equation}
+
+\begin{figure}[h]
+  \centering
+  \includestandalone[width=\textwidth]{figs/range-bearing}
+  \caption{Esquemático do modelo de medida \textit{Range-Bearing}. O sistema de coordenadas do robô é representado em magenta, e o sistema de coordenadas do sensor em azul. A medida $(r^j, \theta^j)$ se refere à i-ésima \textit{landmark} no mapa.}
+  \label{fig:range-bearing-measurement-schematic}
+\end{figure}
+
+Como o modelo de medida em \ref{eq:range-bearing-measurement-model} é não linear, é necessário lineariza-lo para utilizá-lo em soluções como EKF-SLAM, e seus derivados como SEIF-SLAM. Sua matriz jacobiana, $\bvec{H}$, para a j-ésima \textit{landmark} é descrita na Equação \ref{eq:measurement-model-jacobian-full}, 
+ela é composta pelos jacobianos $\bsubvec{H}{R}$, calculado com relação à pose do robô, e pelo jacobiano $\bsubvec{H}{M}$, calculado com relação à 
+posição da \textit{landmark} no vetor de estado.
+\renewcommand{\arraystretch}{2}
+\begin{equation}
+  \bsubvec{H}{R}^j = \begin{bmatrix}
+    \dfrac{d}{r^j}\parentheses{\delta_x \sin\phi - \delta_y \cos\phi} &  \dfrac{-\delta_x}{r^j} & \dfrac{-\delta_y}{r^j}\\
+    -\parentheses{\dfrac{d}{\brac{r^j}^2}\parentheses{\delta_y \sin\phi + \delta_x \cos\phi} + 1} & \dfrac{\delta_y}{\brac{r^j}^2} & \dfrac{-\delta_x}{\brac{r^j}^2}
+    \end{bmatrix}
+  \label{eq:measurement-model-jacobian-robot-part}
+\end{equation}
+\renewcommand{\arraystretch}{2}
+\begin{equation}
+  \bsubvec{H}{M}^j = \begin{bmatrix}
+      \dfrac{\delta_x}{r^j} & \dfrac{\delta_y}{r^j} \\
+      \dfrac{-\delta_y}{\brac{r^j}^2} & \dfrac{\delta_x}{\brac{r^j}^2}
+    \end{bmatrix}
+  \label{eq:measurement-model-jacobian-map-part}
+\end{equation}
+\renewcommand{\arraystretch}{1}
+\begin{equation}
+  \bvec{H}^j(\bvec{x}) = \begin{bmatrix}
+    \bsubvec{H}{R}^j & \bvec{0} & \cdots & \bsubvec{H}{M}^j & \cdots & \bvec{0}
+  \end{bmatrix} 
+  \label{eq:measurement-model-jacobian-full}
+\end{equation}
+
+\subsection{Modelo de medida inverso \textit{Range-Bearing}}
+\label{sec:inverse-measurement-model}
+O modelo de medida descrito na Seção anterior é também conhecido como modelo de medida direto, ele calcula a medida que espera-se ler quando o sistema está em um dado estado. Mas também há o modelo de medida inverso, que calcula um estado a partir de uma medida, esse modelo é útil durante o descobrimento de novas \textit{landmarks}, pois ele da meios para que suas posições sejam  incorporadas no vetor de estados, na Figura \ref{fig:range-bearing-inverse-model-schematic} está representado o momento no qual o robô descobre a p-ésima \textit{landmark} do ambiente.
+\begin{figure}[h]
+  \includestandalone[width=\textwidth]{figs/range-bearing-inverse}
+  \caption{Esquemático do modelo de medida \textit{Range-Bearing}. O sistema de coordenadas do robô é representado em magenta, e o sistema de coordenadas do sensor em azul. Os círculos representam \textit{landmarks}, as conhecidas pelo robô (portanto presentes no vetor de estados), em cinza, e recém descobertas, em laranja. A p-ésima \textit{landmark} acaba de ser encontrada pelo robô.}
+  \label{fig:range-bearing-inverse-model-schematic}
+\end{figure}
+
+O modelo de medida inverso $\mb{f}(\bullet, \bullet)$ é descrito na Equação \ref{eq:inverse-measurement-model}. Como pode ser observado, assim como o 
+modelo de media ``direto'', o modelo de medida inverso é não linear, logo devemos lineariza-lo para utilizá-lo com o EKF-SLAM e seus 
+algoritmos derivados. Sua matriz jacobiana, $\bvec{F}$, na Equação \ref{eq:inverse-measurement-model-jacobian-full} é composta pelos jacobianos 
+parciais em relação ao vetor de estados, $\bvec{F}_X$, e à medida da nova 
+landmark encontrada, $\bvec{F}_Y$, mostrados nas Equações \ref{eq:inverse-measurement-model-jacobian-state-part} e \ref{eq:inverse-measurement-model-jacobian-measurement-part}, respectivamente.
+
+\begin{equation}
+  \mb{f}(\bvec{x}, \bvec{y}^{p}) = 
+    \begin{bmatrix}
+        m_x^p \\
+        m_y^p \\
+    \end{bmatrix} =
+    \begin{bmatrix}
+        x_l + r^p \cos(\phi + \theta^p)\\
+        y_l + r^p \sin(\phi + \theta^p) 
+    \end{bmatrix}
+    \label{eq:inverse-measurement-model}
+\end{equation}
+
+\begin{equation}
+  \bvec{F}_X = 
+    \begin{bmatrix}
+      \begin{bmatrix}
+          -d \sin{\phi} - r^p \sin(\phi + \theta^p)  & 1 & 0\\
+          d\cos{\phi} + r^p\cos(\phi + \theta^p) & 0 & 1
+      \end{bmatrix} & \nullmat{2}{n-3} \end{bmatrix}
+  \label{eq:inverse-measurement-model-jacobian-state-part}
+\end{equation}
+
+\begin{equation}
+  \bvec{F}_Y = \begin{bmatrix}
+       \cos(\phi + \theta^p) & -r^p\sin(\phi + \theta^p)\\
+       \sin(\phi + \theta^p) & r^p\cos(\phi + \theta^p)
+    \end{bmatrix}   
+  \label{eq:inverse-measurement-model-jacobian-measurement-part}
+\end{equation}
+
+\begin{equation}
+  \bvec{F} = \begin{bmatrix}
+    \bvec{F}_X & \bvec{F}_Y
+  \end{bmatrix}
+  \label{eq:inverse-measurement-model-jacobian-full}
+\end{equation}
 
 \section{Simulação}
 

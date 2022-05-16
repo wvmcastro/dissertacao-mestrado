@@ -1,0 +1,91 @@
+\documentclass{standalone}
+
+\usepackage{tikz,tikz-3dplot, tkz-euclide}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{calc}
+\tikzset{>={Latex[round]}}
+
+\usepackage{relsize} % mathsmaller
+\usepackage{amsmath}
+\usepackage{mathtools} %boldsymbol
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.12}
+\usepgfplotslibrary{fillbetween}
+
+\begin{document}
+\tdplotsetmaincoords{0}{-40}
+    \begin{tikzpicture}[scale=1.8, tdplot_main_coords]
+        % world static frame
+        \tdplotsetrotatedcoords{0}{0}{-40}
+        \draw[->, thick, tdplot_rotated_coords] (-2.5, 0, 0) -- (-2, 0, 0);
+        \draw[->, thick, tdplot_rotated_coords] (-2.5, 0, 0) -- (-2.5, 0.5, 0);
+        \node[tdplot_rotated_coords, anchor=north] at (-2.5, 0, 0) {\footnotesize\{M\}};
+        %
+        \coordinate (Origin) at (0, 0, 0);
+        \coordinate (landmark2) at (5, 2, 0);
+        %
+        % x-axis aligned line
+        \draw[tdplot_rotated_coords, dashed, gray] (Origin) -- (2.2, 0, 0);
+        %
+        % robot coordinate frame
+        \draw[->, thick, magenta] (Origin)  -- (1, 0, 0);
+        \draw[->, thick, magenta] (Origin) -- (0, 1, 0);
+        \node[anchor=north, magenta] at (Origin) {\footnotesize\{R\}};
+        %
+        \coordinate (SensorOrigin) at (0.5, 0 0);
+        % robot frame x-axis aligned line
+        \draw[dashed] (SensorOrigin) -- (2.2, 0, 0);
+        %
+        % cota dx
+        \draw[tdplot_rotated_coords, dashed, gray] (SensorOrigin) -- (0.383, -0.5, 0);
+        \draw[tdplot_rotated_coords, dashed, gray] (landmark2) -- (2.55, -0.5, 0);
+        \draw[tdplot_rotated_coords, <->, darkgray] (0.403, -0.4, 0) -- (2.53, -0.4, 0) node[midway, sloped, above]{\small $\delta_x$};
+        %
+        % cota dy
+        \draw[tdplot_rotated_coords, dashed, gray]  (0, 0.32, 0) -- (SensorOrigin);
+        \draw[tdplot_rotated_coords, dashed, gray]  (landmark2) -- (0, 4.75, 0);
+        \draw[tdplot_rotated_coords, <->, darkgray] (0.07, 0.34, 0) -- (0.07, 4.73, 0) node[midway, sloped, above]{\small $\delta_y$};
+        %
+        % sensor coordinate frame
+        \draw[->, ultra thick, blue] (SensorOrigin)  -- (1.5, 0, 0) node[below, pos=.9, sloped] {\footnotesize\{L\}};
+        \draw[->, ultra thick, blue] (SensorOrigin) -- (0.5, 1, 0); 
+        %
+        % landmarks
+        %
+        \draw[fill=olive!60] (landmark2) circle (.2cm);
+        \draw[fill=darkgray] (landmark2) circle (.05cm);
+        \node at (5.5, 1.7, 0) {\small\textit{j-ésima}}; 
+        %
+        \coordinate (landmark3) at (3.5, -0.5, 0);
+        \draw[fill=olive!60] (landmark3) circle (.2cm);
+        \draw[fill=darkgray] (landmark3) circle (.05cm);
+        \node at (4, -0.5, 0) {\color{darkgray}\small\textit{i-ésima}}; 
+        %
+        \coordinate (landmark6) at (1, 3, 0);
+        \draw[fill=olive!60] (landmark6) circle (.2cm);
+        \draw[fill=darkgray] (landmark6) circle (.05cm);
+        \node at (1.5, 2.8, 0) {\color{darkgray}\small\textit{k-ésima}}; 
+        % landmarks end
+        %
+        % phi arc arc
+        \tdplotgetpolarcoords{cos(40)}{sin(40)}{0};
+        \tdplotdrawarc[tdplot_rotated_coords, thick, gray]{(Origin)}{2}{0}{\tdplotresphi}{xshift=.3cm, yshift=.1cm}{\color{darkgray}$\phi$};
+        %
+        % theta arc arc
+        \tdplotdrawarc[line width=2.3, gray]{(SensorOrigin)}{1.5}{0}{24}{xshift=.2cm, yshift=.2cm}{\color{darkgray}$\theta^j$};
+        %
+        % laser center
+        \draw[fill=black] (SensorOrigin) circle (0.06cm) node[below right]{\color{darkgray}\small$(x_l, y_l)$};
+        %
+        % laser ray
+        \draw[red, thick, <->] (SensorOrigin) -- (landmark2) node[midway, sloped, above]{\small$r^j$};
+        %
+        % cota sensor displacement 
+        \draw[gray] (0, 1.05, 0) -- (0, 1.15, 0);
+        \draw[<->, darkgray] (0, 1.1, 0) -- (0.5, 1.1, 0) node[midway, sloped, above]{\small $d$}; 
+        \draw[gray] (0.5, 1.05, 0) -- (0.5, 1.15, 0);
+        %
+    \end{tikzpicture}
+
+\end{document}

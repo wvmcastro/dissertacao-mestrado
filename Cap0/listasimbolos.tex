@@ -8,6 +8,16 @@ $\bsubvec{z}{t}$ & Medida do sensor extrínseco no instante t \\
 $\bsubvec{z}{0:t}$ & Conjunto das medidas do sensor extrínseco do instante 0 até t \\
 $\bvec{m}$ & mapa do ambiente, constituído das coordenadas das \textit{landmarks} \\
 $\pr{\bsubvec{x}{t}, \bvec{m} \given \bsubvec{z}{1:t}, \bsubvec{u}{1:t}, \bsubvec{x}{0}}$ & Distribuição do problema online SLAM \\
-$\pr{\bsubvec{x}{0:t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, \bsubvec{x}{0}}$ & Distribuição do problema full SLAM
+$\pr{\bsubvec{x}{0:t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, \bsubvec{x}{0}}$ & Distribuição do problema full SLAM\\
+$\mean{t}$ & Vetor média no instante $t$\\
+$\predmean{t}$ & Predição do vetor média no instante $t$\\
+$\cov{t}$ &  Matriz de covariância no tempo $t$\\
+$\predcov{t}$ &  Predição da matriz de covariância no tempo $t$\\
+$\bsubvec{K}{t}$ &  Ganho de Kalman no tempo $t$\\
+$\mb{g}_R(\bullet, \bullet)$ &  Modelo de movimento do robô\\
+$\mb{h}(\bullet, \bullet)$ &  Modelo de medida do sensor laser\\
+$\mb{f}(\bullet, \bullet)$ &  Modelo de medida inverso do sensor laser\\
+$\expv{\bullet}$ & Operador esperança \\
+$\nullmat{m}{n}$ & Matriz nula de dimensão $m \times n$ \\
 \end{longtable}
 

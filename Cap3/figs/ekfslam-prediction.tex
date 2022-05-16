@@ -1,0 +1,17 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{math}
+
+\begin{document}
+\begin{tikzpicture}
+  \tikzmath{\m = 21;}
+  \draw[ultra thick] (0, 0) rectangle ++(1, \m);
+  \draw[ultra thick, fill=darkgray] (0, \m-3) rectangle ++(1, 3);
+
+  \draw[ultra thick] (2, 0) rectangle ++(\m, \m);
+  \draw[ultra thick, fill=darkgray] (2, \m-3) rectangle ++(3, 3);
+  \draw[ultra thick, fill=gray] (2, 0) rectangle ++(3, \m-3);
+  \draw[ultra thick, fill=gray] (5, \m-3) rectangle ++(\m-3, 3);
+\end{tikzpicture}
+\end{document}
