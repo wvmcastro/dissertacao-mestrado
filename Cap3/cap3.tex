@@ -283,9 +283,9 @@ Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-me
   \caption{Etapa de predição do EKF-SLAM}
   \label{alg:ekf-slam-prediction}
 \begin{algorithmic}[1]
-\Procedure{EKF-SLAM-Predição}{$\mean{t}, \cov{t}, \bsubvec{u}{t}$}
+\Procedure{EKF-SLAM-Predição}{$\mean{t-1}, \cov{t-1}, \bsubvec{u}{t}$}
   \State $\predmean{t} \gets \begin{bmatrix}
-    \mb{g}_R(\mean{R,t}, \bsubvec{u}{t}) \\ \mean{M}
+    \mb{g}_R(\mean{R,t-1}, \bsubvec{u}{t}) \\ \mean{M}
   \end{bmatrix}$
   \State $\predcov{RR,t} \gets \bsubvec{G}{R, t}\cov{RR, t-1} \bsubvecT{G}{R,t}$
   \State $\predcov{RM, t} \gets \bsubvec{G}{R, t} \cov{RM, t-1}$
@@ -299,6 +299,7 @@ Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-me
 \end{algorithm}
 
 \begin{algorithm}[h]
+  \setstretch{1.5}
   \caption{Etapa de atualização do EKF-SLAM}
   \label{alg:ekf-slam-update}
 \begin{algorithmic}[1]
@@ -314,6 +315,15 @@ Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-me
   \begin{bmatrix}
     \bsubvec{H}{R}^j \\ \bsubvec{H}{M}^j
   \end{bmatrix} + \bsubvec{Q}{t}$
+  \State $\bvec{K} \gets \begin{bmatrix} \cov{RR, t} & \cov{RM^j, t} \\ 
+    \cov{MR, t} & \cov{MM^j, t} 
+  \end{bmatrix}
+  \begin{bmatrix}
+    \brac{\bsubvec{H}{R}^j}^T \\ \brac{\bsubvec{H}{M}^j}^T
+  \end{bmatrix} \bvec{Z}^{-1}$
+  \State $\mean{t} \gets \bvec{K} \bvec{z}$
+  \State $\cov{t} \gets \predcov{t} - \bvec{K}\bvec{Z}\bvecT{K}$
+  \State \Return $\mean{t}, \cov{t}$
   \EndProcedure
 \end{algorithmic}
 \end{algorithm}
