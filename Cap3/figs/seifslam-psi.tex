@@ -1,0 +1,13 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+\usetikzlibrary{math}
+
+\begin{document}
+\begin{tikzpicture}
+  \tikzmath{\m = 21;}
+
+  \draw[ultra thick] (0, 0) rectangle ++(\m, \m);
+  \draw[ultra thick, fill=darkgray] (0, \m-3) rectangle ++(1, 2);
+\end{tikzpicture}
+\end{document}

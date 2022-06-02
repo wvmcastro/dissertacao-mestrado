@@ -6,8 +6,12 @@
 \newcommand{\bsubvec}[2]{\mathbf{#1}_{#2}}
 \newcommand{\bsubvecT}[2]{\mathbf{#1}_{#2}^{T}}
 \newcommand{\mb}[1]{{\boldsymbol{#1}}} %math bold
-\newcommand{\predmean}[1]{\bsubvec{\overline{\mb{\mu}}}{#1}}
-\newcommand{\mean}[1]{\bsubvec{\mb{\mu}}{#1}}
+\newcommand{\predmean}[1]{\overline{\mb{\mu}}_{#1}}
+\newcommand{\mean}[1]{\mb{\mu}_{#1}}
+\newcommand{\infov}[1]{\mb{\xi}_{#1}}
+\newcommand{\predinfov}[1]{\overline{\mb{\xi}}_{#1}}
+\newcommand{\infom}[1]{\mb{\Omega}_{#1}}
+\newcommand{\predinfom}[1]{\overline{\mb{\Omega}}_{#1}}
 \newcommand{\cov}[1]{\bsubvec{P}{#1}}
 \newcommand{\predcov}[1]{\bsubvec{\overline{P}}{#1}}
 \newcommand{\normal}[2]{\mathcal{N}\parentheses{#1, #2}}
@@ -15,3 +19,7 @@
 \newcommand{\brac}[1]{\left[#1\right]} % brackets
 \newcommand{\nullmat}[2]{\bvec{0}_{#1\times#2}} % null matrix
 \newcommand{\expv}[1]{\mathbb{E}\brac{#1}} % expectation value
+\newcommand{\covf}[1]{\mathop{Cov}\parentheses{#1}}
+% colors
+\newcommand{\blue}[1]{\color{blue}#1\color{black}}
+\newcommand{\magenta}[1]{\color{magenta}#1\color{black}}

@@ -17,10 +17,10 @@ quantidades são observadas:
   \item $\bsubvec{x}{1:t} = \{ \bsubvec{x}{1}, \bsubvec{x}{2}, \dots, 
   \bsubvec{x}{t-1}, \bsubvec{x}{t} \}$: histórico de poses do robô até o instante \emph{t}
   \item $\bsubvec{u}{t}$: o vetor de controle executado pelo robô no instante \emph{t}
-  \item $\bsubvec{u}{0:t} = \{ \bsubvec{u}{0}, \bsubvec{u}{1}, \dots, 
+  \item $\bsubvec{u}{1:t} = \{ \bsubvec{u}{1}, \bsubvec{u}{2}, \dots, 
   \bsubvec{u}{t-1}, \bsubvec{u}{t} \}$: histórico de controles executados pelo robô até o instante \emph{t}
   \item $\bsubvec{z}{t}$: o vetor de medidas no instante \emph{t}
-  \item $\bsubvec{z}{0:t} = \{ \bsubvec{z}{0}, \bsubvec{z}{1}, \dots, 
+  \item $\bsubvec{z}{1:t} = \{ \bsubvec{z}{1}, \bsubvec{z}{2}, \dots, 
   \bsubvec{z}{t-1}, \bsubvec{z}{t} \}$: o conjunto de todas as medidas realizadas até o instante \emph{t}
   \item $\bvec{m}$: o vetor de mapa, constituído pelas posições das características do ambiente consideradas pelo robô
 \end{itemize}
@@ -28,7 +28,7 @@ quantidades são observadas:
 De maneira bastante sucinta, os problemas de SLAM consistem em estimar uma das 
 seguintes distribuições de probabilidade:
 \begin{gather}
-  \pr{\bsubvec{x}{t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{0:t}, 
+  \pr{\bsubvec{x}{t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, 
     \bsubvec{x}{0}}
   \label{eq:online-slam-probability} \\
   \pr{\bsubvec{x}{1:t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, 
@@ -173,5 +173,7 @@ da simulacao desde condicoes de luz até coeficientes de atrito
 textura, transparencia e cor
 
 \section{Motivação}
+
+\section{Estrutura de um sistema SLAM}
 
 \section{Organização do trabalho}

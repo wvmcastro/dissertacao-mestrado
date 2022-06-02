@@ -1,0 +1,73 @@
+\documentclass{standalone}
+
+\usepackage{tikz,tikz-3dplot, tkz-euclide}
+\usetikzlibrary{arrows.meta}
+\tikzset{>={Latex[round]}}
+
+\usepackage{relsize} % mathsmaller
+\usepackage{amsmath}
+\usepackage{mathtools} %boldsymbol
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.12}
+\usepgfplotslibrary{fillbetween}
+
+\begin{document}
+\tdplotsetmaincoords{0}{-40}
+    \begin{tikzpicture}[tdplot_main_coords]
+        \tdplotsetrotatedcoords{0}{0}{-40}
+        \draw[->, thick, tdplot_rotated_coords] (-5, -3.5, 0) -- (-4, -3.5, 0);
+        \draw[->, thick, tdplot_rotated_coords] (-5, -3.5, 0) -- (-5, -2.5, 0);
+        \node[tdplot_rotated_coords, anchor=north] at (-5, -3.5, 0) {\{s\}};
+        % main body
+        \draw[name path=corpo_borda_inferior, thick] (-2.5, -2.5, 0) -- (2.5, -2.5, 0);
+        \draw[name path=corpo_borda_superior, thick] (-2.5, 2.5, 0) -- (2.5, 2.5, 0);
+        \draw[thick] (-2.5, -2.5, 0) -- (-2.5, 2.5, 0);
+        \draw[thick] (2.5, -2.5, 0) -- (2.5, 2.5, 0);
+        \tikzfillbetween[of=corpo_borda_inferior and corpo_borda_superior]{gray, opacity=0.35};
+        %left wheel
+        \draw[name path=borda_inferior_roda_esquerda, thick] (-1, 2.6, 0) -- (1, 2.6, 0);
+        \draw[name path=borda_superior_roda_esquerda, thick] (-1, 3.2, 0) -- (1, 3.2, 0);
+        \draw[thick] (-1, 2.6, 0) -- (-1, 3.2, 0);
+        \draw[thick] (1, 2.6, 0) -- (1, 3.2, 0);
+        \tikzfillbetween[of=borda_inferior_roda_esquerda and borda_superior_roda_esquerda]{black, opacity=0.5}
+        %right wheel
+        \draw[name path=borda_superior_roda_direita, thick] (-1, -2.6, 0) -- (1, -2.6, 0);
+        \draw[name path=borda_inferior_roda_direita, thick] (-1, -3.2, 0) -- (1, -3.2, 0);
+        \draw[thick] (-1, -2.6, 0) -- (-1, -3.2, 0);
+        \draw[thick] (1, -2.6, 0) -- (1, -3.2, 0);
+        \tikzfillbetween[of=borda_inferior_roda_direita and borda_superior_roda_direita]{black, opacity=0.5};
+        %
+        \coordinate (Origin) at (0, 0, 0);
+        \draw[->, ultra thick] (Origin)  -- (1, 0, 0) node[anchor=west]{$\boldsymbol{\hat{x}_{\mathsmaller{R}}}$};
+        \draw[->, ultra thick] (Origin) -- (0, 1, 0) node[anchor=south]
+        {$\boldsymbol{\hat{y}_{\mathsmaller{R}}}$};
+        %
+        \draw[dashed, tdplot_rotated_coords] (Origin) -- (1, 0, 0);
+        \tdplotgetpolarcoords{cos(40)}{sin(40)}{0};
+        \tdplotdrawarc[tdplot_rotated_coords, darkgray]{(Origin)}{0.5}{0}{\tdplotresphi}{xshift=.3cm, yshift=.1cm}{$\phi$};
+        %
+        \draw[dashed, darkgray] (0, 3, 0) -- (0, -3, 0);
+        %
+        \draw[fill, black] (0, 2.9, 0) circle (.12cm);
+        \draw[->, thick, green!50!black] (0, 2.9, 0) -- (1.5, 2.9, 0) node[pos=1, above, sloped] {$\boldsymbol{\vec{\mathrm{v}}_\mathsmaller{L}}$};
+        %
+        \draw[fill, black] (0, -2.9, 0) circle (.12cm);
+        \draw[->, thick, green!50!black] (0, -2.9, 0) -- (1.5, -2.9, 0) node[pos=1, below, sloped] {$\boldsymbol{\vec{\mathrm{v}}_\mathsmaller{R}}$};
+        %
+        \draw[fill, magenta] (Origin) circle (.1cm) node[anchor=north east] {$\mathbf{m}$};
+        %
+        \draw[thick, gray] (-3.1, 2.9, 0) -- (-2.9, 2.9, 0);
+        \draw[thick, gray] (-3, 0, 0) -- (-3, 2.9, 0) node[midway, anchor=east] {\color{darkgray}$d$};
+        \draw[thick, gray] (-3.1, 0, 0) -- (-2.9, 0, 0);
+        \draw[thick, gray] (-3, -2.9, 0) -- (-3, 0, 0) node[midway, anchor=east] {\color{darkgray}$d$};
+        \draw[thick, gray] (-3.1, -2.9, 0) -- (-2.9, -2.9, 0);
+        %
+        \draw[thick, gray] (-1, -3.5, 0) -- (0, -3.5, 0) node[midway, below, sloped] {\color{darkgray}$r$};
+        \draw[thick, gray] (0, -3.5, 0) -- (1, -3.5, 0) node[midway, below, sloped] {\color{darkgray}$r$};
+        \draw[thick, gray] (-1, -3.4, 0) -- (-1, -3.6, 0);
+        \draw[thick, gray] (0, -3.4, 0) -- (0, -3.6, 0);
+        \draw[thick, gray] (1, -3.4, 0) -- (1, -3.6, 0);
+    \end{tikzpicture}
+
+\end{document}

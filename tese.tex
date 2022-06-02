@@ -47,7 +47,7 @@
 \usepackage{epsfig}
 \usepackage{amsmath}
 \usepackage{amssymb} 
-\usepackage{subfig}
+% \usepackage{subfig}
 \usepackage{multirow}
 \usepackage{float}
 \usepackage{amsthm}
@@ -141,7 +141,7 @@
 
 % Dedicatoria: Nao esqueca essa secao  ... :-)
 \begin{itadedication}
-Aos amigos da Graduação e Pós-Graduação do ITA por motivarem tanto a criação deste template pelo Fábio Fagundes Silveira quanto por motivarem a mim e outras pessoas a atualizarem e aprimorarem este excelente trabalho.
+Aos amigos da Graduação e Pós-Graduação do ITA.
 \end{itadedication}
 
 % Agradecimentos
@@ -156,9 +156,8 @@ Aos amigos da Graduação e Pós-Graduação do ITA por motivarem tanto a criaç
 \begin{spacing}{1}
 \mbox{}\vfill
 {\sffamily\itshape
-``If I have seen farther than others,\\
-it is because I stood on the shoulders of giants.''\\}
---- \textsc{Sir~Isaac Newton}
+``O conhecido é finito, o desconhecido, infinito; intelectualmente estamos numa ilhota no meio de um oceano ilimitado de inexplicabilidade. Nossa função em cada geração é reinvindicar um pouco mais de terra firme.''\\}
+--- \textsc{T. H. Huxley}
 \end{spacing}
 \end{flushright}
 
@@ -207,6 +206,12 @@ it is because I stood on the shoulders of giants.''\\}
 \chapter{Aplicação da estimação no problema SLAM (\textit{Backend})}
 \import{Cap3/}{cap3}
 
+\chapter{SLAM \textit{Frontend}}
+\import{CapX/}{capx}
+
+\chapter{SLAM multiagente descentralizado}
+\import{CapY/}{capy}
+
 \chapter{Conclusão}
 \import{Cap4/}{cap4}
 
@@ -216,13 +221,16 @@ it is because I stood on the shoulders of giants.''\\}
 
 % Apendices
 \appendix
-\chapter{Tópicos de Dilema Linear} %opcional
-\input{ApeA/apendiceA}
+\chapter{Descrição detalhada de algoritmos}
+\import{ApeA/}{apendiceA}
+
+\chapter{Matrizes}
+\import{ApeB/}{apendiceB}
 
 % Anexos
-\annex
-\chapter{Exemplo de um Primeiro Anexo} %opcional
-\input{AneA/anexoA}
+% \annex
+% \chapter{Exemplo de um Primeiro Anexo} %opcional
+% \input{AneA/anexoA}
 
 % Glossario
 %\itaglossary

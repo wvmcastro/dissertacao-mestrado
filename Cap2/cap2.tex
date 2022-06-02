@@ -2,14 +2,96 @@
 
 
 \section{Modelo do robô}
+Neste trabalho foi utilizado o gêmeo digital do robô \emph{Turtlebot 3} \cite{TurtleBot_3}, que é um robô de acionamento diferencial, e é equipado com 
+\textit{encoder} de rodas, uma IMU e um sensor laser do tipo LiDAR. Na Figura 
+\ref{fig:diff-drive-schematic} é representado o esquemático de um robô diferencial, as características mais importantes nesse tipo de construção 
+são: o raio da roda, $r$, e a distância entre os eixos das rodas, $2d$. A 
+pose do robô, no instante $t$, é definida como:
+\begin{equation}
+  \bsubvec{x}{t} = \begin{bmatrix}
+    \phi_t & x_t & y_t
+  \end{bmatrix}^T
+  \label{eq:robot-pose}
+\end{equation}
+Onde $\phi$ é o ângulo do eixo $\hat{x}_r$, do sistema de coordenadas móvel 
+do robô, com o eixo $\hat{x}$ do sistema de coordenadas estático $\{s\}$. E $(x, y)$ é origem do sistema de coordenadas do robô, no sistema estático.
+\begin{figure}[h]
+  \centering
+  \includestandalone[width=0.54\textwidth]{figs/diff-drive}
+  \caption{Visão superior do esquemático de um robô diferencial. O eixo z está apontando para fora 
+  da folha. O sistema de coordenadas móvel do robô está posicionado no ponto médio do eixo das rodas  (cinza escuro). Na imagem $\{s\}$ é um sistema de coordenadas estático.}
+  \label{fig:diff-drive-schematic}
+\end{figure}
+
+O modelo de movimento do robô utilizado neste trabalho, na Equação \ref{eq:motion-model}, usa apenas a informação dos \textit{encoders}. Na 
+expressão abaixo, a entrada 
+$\bsubvec{u}{t}$ é composta pelos deslocamentos angulares, $u_t^L$ e $u_t^R$, das rodas esquerda e direita, durante o intervalo $]t-1, t]$.
+\newcommand{\factor}{d\cdot\dfrac{u_t^{R} + u_t^L}{u_t^R - u_t^L}}
+\begin{equation}
+\begin{aligned}
+  \bsubvec{x}{t} &= \mb{g}_R(\bsubvec{x}{t-1}, \bsubvec{u}{t}) \\
+  &= \begin{bmatrix}
+      \phi_{t-1}  \\ x_{t-1} \\ y_{t-1}
+    \end{bmatrix} + 
+  \begin{cases}
+  \renewcommand{\arraystretch}{1.8}
+    \begin{bmatrix}
+      \alpha_t
+      \\
+      \factor \parentheses{\sin(\phi_{t-1} + \alpha_t) - \sin(\phi_{t-1})} 
+      \\
+      \factor \parentheses{-\cos(\phi_{t-1} + \alpha_t) + \cos(\phi_{t-1})}
+    \end{bmatrix}, \text{Se } u_t^L \neq u_t^R \\ 
+    \\
+    \renewcommand{\arraystretch}{1.1}
+    \begin{bmatrix}
+      0
+      \\
+      r\cdot u_t^R \cos(\phi_{t-1}) 
+      \\
+      r\cdot u_t^R \sin(\phi_{t-1}) 
+    \end{bmatrix}, \text{Caso contrário}
+  \end{cases}
+\end{aligned}
+\label{eq:motion-model}
+\end{equation}
+\renewcommand{\arraystretch}{1}
+Onde:
+\begin{equation}
+  \alpha_t = \dfrac{r}{2d} \parentheses{u_t^L - u_t^R}
+\end{equation}
+Assim como os modelos de medida na próxima Seção, o modelo de movimento do 
+robô de acionamento diferencial é não linear. Portanto, é necessário calcular 
+sua matriz jacobiana, em torno de um ponto $\overline{\bvec{x}}_{t-1}$, que será 
+utilizada para linearizá-lo em técnicas como EKF e SEIF-SLAM, apresentadas 
+mais adiante. O jacobiano do modelo $\mb{g}_R(\bullet, \bullet)$ está na Equação 
+\ref{eq:motion-model-jacobian}.
+\begin{equation}
+  \bsubvec{G}{R} = \bvec{I}_3 + \begin{cases}
+    \renewcommand{\arraystretch}{1.8}
+    \begin{bmatrix}
+      0 & 0 & 0 \\
+      \factor \parentheses{\cos(\overline{\phi}_{t-1} + \overline{\alpha}_{t-1}) - \cos(\overline{\phi}_{t-1})} & 0 & 0 \\
+      \factor \parentheses{\sin(\overline{\phi}_{t-1} + \overline{\alpha}_{t-1}) - \sin(\overline{\phi}_{t-1})} & 0 & 0  
+    \end{bmatrix}, \text{Se } u_t^L \neq u_t^R \\
+    \\
+    \renewcommand{\arraystretch}{1}
+    \begin{bmatrix}
+      0 & 0 & 0 \\
+      -r\cdot u_t^R \sin(\overline{\phi}_{t-1}) & 0 & 0 \\
+      r\cdot u_t^R \cos(\overline{\phi}_{t-1}) & 0 & 0  
+    \end{bmatrix}, \text{Caso contrário}
+  \end{cases}
+  \label{eq:motion-model-jacobian}
+\end{equation}
 
 \section{Medidas e o modelo de medida \textit{Range-Bearing}}
-A medida gerada pelo sensor LiDar, embarcado no TurtleBot, consiste em uma nuvem de pontos planar. Essa nuvem de pontos é processada e dela são extraídas estimativas dos centros dos cilindros presentes no ambiente. Esses 
+A medida gerada pelo sensor LiDAR, embarcado no TurtleBot, consiste em uma nuvem de pontos planar. Essa nuvem de pontos é processada e dela são extraídas estimativas dos centros dos cilindros presentes no ambiente. Esses 
 centros são as medidas utilizadas pelo algoritmo de SLAM, eles são descritos 
 em termos de coordenadas polares $(r, \theta)$ no sistema de coordenadas do sensor.
 
 \subsection{Modelo de medida \textit{Range-Bearing}}
-O modelo de medida calcula a medida que espera-se ser lida pelo sensor, quanto o sistema está no estado $\bsubvec{x}{t}$. Na Figura \ref{fig:range-bearing-measurement-schematic}, é representado um sistema composto por um robô e três \textit{landmarks} i, j e k. Logo o vetor de estados, $\bvec{x}$, é formado pela pose do robô, e pelas posições das landmarks no mapa:
+O modelo de medida calcula a medida que espera-se ser lida pelo sensor, quando o sistema está no estado $\bsubvec{x}{t}$. Na Figura \ref{fig:range-bearing-measurement-schematic}, é representado um sistema composto por um robô e três \textit{landmarks} i, j e k. Logo o vetor de estados, $\bvec{x}$, é formado pela pose do robô, e pelas posições das landmarks no mapa:
 \begin{equation}
   \bvec{x} = \begin{bmatrix}
     \phi & x & y & m_x^i & m_y^i & m_x^j & m_y^j & m_x^k & m_y^k
@@ -71,7 +153,7 @@ posição da \textit{landmark} no vetor de estado.
 
 \subsection{Modelo de medida inverso \textit{Range-Bearing}}
 \label{sec:inverse-measurement-model}
-O modelo de medida descrito na Seção anterior é também conhecido como modelo de medida direto, ele calcula a medida que espera-se ler quando o sistema está em um dado estado. Mas também há o modelo de medida inverso, que calcula um estado a partir de uma medida, esse modelo é útil durante o descobrimento de novas \textit{landmarks}, pois ele da meios para que suas posições sejam  incorporadas no vetor de estados, na Figura \ref{fig:range-bearing-inverse-model-schematic} está representado o momento no qual o robô descobre a p-ésima \textit{landmark} do ambiente.
+O modelo de medida descrito na Seção anterior é também conhecido como modelo de medida direto, ele calcula a medida que espera-se ler quando o sistema está em um dado estado. Mas também há o modelo de medida inverso, que calcula um estado a partir de uma medida, esse modelo é útil durante o descobrimento de novas \textit{landmarks}, pois ele dá meios para que suas posições sejam  incorporadas no vetor de estados, na Figura \ref{fig:range-bearing-inverse-model-schematic} está representado o momento no qual o robô descobre a p-ésima \textit{landmark} do ambiente.
 \begin{figure}[h]
   \includestandalone[width=\textwidth]{figs/range-bearing-inverse}
   \caption{Esquemático do modelo de medida \textit{Range-Bearing}. O sistema de coordenadas do robô é representado em magenta, e o sistema de coordenadas do sensor em azul. Os círculos representam \textit{landmarks}, as conhecidas pelo robô (portanto presentes no vetor de estados), em cinza, e recém descobertas, em laranja. A p-ésima \textit{landmark} acaba de ser encontrada pelo robô.}
