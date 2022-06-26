@@ -1,5 +1,24 @@
 \section{O ambiente}
-
+O ambiente consiste em uma espaço de 10$m^2$ com diversos ``postes'' de formato cilíndrico de 16$cm$ de diâmetro, delimitado por paredes, e está representado na Figura \ref{fig:environment}.
+\begin{figure}[h]
+  \begin{subfigure}{.50\textwidth}
+    \includegraphics[width=\textwidth]{figs/environment-perspective.jpg}
+    \caption{Vista perspectiva ampla}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{.50\textwidth}
+    \includegraphics[width=\textwidth]{figs/environment-birds-eye-of-view.jpg}
+    \caption{Vista ortográfica superior}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=.5\textwidth]{figs/environment-closer-perspective.jpg}
+    \caption{Vista perspectiva fechada}
+  \end{subfigure}
+  \caption{Diferentes vistas do ambiente simulado}
+  \label{fig:environment}
+\end{figure}
 
 \section{Modelo do robô}
 Neste trabalho foi utilizado o gêmeo digital do robô \emph{Turtlebot 3} \cite{TurtleBot_3}, que é um robô de acionamento diferencial, e é equipado com 
@@ -86,6 +105,7 @@ mais adiante. O jacobiano do modelo $\mb{g}_R(\bullet, \bullet)$ está na Equaç
 \end{equation}
 
 \section{Medidas e o modelo de medida \textit{Range-Bearing}}
+\label{sec:slam-measurement}
 A medida gerada pelo sensor LiDAR, embarcado no TurtleBot, consiste em uma nuvem de pontos planar. Essa nuvem de pontos é processada e dela são extraídas estimativas dos centros dos cilindros presentes no ambiente. Esses 
 centros são as medidas utilizadas pelo algoritmo de SLAM, eles são descritos 
 em termos de coordenadas polares $(r, \theta)$ no sistema de coordenadas do sensor.
