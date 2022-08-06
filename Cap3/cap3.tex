@@ -254,20 +254,22 @@ do EKF.
     &= \begin{bmatrix}
        \mb{\eta}_t \\
        \bvec{F}_X \mb{\eta}_t + \bvec{F}_Y \mb{\delta} 
-   \end{bmatrix} \small\text{ Onde $\mb{\eta}_t = \bsubvec{x}{t} - \mean{t}$ e $\mb{\delta} = \bvec{y} - \bvec{y}^j$}
+   \end{bmatrix} \text{ Onde $\mb{\eta}_t = \bsubvec{x}{t} - \mean{t}$ e $\mb{\delta} = \bvec{y} - \bvec{y}^j$}
 \end{aligned}
 \end{equation}
 A matriz de covariância do sistema aumentado, $\cov{t}^*$, é obtida por:
 \renewcommand{\arraystretch}{1.5}
+\newcommand{\eqCovarianceAugmented}{\begin{bmatrix}
+       \cov{t} & \cov{t} \bvec{F}_X^T\\
+       \bsubvec{F}{X} \cov{t} &  \bvec{F}_X \cov{t} \bvec{F}_X^T 
+       + \bvec{F}_Y \bvec{Q} \bvec{F}_Y^T
+    \end{bmatrix}}
 \begin{equation}
 \begin{aligned}
   \cov{t}^* &= \expv{\mb{\alpha} \,\mb{\alpha}^T} \\
-  &= \begin{bmatrix}
-       \cov{t} & \cov{t} \bvec{F}_X^T\\
-       \cov{t} \bvec{F}_X &  \bvec{F}_X \cov{t} \bvec{F}_X^T 
-       + \bvec{F}_Y \bvec{Q} \bvec{F}_Y^T
-    \end{bmatrix}
+  &= \eqCovarianceAugmented
 \end{aligned}
+\label{eq:ekf-landmark-insertion-covariance}
 \end{equation}
 \renewcommand{\arraystretch}{1}
 Portanto, a matriz de covariância do sistema aumentado é a matriz de 
@@ -607,6 +609,110 @@ vetor de informação predito.
 
 \subsection{SEIF-SLAM: Passo de atualização}
 \subsection{SEIF-SLAM: Inserção de nova \textit{landmark}}
+Para derivar a inserção de \textit{landmark} no EIF/SEIF, vamos partir 
+dos resultados da inserção de \textit{landmark} no EKF apresentados na 
+Seção \ref{sec:ekf-slam-landmark-insertion}. Utilizando o resultado do 
+aumento da matriz de covariâncias, repetido a seguir:
+\begingroup
+\renewcommand{\arraystretch}{1.5}
+\begin{equation*}
+  \bsubvec{P}{t}^* = \eqCovarianceAugmented \tag{\ref{eq:ekf-landmark-insertion-covariance} repetida}
+\end{equation*}
+\endgroup
+E aplicando a equivalência $\bvec{\Omega}^{-1} = \bvec{P}$, pode-se reescrever a expressão acima como:
+\newcommand{\eqOmegaInv}{\bsubvec{\Omega}{t}^{-1}}
+\begingroup
+\renewcommand{\arraystretch}{1.5}
+\begin{equation}
+  \brac{\bsubvec{\Omega}{t}^*}^{-1} = \begin{bmatrix}
+    \eqOmegaInv & \eqOmegaInv \bsubvecT{F}{X} \\
+    \bsubvec{F}{X} \eqOmegaInv & \bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y}
+  \end{bmatrix}
+\end{equation}
+Invertendo ambos os lados:
+\begin{equation*}
+  \bsubvec{\Omega}{t}^* = \begin{bmatrix}
+    \bvec{X} & \bvec{Y} \\
+    \bvec{Z} & \bvec{U}
+  \end{bmatrix}
+\end{equation*}
+\endgroup
+Onde, pelo lema da inversão na forma de blocos (Apêndice \ref{app:blockwise-inversion-lemma}) temos:
+\newcommand{\eqU}{\brac{\bsubvecT{F}{Y}}^{-1} \bvec{Q}^{-1} \bsubvec{F}{Y}^{-1}}
+\addtolength{\jot}{1.4pt}
+\begingroup
+\begin{align}
+  &\begin{aligned}
+    \blue{\bvec{U}} &=  \brac{\bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y} - \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}} \,\eqOmegaInv \bsubvecT{F}{X}}^{-1}\\
+    &= \brac{\cancel{\bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X}} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y} - \cancel{\bsubvec{F}{X} \eqOmegaInv \bsubvecT{F}{X}}}^{-1}\\
+    &= \eqU
+  \end{aligned}\\
+  &\begin{aligned}
+    \bvec{Y} &= -\cancel{\brac{\eqOmegaInv}^{-1} \eqOmegaInv}\bsubvecT{F}{X} \blue{\bvec{U}}\\
+    &= \bsubvecT{F}{X} \parentheses{\eqU} \\
+  \end{aligned}\\
+  &\begin{aligned}
+    \bvec{Z} &= -\blue{\bvec{U}} \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}}\\
+    &= -\parentheses{\eqU} \bsubvec{F}{X}
+  \end{aligned}\\
+  &\begin{aligned}
+    \bvec{X} &= \brac{\eqOmegaInv}^{-1} + \cancel{\brac{\eqOmegaInv}^{-1} \eqOmegaInv}\bsubvecT{F}{X} \,\blue{\bvec{U}} \, \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}}\\
+    &= \bsubvec{\Omega}{t} + \bsubvecT{F}{X} \parentheses{\eqU} \bsubvec{F}{X}
+  \end{aligned}
+\end{align}
+Por fim, temos que a matriz de informação aumentada é dada por:
+\renewcommand{\arraystretch}{1.5}
+\begin{equation}
+  \bsubvec{\Omega}{t}^* = \begin{bmatrix}
+    \bsubvec{\Omega}{t} + \bsubvecT{F}{X} \parentheses{\eqU} \bsubvec{F}{X} & -\bsubvecT{F}{X} \parentheses{\eqU} \\
+    -\parentheses{\eqU} \bsubvec{F}{X} & \eqU
+  \end{bmatrix} 
+  \label{eq:seif-landmark-insertion-information-matrix}
+\end{equation}
+\endgroup
+
+Note que ao contrário da matriz de covariâncias aumentada do EKF,  na Eq. \ref{eq:ekf-landmark-insertion-covariance}, que não altera a covariância dos elementos já existentes no filtro. A matriz de informação aumentada altera a informação dos elementos existentes, mais especificamente ela altera a informação do robô.
+
+Isso pode ser concluído a partir da observação da forma da matrix $\bsubvec{F}{X}$, Eq. \ref{eq:inverse-measurement-model-jacobian-state-part}, nula em todos elementos exceto pelo primeiro bloco $2\times 3$. Para deixar isso em evidência a Eq. \ref{eq:seif-landmark-insertion-information-matrix} é 
+reescrita abaixo:
+\begingroup
+\renewcommand{\arraystretch}{1.5}
+\begin{equation}
+  \bsubvec{\Omega}{t}^* = \begin{bmatrix}
+    \bsubvec{\Omega}{RR,t} + \bsubvecT{F}{R}\parentheses{\eqU}\bsubvec{F}{R} & \bsubvec{\Omega}{RM,t} & -\bsubvecT{F}{R} \parentheses{\eqU}\\
+    \bsubvecT{\Omega}{RM,t} & \bsubvec{\Omega}{MM,t} & \nullmat{n-3}{2}\\
+    -\parentheses{\eqU} \bsubvec{F}{R} & \nullmat{2}{n-3} & \eqU
+  \end{bmatrix}
+\end{equation}
+\endgroup
+A partir da matriz de informação e do vetor de estado aumentados pode-se 
+calcular o vetor de informação aumentado:
+\begingroup
+\renewcommand{\arraystretch}{1.5}
+\begin{equation}
+  \begin{aligned}
+    \infov{t}^* &= \bsubvec{\Omega}{t}^* \mean{t}^*\\
+    &= \begin{bmatrix}
+      \begin{bmatrix} \bsubvec{\Omega}{RR,t}^* & \bsubvec{\Omega}{RM,t}^* \end{bmatrix} \mean{t}^*  \\
+      \infov{M, t}\\
+      \begin{bmatrix} \bsubvec{\Omega}{RM_j,t}^* & \bsubvec{\Omega}{M_j M_j, t}^* \end{bmatrix} \mean{t}^*
+    \end{bmatrix}
+  \end{aligned}
+\end{equation}
+\endgroup
+Assim como na matriz de informação, os elementos do vetor de informação correspondentes ao robô também são alterados, além dos elementos da nova \textit{landmark}, é claro. De novo, ao contrário do que acontece no EKF, onde apenas os elementos da nova \textit{landmark} são alterados no vetor de estados. A Figura \ref{fig:seif-slam-landmark-insertion} representa as porções alteradas e/ou adicionadas à matriz de informação e ao vetor de informação.
+\begin{figure}[h]
+  \centering
+  \includestandalone[width=.6\textwidth]{figs/seifslam-landmark-insertion}
+  \caption{Vetor e matriz de informação aumentados após inserção de nova \textit{landmark}. As partes adicionadas, em cinza, correspondem à informação cruzada entre a nova landmark e o robô (cinza claro), e à média da nova \textit{landmark} e do robô, e suas informações (cinza escuro).}
+  \label{fig:seif-slam-landmark-insertion}
+\end{figure}
+
+Como pode ser observado na figura acima, a operação de inserção de \textit{landmark} no SEIF possui complexidade constante $\bigO{1}$ em memória (o EKF possui complexidade linear), porém assim como no EKF o cálculo das 
+novas porções possui complexidade $\bigO{n}$.
+
+\blue{\textbf{TODO}: Como interpretar  o resultado de uma nova landmark alterar a informação do robô?}
+
 \subsection{SEIF-SLAM: Esparsificação da matriz de informação}
 
 \subsection{SEIF-SLAM: Recuperação da média}

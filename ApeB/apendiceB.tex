@@ -35,3 +35,22 @@ Isso é mostrado através de uma série de manipulações:
 \label{lem:inversion-lemma}
 
 \end{lem}
+
+
+\section{Inversão na forma de blocos}
+\label{app:blockwise-inversion-lemma}
+Seja a matriz $(m+n) \times (m+n)$, $\bvec{M}$, particionada na seguinte forma de blocos:
+\begin{equation}
+    \bvec{M} = \begin{bmatrix}
+        \bvec{A} & \bvec{B} \\ \bvec{C} & \bvec{D}
+    \end{bmatrix}
+\end{equation}
+onde as matrizes $\mat{A}{m}{m}$ e $\mat{D}{n}{n}$ são invertíveis, então temos que $\bvec{M}^{-1}$ é dado por:
+\begin{equation}
+    \newcommand{\commonTerm}{\parentheses{\bvec{D-C}\bvec{A}^{-1}\bvec{B}}^{-1}}
+    \bvec{M}^{-1} = \begin{bmatrix}
+        \bvec{A}^{-1} + \bvec{A}^{-1}\bvec{B} \commonTerm \bvec{C} \bvec{A}^{-1} & -\bvec{A}^{-1}\bvec{B}\commonTerm \\
+        -\commonTerm \bvec{C} \bvec{A}^{-1} & \commonTerm
+    \end{bmatrix}
+    \label{eq:blockwise-matrix-inversion}
+\end{equation}
