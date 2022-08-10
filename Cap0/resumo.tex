@@ -1,0 +1,23 @@
+O problema de Localização e Mapeamento Simultâneos, conhecido pela sigla SLAM, pergunta se é possível para um robô ser colocado em um ambiente 
+desconhecido a priori, e incrementalmente construir um mapa deste 
+ambiente enquanto simultaneamente se localiza neste mapa sem a 
+necessidade de infraestrutura de localização como GPS.
+
+A solução do problema de SLAM é fundamental para a robótica móvel 
+autônoma. Entretanto, apesar de já solucionado não é uma tarefa trivial 
+tanto do ponto de vista teórico como do ponto de vista da implementação. 
+Dependendo da dinâmica do robô, sensores utilizados, recurso 
+computacional disponível, necessidade de navegação e guiamento, a solução 
+pode se tornar mais ou menos complexa.
+
+Este trabalho desenvolve uma solução multiagente em ambiente simulado 
+para o problema SLAM 2D. Para isso emprega o uso do Filtro de Informação 
+Esparso, juntamente com outros algoritmos de navegação, associação de 
+dados e de representação de mapas. As vantagens da solução distribuída do 
+problema de SLAM, em relação ao problema original, é a divisão da carga 
+de trabalho entre os agentes e a redundância de informação.
+
+Atualmente cada agente é capaz de performar SLAM individualmente, o desenvolvimento se encontra na etapa de troca do mapa de \textit{features} entre os agentes. Subsequente a essa etapa, será abordado o problema da exploração conjunta entre os agentes. Terminadas essas duas 
+etapas de desenvolvimento, fechando o escopo delineado para o trabalho, 
+se dará início à escrita da dissertação e também de artigo para submissão 
+a coreferências e/ou periódicos.

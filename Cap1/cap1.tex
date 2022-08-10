@@ -4,7 +4,7 @@
 
 O problema de Mapeamento e Localização Simultâneos conhecido pela sigla SLAM por conta do termo em inglês \textit{Simultaneous Localization and Mapping}, pergunta se é possível para um robô móvel ser colocado em um ambiente desconhecido a priori e incrementalmente construir um mapa deste ambiente enquanto simultaneamente se localiza neste mapa. Ou seja, tanto a trajetória da plataforma móvel quanto a localização das características do mapa (também conhecidas por \textit{landmarks}) são estimadas em tempo real sem a necessidade de nenhum conhecimento a priori de suas localizações \cite{durrant2006simultaneous}, ou infra estrutura de localização prévia, como GPS.
 
-Além disso, SLAM também já foi conhecido como Mapeamento e Localização Concorrentes (CML, do inglês \textit{Concurrent Mapping and Localization}), porém este termo caiu em desuso a partir de 1995 quando o termo SLAM foi cunhando em \cite{durrant1996localization} no Simpósio Internacional de Pesquisa em Robótica, ISSR, onde originalmente era chamado \textit{Simultaneous Localization and Map Building}. A solução do problema de SLAM é fundamental para atingir a robótica móvel autônoma e independente de operadores \cite{durrant2006simultaneous}. Entretanto resolver o problema de localização e mapeamento simultâneos, apesar de solucionado, não é uma tarefa trivial tanto do ponto de vista teórico como do ponto de vista da implementação \cite{durrant1996localization}.
+SLAM também já foi conhecido como Mapeamento e Localização Concorrentes (CML, do inglês \textit{Concurrent Mapping and Localization}), porém este termo caiu em desuso a partir de 1995 quando o termo SLAM foi cunhando em \cite{durrant1996localization} no Simpósio Internacional de Pesquisa em Robótica, ISSR, onde originalmente era chamado \textit{Simultaneous Localization and Map Building}. A solução do problema de SLAM é fundamental para atingir a robótica móvel autônoma e independente de operadores \cite{durrant2006simultaneous}. Entretanto resolver o problema de localização e mapeamento simultâneos, apesar de solucionado, não é uma tarefa trivial tanto do ponto de vista teórico como do ponto de vista da implementação \cite{durrant1996localization}.
 
 \subsection*{Caracterização do problema}
 Imagine um robô dotado de um sensor extrínseco, capaz de capturar medidas relacionadas ao 
@@ -51,8 +51,8 @@ Embora as definições do problema em \ref{eq:online-slam-probability} e
 A depender das características do sistema como: a dinâmica do robô, sensores utilizados, recursos computacionais disponíveis, restrição de tempo real, e, 
 necessidade de navegação e guiamento autônomos, sua solução pode se tornar mais 
 ou menos complexa. Difícil também, é aprender terminologia utilizada, pelos 
-pesquisadores, para cada uma dessas características. Parte da terminologia, 
-pertinente a este trabalho, do problema de SLAM é abordada a seguir.
+pesquisadores, para cada uma dessas características. Parte da terminologia do problema de SLAM,
+pertinente a este trabalho, é abordada a seguir.
 
 \subsection*{Taxonomia do problema SLAM}
 Como é de se esperar, há termos específicos para tratar cada aspecto de um 
