@@ -1,4 +1,11 @@
-O famoso Filtro de Kalman (KF) é uma técnica de estimação ótima para sistemas lineares com ruídos gaussianos, nele a distribuição de probabilidade do estado estimado é representada por uma gaussiana, parametrizada pelos momentos média e covariância. Ele foi desenvolvido simultaneamente em 1958 por Peter Swerling, e em 1960 por Rudolf Kalman \cite[p.~40]{bongard2006probabilistic}. Apesar de sua otimalidade ser garantida apenas para sistemas lineares, ele é aplicado em sistemas não lineares também. Para isso, é feita uma aproximação linear em torno da estimativa do estado atual do sistema, utilizando-se série de Taylor, e a premissa de que os termos de ordem maior ou igual a dois são desprezíveis.
+O famoso Filtro de Kalman (KF) é uma técnica de estimação ótima para sistemas lineares com ruídos gaussianos, nele a distribuição de probabilidade do estado estimado é representada por uma gaussiana, 
+Eq. \ref{eq:moments-gaussian-probabilistic-distribution}, parametrizada pelos momentos média e covariância. Ele foi desenvolvido simultaneamente em 1958 por Peter Swerling, e em 1960 por Rudolf Kalman \cite[p.~40]{bongard2006probabilistic}. Apesar de sua otimalidade ser garantida apenas para sistemas lineares, ele é aplicado em sistemas não lineares também. Para isso, é feita uma aproximação linear em torno da estimativa do estado atual do sistema, utilizando-se série de Taylor, e a premissa de que os termos de ordem maior ou igual a dois são desprezíveis.
+
+\begin{equation}
+  \pr{\bvec{x}} = \boldsymbol{\eta} \exp\parentheses{-\frac{1}{2} 
+  \parentheses{\bvec{x} - \mean{}}^T \cov{}^{-1}\parentheses{\bvec{x} - \mean{}}}
+  \label{eq:moments-gaussian-probabilistic-distribution}
+\end{equation}
 
 Essa técnica derivada do KF para sistemas não lineares é conhecida como Filtro de Kalman Extendido (EKF). O EKF é muito utilizado em aplicações reais, pois a grande maioria dos sistemas reais são não lineares, como o movimento de um robô diferencial, por exemplo. Além disso o modelo de medida do sensor é, muitas vezes, uma função não linear do estado do sistema.
 
@@ -288,7 +295,8 @@ Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-me
 
 \section{Filtro de Informação Extendido (EIF)}
 O Filtro de Kalman Extendido, apresentado na Seção \ref{sec:ekf} utiliza a
-parametrização de momentos para representar a distribuição de probabilidade 
+parametrização de momentos (Eq. \ref{eq:moments-gaussian-probabilistic-distribution}) para representar a 
+distribuição de probabilidade 
 gaussiana. Já o Filtro de Informação utiliza a chamada representação canônica, composta pelo vetor de informação, $\infov{}$, e pela matriz de informação, $\infom{}$. Definidos a seguir:
 \begin{equation}
   \infov{} = \cov{}^{-1} \mean{}
@@ -315,6 +323,13 @@ Informação Extendido:
   \brac{\bsubvec{y}{t} - \mb{h}(\predmean{t}) + \bsubvec{H}{t}\predmean{t}}
   \label{eq:eif-info-vector-update}
 \end{align}
+e a distribuição de probabilidade na Eq. \ref{eq:moments-gaussian-probabilistic-distribution} pode ser reescrita como:
+\begin{equation}
+  \pr{\bvec{x}} = \boldsymbol{\eta} \exp\parentheses{-\frac{1}{2} 
+  \bvecT{x} \infom{} \bvec{x} + \bvecT{x}\infov{}}
+  \label{eq:canonical-gaussian-probabilistic-distribution}
+\end{equation}
+
 Uma vantagem do Filtro de Informação é que ele tende a ser numericamente mais estável. Além disso, 
 representar alto nível de incerteza é numericamente mais seguro quando comparado 
 com o Filtro de Kalman, aqui basta definir $\infom{} = \bvec{0}$, enquanto no KF 
@@ -350,7 +365,7 @@ memória. A próxima Seção descreve o SEIF e seus detalhes de implementação.
 
 \section{SEIF-SLAM}
 Essa Seção descreve o Filtro de Informação Extendido Esparso (SEIF), e 
-como ele endereça as principais desvantagens do EIF clássico, no 
+como ele endereça as principais desvantagens do EIF clássico no 
 contexto de SLAM. Será mostrado como ele mantém complexidade 
 linear no uso de memória, e complexidade de tempo constante nos passos de predição e atualização, independentemente do número de 
 \textit{landmarks} no mapa/ambiente.
@@ -417,13 +432,12 @@ tempo constante de atualização e predição.
 O passo de predição do SEIF-SLAM está condensado no Algoritmo \ref{alg:seif-slam-prediction}, abaixo. As Seções que se seguem derivam os 
 passos do algoritmo a partir das equações de predição do EIF, \ref{eq:eif-info-matrix-prediction}, \ref{eq:eif-info-vector-prediction} e \ref{eq:eif-mean-prediction}. A esparsidade da matriz de informação é 
 usada como premissa para garantir o tempo de execução constante, 
-a esparsificação em sí será tratada mais adiante, por hora vamos assumir que 
-ela é esparsa.
+a esparsificação em sí será tratada mais adiante, por hora vamos assumir que a matriz é esparsa.
 
 TODO: 
 \begin{itemize}
-  \item nota sobre a cópia da matriz de informação
-  \item nota sobre correção da componente de orientação
+  \item \blue{nota sobre a cópia da matriz de informação}
+  \item \blue{nota sobre correção da componente de orientação}
 \end{itemize}
 \begin{algorithm}[h]
   \setstretch{1.4}
@@ -572,7 +586,7 @@ igual a dois.
 
 A princípio, pode parecer que a quantidade de elementos não 
 nulos é significativa em relação ao tamanho das matrizes. Porém, essa 
-percepção se deve ao fato das matrizes representadas serem pequenas, o tamanho delas foi escolhido de modo a facilitar a visualização.
+percepção se deve ao fato das matrizes representadas na Figura \ref{fig:seif-slam-prediction-variables} serem pequenas, o tamanho delas foi escolhido de modo a facilitar a visualização.
 
 \subsubsection{Predição do vetor de informação}
 Abaixo é apresentada uma série de manipulações para que a predição do vetor 
@@ -607,7 +621,135 @@ temos como resultado um vetor esparso
 constante de operações, que independe do tamanho do mapa, para calcular o 
 vetor de informação predito.
 
+\subsection{SEIF-SLAM: Recuperação da média}
+Outro desafio a ser resolvido no SEIF-SLAM, para manter o tempo de 
+predição e/ou atualização constantes, é o cálculo do vetor média. 
+Fundamental para as linearizações dos modelos de movimento e medida, e para no cálculo do vetor de informação na etapa de esparsificação. Na Equação 
+\ref{eq:eif-mean-recuperation}, do Filtro de Informação Extendido, esse cálculo 
+é feito através da inversão da matriz de informação, 
+e, mesmo numa matriz esparsa, essa operação não é constante.
+
+Para contornar essa inversão, no SEIF esse passo é executado de uma forma completamente diferente: ele é modelado como um problema de otimização. Em 
+\cite[Cap.~12.6]{bongard2006probabilistic} mostra-se que o vetor média equivale 
+ao ponto de máximo da quadrática na representação canônica da gaussiana 
+Eq. \ref{eq:canonical-gaussian-probabilistic-distribution}, então o 
+vetor média atualizado $\mean{t}$ pode ser calculado como:
+\begin{equation}
+  \begin{aligned}
+    \mean{t} &= \mathop{\mathrm{argmax}}\limits_{\mean{}} \,\exp\parentheses{-\frac{1}{2}\,\mean{}^T\infom{t}\mean{} 
+    + \mean{}^T \infov{t}}\\
+    &= \mathop{\mathrm{argmin}}\limits_{\mean{}}\, - \parentheses{-\frac{1}{2}\,\mean{}^T\infom{t}\mean{} 
+    + \mean{}^T \infov{t}}\\
+    &= \mathop{\mathrm{argmin}}\limits_{\mean{}}\, \frac{1}{2}\,\mean{}^T\infom{t}\mean{} 
+    - \mean{}^T \infov{t}
+  \end{aligned}
+  \label{eq:seif-mean-recuperation}
+\end{equation}
+
+A minimização acima pode ser realizada por qualquer algoritmo de 
+minimização como gradiente descendente, gradiente conjugado, entre 
+outros. Nesse trabalho foi utilizado a descida de coordenadas, Algoritmo \ref{alg:seif-slam-mean-recovery}, que apesar de não ser tão sofisticada 
+quanto os algoritmos citados, se mostrou boa o suficiente para a tarefa.
+
+Em problemas de otimização um bom palpite inicial próximo da vizinhança 
+do ponto de interesse é fundamental para a convergência do algoritmo, no 
+caso de SLAM esperamos que o estado atualizado sempre esteja próximo do 
+estado predito, portanto o vetor $\predmean{t}$ é utilizado como ponto de partida da otimização.
+\begin{algorithm}[h]
+  \setstretch{1.25}
+  \caption{Etapa de recuperação da média no SEIF-SLAM}
+  \label{alg:seif-slam-mean-recovery}
+\begin{algorithmic}[1]
+  \Procedure{SEIF-SLAM-Recuperação-Média}{$\predmean{t}, \infov{t}, \infom{t}, \mathrm{K}$}
+  \State $\mean{t} \gets \predmean{t}$
+  \For {$j \in {\bvec{m}^+}$}
+    \State $k \gets 0$
+    \While{$k < \mathrm{K}$ }
+      \State $\mean{t}^{m^j} \gets (\bsubvec{M}{m^j} \infom{t} \bsubvecT{M}{m^j})^{-1} \, \bsubvec{M}{m^j}\brac{\infov{t} - 
+      \infom{t}\predmean{t} + \infom{t} \bsubvecT{M}{m^j}
+      \bsubvec{M}{m^j}\predmean{t}}$
+      \State $\mean{t}^{x_r} \gets (\bsubvec{M}{x_r} \infom{t} \bsubvecT{M}{x_r})^{-1} \, \bsubvec{M}{x_r}\brac{\infov{t} - 
+      \infom{t}\predmean{t} + \infom{t} \bsubvecT{M}{x_r}
+      \bsubvec{M}{x_r}\predmean{t}}$
+      \State $k \gets k + 1$
+    \EndWhile
+  \EndFor
+  \State \Return $\mean{t}$
+  \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+Como pode ser notado na linha 2 do algoritmo acima, dentre todas as 
+\textit{landmarks} apenas as ativas são atualizadas. Além da pose do 
+robô, é claro. Isso se deve novamente à esparsidade da matriz de 
+informação, pois a atualização de uma \textit{landmark} só contribui 
+para a estimação da posição de suas vizinhas e da pose do robô. 
+Portanto, a complexidade da recuperação da média também é constante, 
+dado que $\mathrm{K}$ e o tamanho do conjunto $\bvec{m}^+$ são ambos 
+constantes.
+
 \subsection{SEIF-SLAM: Passo de atualização}
+Por hora, assim como foi feito com o EKF-SLAM na Eq. \ref{eq:ekf-slam-innovation} vamos assumir que é possível calcular a inovação 
+$\bsubvec{z}{t}^j$ a partir da medida $\bsubvec{y}{t}^j$. É claro que 
+na prática, é preciso antes uma etapa que estabeleça correspondência entre 
+as medidas lidas e as \textit{landmarks} existentes no vetor de estados. 
+Essa correspondência é fundamental para utilizar a \textit{landmark} $\bvec{m}^i$ correta no cálculo do modelo de medida \measurementModel, Eq. \ref{eq:range-bearing-measurement-model}.
+
+O algoritmo abaixo pressupõe que tais correspondências são 
+conhecidas. Mais adiante na Seção \ref{sec:data-association} será 
+abordado uma maneira de como essas correspondências são estabelecidas. 
+Ao contrário dos outros passos, no passo de atualização a esparsidade da 
+matriz de informação não influencia e/ou altera nada em relação ao 
+Filtro de Informação Extendido. As equações de atualização nas linhas 
+3 e 4 abaixo, são as mesmas equações \ref{eq:eif-info-matrix-update} e 
+\ref{eq:eif-info-vector-update} do EIF.
+
+\begin{algorithm}[h]
+  \setstretch{1.25}
+  \caption{Etapa de atualização do SEIF-SLAM com associação conhecida}
+  \label{alg:seif-slam-update-known-associations}
+\begin{algorithmic}[1]
+  \Procedure{SEIF-SLAM-Atualização}{$\predmean{t}, \predinfov{t}, \predinfom{t}, \bvec{y}, j = \text{índice da \textit{landmark}}$}
+  \State $\bvec{z} \gets \bvec{y} - \mb{h}^j(\predmean{t})$
+  \State $\infom{t} \gets \predinfom{t} + \bsubvecT{H}{t} \bsubvec{Q}{t}^{-1} \bsubvec{H}{t}$
+  \State $\infov{t} \gets \predinfov{t} + \bsubvecT{H}{t}\bsubvec{Q}{t}^{-1} 
+  \brac{\bvec{z} + \bsubvec{H}{t}\predmean{t}}$
+  \State $\mean{t} \gets \textproc{SEIF-SLAM-Recuperação-Média}(\predmean{t}, \infov{t}, \infom{t}, \mathrm{K})$
+  \State \Return $\infov{t}, \mean{t}, \infom{t}$
+  \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+A atualização acima altera apenas os elementos referentes ao robô e à 
+j-ésima \textit{landmark} tanto na matriz de informação quanto no vetor 
+de informação é ilustrada na Figura \ref{fig:seif-slam-update}. O SEIF 
+herda o caráter "local" da atualização do EIF, e difere no EKF onde a 
+atualização altera todos os elementos do vetor média e da matriz de 
+covariâncias como foi mostrado na Figura \ref{fig:ekf-slam-update}.
+\begin{figure}[h]
+  \begin{subfigure}{.30\textwidth}
+    \includestandalone[width=\textwidth, keepaspectratio]{figs/seifslam-mean-update}
+    \caption{$\mean{t}$}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{.30\textwidth}
+    \includestandalone[width=\textwidth]{figs/seifslam-infov-update}
+    \caption{$\infov{t}$}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{.3\textwidth}
+    \includestandalone[width=\textwidth]{figs/seifslam-infom-update}
+    \caption{$\infom{t}$}
+  \end{subfigure}
+  \caption{Representação dos vetores média e informação, $\mean{t}$ e $\infov{t}$ respectivamente, e da matriz de informação $\infom{t}$ na 
+  etapa de atualização. O conjunto $\bvec{m}^+$ possui tamanho 2, e a 
+  segunda \textit{landmark} é atualizada. Note que no vetor média, 
+  a pose do robô e todas as \textit{landmarks} ativas são atualizadas, 
+  enquanto que no vetor e matriz de informação, apenas a pose do robô e 
+  a posição da \textit{landmark} observada são atualizados.}
+  \label{fig:seif-slam-update}
+\end{figure}
+
 \subsection{SEIF-SLAM: Inserção de nova \textit{landmark}}
 Para derivar a inserção de \textit{landmark} no EIF/SEIF, vamos partir 
 dos resultados da inserção de \textit{landmark} no EKF apresentados na 
@@ -715,14 +857,11 @@ novas porções possui complexidade $\bigO{n}$.
 
 \subsection{SEIF-SLAM: Esparsificação da matriz de informação}
 
-\subsection{SEIF-SLAM: Recuperação da média}
-A recuperação da média, na Equação \ref{eq:eif-mean-recuperation}, implica na 
-inversão da matriz de informação, e, mesmo numa matriz esparsa, essa operação 
-não é constante. Portante, no SEIF esse passo é executado de uma forma 
-completamente diferente, ele é modelado como um problema de otimização.
 
-...
 
 \section{Associação de \textit{landmarks}}
+\label{sec:data-association}
+
+\section{Estratégia para mitigar efeito de falsas detecções}
 
 \section{Conclusão do capítulo}
