@@ -1,0 +1,30 @@
+Os resultados exibidos nas próximas Seções foram retirados de \cite[p.~358-359]{bongard2006probabilistic}, onde são demonstrados. Seja a distribuição de probabilidade $\pr{\bvec{x}, \bvec{y}}$ sobre os vetores aleatórios $\bvec{X}$ e $\bvec{Y}$ uma gaussiana representada na forma canônica (informação).
+\begin{align}
+  \infom{} &= \begin{bmatrix}
+    \infom{\mathrm{xx}} & \infom{\mathrm{xy}} \\
+    \infom{\mathrm{yx}} & \infom{\mathrm{yy}}
+  \end{bmatrix}\\
+  \infov{} &= \begin{bmatrix}
+    \infov{\mathrm{x}}\\
+    \infov{\mathrm{y}}
+  \end{bmatrix}
+\end{align}
+\section{Marginalização}
+
+Se $\infom{\mathrm{yy}}$ é invertível, a marginal $\pr{\bvec{x}}$ é também uma gaussiana representada por:
+\begin{align}
+  \predinfom{\mathrm{xx}} &= \infom{\mathrm{xx}} - \infom{\mathrm{xy}} \infom{\mathrm{yy}}^{-1} \infom{\mathrm{yx}}
+  \label{eq:infom-marginalization}\\
+  \predinfov{\mathrm{x}} &= \infov{\mathrm{x}} - \infom{\mathrm{xy}} \infom{\mathrm{yy}}^{-1} \infov{\mathrm{y}}
+  \label{eq:infov-marginalization}
+\end{align}
+
+\section{Condicionamento}
+A condicional $\pr{\bvec{x} \given \bvec{y}}$ também é uma gaussiana 
+representada por:
+\begin{align}
+  \predinfom{\mathrm{x \given y}} &= \infom{\mathrm{xx}}
+  \label{eq:infom-conditioning}\\
+  \predinfov{\mathrm{x \given y}} &=  \infov{\mathrm{x}} - \infom{\mathrm{xy}} \, y
+  \label{eq:infov-conditioning}
+\end{align}

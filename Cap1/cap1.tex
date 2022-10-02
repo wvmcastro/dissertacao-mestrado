@@ -13,9 +13,9 @@ controle executados, se deslocando. Até o instante \emph{t} as seguintes
 quantidades são observadas:
 
 \begin{itemize}
-  \item $\bsubvec{x}{t}$: o vetor de estados descrevendo a pose do robô no instante \emph{t}
-  \item $\bsubvec{x}{1:t} = \{ \bsubvec{x}{1}, \bsubvec{x}{2}, \dots, 
-  \bsubvec{x}{t-1}, \bsubvec{x}{t} \}$: histórico de poses do robô até o instante \emph{t}
+  \item $\robotstate{t}$: o vetor de estados descrevendo a pose do robô no instante \emph{t}
+  \item $\robotstate{1:t} = \{ \robotstate{1}, \robotstate{2}, \dots, 
+  \robotstate{t-1}, \robotstate{t} \}$: histórico de poses do robô até o instante \emph{t}
   \item $\bsubvec{u}{t}$: o vetor de controle executado pelo robô no instante \emph{t}
   \item $\bsubvec{u}{1:t} = \{ \bsubvec{u}{1}, \bsubvec{u}{2}, \dots, 
   \bsubvec{u}{t-1}, \bsubvec{u}{t} \}$: histórico de controles executados pelo robô até o instante \emph{t}
@@ -28,11 +28,11 @@ quantidades são observadas:
 De maneira bastante sucinta, os problemas de SLAM consistem em estimar uma das 
 seguintes distribuições de probabilidade:
 \begin{gather}
-  \pr{\bsubvec{x}{t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, 
-    \bsubvec{x}{0}}
+  \pr{\robotstate{t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, 
+    \robotstate{0}}
   \label{eq:online-slam-probability} \\
-  \pr{\bsubvec{x}{1:t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, 
-    \bsubvec{x}{0}}
+  \pr{\robotstate{1:t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, 
+    \robotstate{0}}
   \label{eq:full-slam-probability}
 \end{gather}
 
@@ -40,7 +40,7 @@ Além da solução da primeira distribuição se preocupar apenas em estimar o
 estado atual, enquanto na segunda toda a trajetória, o histórico de 
 poses até o instante \emph{t}, é estimada. A diferença fundamental entre as 
 duas soluções é que para calcular a primeira distribuição, não são utilizadas entradas de controle e medidas posteriores a um instante 
-\emph{t} para estimar a pose $\bsubvec{x}{t}$. Enquanto na 
+\emph{t} para estimar a pose $\robotstate{t}$. Enquanto na 
 solução da segunda, medidas e controles posteriores podem ser utilizados para 
 calcular poses anteriores a eles. Habitualmente os problemas de estimação 
 dessas duas distribuições são conhecidos como \textit{online} SLAM e 

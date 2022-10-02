@@ -48,7 +48,7 @@ $\bsubvec{u}{t}$ é composta pelos deslocamentos angulares, $u_t^L$ e $u_t^R$, d
 \newcommand{\factor}{d\cdot\dfrac{u_t^{R} + u_t^L}{u_t^R - u_t^L}}
 \begin{equation}
 \begin{aligned}
-  \bsubvec{x}{t} &= \mb{g}_R(\bsubvec{x}{t-1}, \bsubvec{u}{t}) \\
+  \bsubvec{x}{t} &= \mb{g}_\mathrm{r}(\bsubvec{x}{t-1}, \bsubvec{u}{t}) \\
   &= \begin{bmatrix}
       \phi_{t-1}  \\ x_{t-1} \\ y_{t-1}
     \end{bmatrix} + 
@@ -83,7 +83,7 @@ Assim como os modelos de medida na próxima Seção, o modelo de movimento do
 robô de acionamento diferencial é não linear. Portanto, é necessário calcular 
 sua matriz jacobiana, em torno de um ponto $\overline{\bvec{x}}_{t-1}$, que será 
 utilizada para linearizá-lo em técnicas como EKF e SEIF-SLAM, apresentadas 
-mais adiante. O jacobiano do modelo $\mb{g}_R(\bullet, \bullet)$ está na Equação 
+mais adiante. O jacobiano do modelo $\mb{g}_\mathrm{r}(\bullet, \bullet)$ está na Equação 
 \ref{eq:motion-model-jacobian}.
 \begin{equation}
   \bsubvec{G}{R} = \bvec{I}_3 + \begin{cases}
@@ -145,11 +145,11 @@ onde
 \end{figure}
 
 Como o modelo de medida em \ref{eq:range-bearing-measurement-model} é não linear, é necessário lineariza-lo para utilizá-lo em soluções como EKF-SLAM, e seus derivados como SEIF-SLAM. Sua matriz jacobiana, $\bvec{H}$, para a j-ésima \textit{landmark} é descrita na Equação \ref{eq:measurement-model-jacobian-full}, 
-ela é composta pelos jacobianos $\bsubvec{H}{R}$, calculado com relação à pose do robô, e pelo jacobiano $\bsubvec{H}{M}$, calculado com relação à 
+ela é composta pelos jacobianos $\bsubvec{H}{\mathrm{r}}$, calculado com relação à pose do robô, e pelo jacobiano $\bsubvec{H}{M}$, calculado com relação à 
 posição da \textit{landmark} no vetor de estado.
 \renewcommand{\arraystretch}{2}
 \begin{equation}
-  \bsubvec{H}{R}^j = \begin{bmatrix}
+  \bsubvec{H}{\mathrm{r}}^j = \begin{bmatrix}
     \dfrac{d}{r^j}\parentheses{\delta_x \sin\phi - \delta_y \cos\phi} &  \dfrac{-\delta_x}{r^j} & \dfrac{-\delta_y}{r^j}\\
     -\parentheses{\dfrac{d}{\brac{r^j}^2}\parentheses{\delta_y \sin\phi + \delta_x \cos\phi} + 1} & \dfrac{\delta_y}{\brac{r^j}^2} & \dfrac{-\delta_x}{\brac{r^j}^2}
     \end{bmatrix}
@@ -157,7 +157,7 @@ posição da \textit{landmark} no vetor de estado.
 \end{equation}
 \renewcommand{\arraystretch}{2}
 \begin{equation}
-  \bsubvec{H}{M}^j = \begin{bmatrix}
+  \bsubvec{H}{\mathrm{m}}^j = \begin{bmatrix}
       \dfrac{\delta_x}{r^j} & \dfrac{\delta_y}{r^j} \\
       \dfrac{-\delta_y}{\brac{r^j}^2} & \dfrac{\delta_x}{\brac{r^j}^2}
     \end{bmatrix}
@@ -166,7 +166,7 @@ posição da \textit{landmark} no vetor de estado.
 \renewcommand{\arraystretch}{1}
 \begin{equation}
   \bvec{H}^j(\bvec{x}) = \begin{bmatrix}
-    \bsubvec{H}{R}^j & \bvec{0} & \cdots & \bsubvec{H}{M}^j & \cdots & \bvec{0}
+    \bsubvec{H}{\mathrm{r}}^j & \bvec{0} & \cdots & \bsubvec{H}{\mathrm{m}}^j & \cdots & \bvec{0}
   \end{bmatrix} 
   \label{eq:measurement-model-jacobian-full}
 \end{equation}

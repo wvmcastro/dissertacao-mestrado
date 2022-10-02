@@ -10,13 +10,13 @@ intervalo $\brac{-\pi, \pi}$, é omitida tanto no Algoritmo \ref{alg:ekf-slam-pr
 \begin{algorithmic}[1]
 \Procedure{EKF-SLAM-Predição}{$\mean{t-1}, \cov{t-1}, \bsubvec{u}{t}$}
   \State $\predmean{t} \gets \begin{bmatrix}
-    \mb{g}_R(\mean{R,t-1}, \bsubvec{u}{t}) \\ \mean{M}
+    \mb{g}_\mathrm{r}(\mean{\mathrm{r},t-1}, \bsubvec{u}{t}) \\ \mean{\mathrm{m}}
   \end{bmatrix}$
   \State $\predcov{RR,t} \gets \bsubvec{G}{R, t}\cov{RR, t-1} \bsubvecT{G}{R,t}$
   \State $\predcov{RM, t} \gets \bsubvec{G}{R, t} \cov{RM, t-1}$
   \State $\predcov{t} \gets \begin{bmatrix}
     \predcov{RR, t} & \predcov{RM, t} \\
-    \predcov{RM, t}^T & \cov{MM}
+    \predcov{RM, t}^T & \cov{\mathrm{mm}}
   \end{bmatrix}$
   \State \Return $\predmean{t}, \predcov{t}$
 \EndProcedure
@@ -31,20 +31,20 @@ intervalo $\brac{-\pi, \pi}$, é omitida tanto no Algoritmo \ref{alg:ekf-slam-pr
   \Procedure{EKF-SLAM-Atualização}{$\predmean{t}, \predcov{t}, \bvec{y}, j = \text{índice da \textit{landmark}}$}
   \State $\bvec{z} \gets \bvec{y} - \mb{h}^j(\predmean{t})$
   \State $\bvec{Z} \gets \begin{bmatrix}
-    \bsubvec{H}{R}^j & \bsubvec{H}{M}^j
+    \bsubvec{H}{\mathrm{r}}^j & \bsubvec{H}{\mathrm{m}}^j
   \end{bmatrix}
   \begin{bmatrix}
-    \predcov{RR} & \predcov{RM_j} \\
-    \predcov{RM_j}^T & \predcov{M_j M_j}
+    \predcov{\mathrm{rr}} & \predcov{\mathrm{rm^j}} \\
+    \predcov{\mathrm{rm^j}}^T & \predcov{\mathrm{m^j m^j}}
   \end{bmatrix}
   \begin{bmatrix}
-    \bsubvec{H}{R}^j \\ \bsubvec{H}{M}^j
+    \bsubvec{H}{\mathrm{r}}^j \\ \bsubvec{H}{\mathrm{m}}^j
   \end{bmatrix} + \bsubvec{Q}{t}$
   \State $\bvec{K} \gets \begin{bmatrix} \cov{RR, t} & \cov{RM^j, t} \\ 
     \cov{MR, t} & \cov{MM^j, t} 
   \end{bmatrix}
   \begin{bmatrix}
-    \brac{\bsubvec{H}{R}^j}^T \\ \brac{\bsubvec{H}{M}^j}^T
+    \brac{\bsubvec{H}{\mathrm{r}}^j}^T \\ \brac{\bsubvec{H}{\mathrm{m}}^j}^T
   \end{bmatrix} \bvec{Z}^{-1}$
   \State $\mean{t} \gets \bvec{K} \bvec{z}$
   \State $\cov{t} \gets \predcov{t} - \bvec{K}\bvec{Z}\bvecT{K}$
@@ -82,7 +82,7 @@ intervalo $\brac{-\pi, \pi}$, é omitida tanto no Algoritmo \ref{alg:ekf-slam-pr
     \State $\mathcal{L}^{*} \gets \{\}$ \Comment{Conjunto de novas landmarks}
     \For {$(\bvec{y}^i \in \bvec{y}^{1:k})$}
       \State $j \gets \bvec{c}^i$
-      \If {landmark $j$ está no mapa $\bsubvec{x}{M}$}
+      \If {landmark $j$ está no mapa $\bsubvec{x}{\mathrm{m}}$}
         \State $\predmean{t}, \predcov{t} \gets \textproc{EKF-SLAM-Atualização}(\predmean{t}, \predcov{t}, \bvec{y}^i, j)$
       \Else
         \State $\mathcal{L}^* \gets \mathcal{L}^* + \{(j, \bvec{y}^i)\}$
