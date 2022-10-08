@@ -16,6 +16,7 @@
 \newcommand{\sinfom}[1]{\tilde{\mb{\Omega}}_{#1}}
 \newcommand{\predinfom}[1]{\overline{\mb{\Omega}}_{#1}}
 \newcommand{\cov}[1]{\bsubvec{P}{#1}}
+\newcommand{\approxcov}[1]{\bsubvec{\tilde{P}}{#1}}
 \newcommand{\predcov}[1]{\bsubvec{\overline{P}}{#1}}
 \newcommand{\normal}[2]{\mathcal{N}\parentheses{#1, #2}}
 \newcommand{\bigO}[1]{\mathcal{O}\parentheses{#1}}
@@ -29,6 +30,10 @@
 \newcommand{\proj}[1]{\bsubvec{M}{#1}}
 \newcommand{\projT}[1]{\bsubvecT{M}{#1}}
 \newcommand{\marginalize}[2]{#1 - #1\,#2^T  \parentheses{#2 \, #1 \, #2^T}^{-1} #2\,#1}
+
+\newcommand{\lscore}[2]{\mathcal{Q}_{#1}\parentheses{\bupvec{m}{#2}}}
+
+\newcommand{\dataTh}{\chi^2_{2,\alpha}}
 % colors
 \newcommand{\blue}[1]{\color{blue}#1\color{black}}
 \newcommand{\magenta}[1]{\color{magenta}#1\color{black}}

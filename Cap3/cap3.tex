@@ -437,11 +437,6 @@ passos do algoritmo a partir das equações de predição do EIF, \ref{eq:eif-in
 usada como premissa para garantir o tempo de execução constante, 
 a esparsificação em sí será tratada mais adiante, por hora vamos assumir que a matriz é esparsa.
 
-TODO: 
-\begin{itemize}
-  \item \blue{nota sobre a cópia da matriz de informação}
-  \item \blue{nota sobre correção da componente de orientação}
-\end{itemize}
 \begin{algorithm}[h]
   \setstretch{1.4}
   \caption{SEIF-SLAM passo de predição}
@@ -624,7 +619,10 @@ multiplica-la pela matriz de informação predita, que também é esparsa,
 temos como resultado um vetor esparso 
 \cite[p.~398]{bongard2006probabilistic}. Portanto, é necessário um número 
 constante de operações, que independe do tamanho do mapa, para calcular o 
-vetor de informação predito.
+vetor de informação predito \footnote{Comumente a orientação do robô é 
+normalizada para o intervalo $[-\pi, \pi[$ no vetor média, portanto é necessário 
+ajustar alguns elementos do vetor de informação para que ele continue 
+obedecendo a identidade $\infov{} = \infom{}\mean{}$. Porém esse ajuste não viola o caráter constante do passo de atualização, pois a quantidade de elementos é fixa de acordo com $\lvert \bupvec{m}{+} \rvert$.}.
 
 \subsection{SEIF-SLAM: Recuperação da média}
 \label{sec:seif-mean-recovery}
@@ -729,8 +727,8 @@ Filtro de Informação Extendido. As equações de atualização nas linhas
 
 A atualização acima altera apenas os elementos referentes ao robô e à 
 j-ésima \textit{landmark} tanto na matriz de informação quanto no vetor 
-de informação é ilustrada na Figura \ref{fig:seif-slam-update}. O SEIF 
-herda o caráter "local" da atualização do EIF, e difere no EKF onde a 
+de informação, como é ilustrado na Figura \ref{fig:seif-slam-update}. O SEIF 
+herda o caráter "local" da atualização do EIF, e difere do EKF onde a 
 atualização altera todos os elementos do vetor média e da matriz de 
 covariâncias como foi mostrado na Figura \ref{fig:ekf-slam-update}.
 \begin{figure}[h]
@@ -891,7 +889,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \caption{\textit{Landmark} $\bvec{m}^2$ também é observada}
   \end{subfigure}
   \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks}, durante a observação das 
-  \textit{landmarks} $\bvec{m}^1$ e $\bvec{m^2}$ no instante $t$. Os elementos não nulos da matriz de informação estão representados em cinza.}
+  \textit{landmarks} $\bvec{m}^1$ e $\bvec{m^2}$ no instante $t$. Os elementos não nulos da matriz de informação estão representados em cinza. Adaptado de \cite[p.~389]{bongard2006probabilistic}.}
   \label{fig:seifslam-info-matrix-construction-observation}
 \end{figure}
 
@@ -906,7 +904,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \caption{Após o movimento}
     \label{fig:seifslam-info-matrix-construction-motion-b}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks}, antes (esquerda) e depois (direita) do movimento do robô, entre os instantes $t$ e $t+1$. A conexão de movimento gerada entre as \textit{landmarks} $\bvec{m}^1$ e $\bvec{m}^2$ é mostrada em magenta, assim como os elementos correspondentes na matriz de informação. Os demais elementos não nulos estão representados em tons de cinza.}
+  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks}, antes (esquerda) e depois (direita) do movimento do robô, entre os instantes $t$ e $t+1$. A conexão de movimento gerada entre as \textit{landmarks} $\bvec{m}^1$ e $\bvec{m}^2$ é mostrada em magenta, assim como os elementos correspondentes na matriz de informação. Os demais elementos não nulos estão representados em tons de cinza. Adaptado de \cite[p.~389]{bongard2006probabilistic}. }
   \label{fig:seifslam-info-matrix-construction-motion}
 \end{figure}
 
@@ -921,7 +919,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \caption{\textit{Landmark} $\bvec{m}^3$ é observada}
     \label{fig:seifslam-info-matrix-construction-third-observation-b}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ durante a observação da \textit{landmark} $\bvec{m}^3$. Os elementos nulos da matriz de informação estão representados em branco.}
+  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ durante a observação da \textit{landmark} $\bvec{m}^3$. Os elementos nulos da matriz de informação estão representados em branco. Adaptado de \cite[p.~389]{bongard2006probabilistic}.}
   \label{fig:seifslam-info-matrix-construction-third-observation}
 \end{figure}
 
@@ -935,7 +933,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \includegraphics[width=\textwidth]{figs/seifslam-sparsification.tex} 
     \caption{Depois da esparsificação}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ antes e após a esparsificação da \textit{landmark} $\bvec{m}^1$. Os elementos nulos da matriz de informação estão representados em branco.}
+  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ antes e após a esparsificação da \textit{landmark} $\bvec{m}^1$. Os elementos nulos da matriz de informação estão representados em branco. Adaptado de \cite[p.~389]{bongard2006probabilistic}.}
   \label{fig:seifslam-info-matrix-sparsification}
 \end{figure}
 
@@ -950,7 +948,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \caption{Depois do movimento}
     \label{fig:seifslam-info-matrix-construction-second-motion-b}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} durante movimento entre os instantes $t$ e $t+1$. Note que, devido à esparsificação da \textit{landmark} $\bvec{m}^1$, o movimento não gerou conexão de movimento entre as \textit{landamrks} $\bvec{m}^1$ e $\bvec{m}^3$. Os elementos nulus da matriz de informação estão representados em branco.}
+  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} durante movimento entre os instantes $t$ e $t+1$. Note que, devido à esparsificação da \textit{landmark} $\bvec{m}^1$, o movimento não gerou conexão de movimento entre as \textit{landamrks} $\bvec{m}^1$ e $\bvec{m}^3$. Os elementos nulos da matriz de informação estão representados em branco.}
   \label{fig:seifslam-info-matrix-construction-second-motion}
 \end{figure}
 
@@ -1065,9 +1063,172 @@ como premissa para no desenvolvimento das etapas anteriores.
 
 \section{Associação de \textit{landmarks}}
 \label{sec:data-association}
+Para calcular a inovação, $\bsubvec{z}{t} = \bupvec{y}{j} - \mb{h}(\mean{t})$, da \textit{j-ésima} leitura, é necessário estabelecer a qual \textit{landmark} do vetor de estados a leitura $\bupvec{y}{j}$ 
+corresponde. Porém, até o momento, tanto na atualização do EKF-SLAM quanto do SEIF-SLAM, essa correspondência foi dada como premissa. 
+Mas um sistema SLAM precisa lidar com o problema da associação de medidas e \textit{landmarks}, pois essas associações são desconhecidas 
+e precisam ser feitas sempre que as \textit{landmarks} não podem ser 
+identificadas individualmente utilizando apenas a medida do sensor \cite[p.~4]{liu2003results}. Além disso, é preciso diferenciar quando entre os momentos 
+que uma \textit{landmark} é re-observada e quando é observada pela primeira vez.
 
+Portanto nessa Seção é apresentado um método de associação entre as 
+medidas lidas e as \textit{landmarks} presentes no vetor de estados do 
+sistema SLAM. Esa etapa é necessária em qualquer sistema SLAM 
+independentemente do ``\textit{backend}" utilizado (EKF, EIF, Filtro 
+de Partículas, etc), no entanto a discussão aqui apresentada focará nas 
+particularidades do SEIF.
+
+Para calcular as correspondências foi utilizada o método guloso \textit{Individual Compatibility Nearest Neighbor} (ICNN), Algoritmo \ref{alg:landmark-correspondence}, em linhas gerais
+ele atribui a \textit{landmark} cuja distribuição de probabilidade 
+possui a menor distância de Mahalanobis \cite{mclachlan1999mahalanobis} 
+para a medida lida. E caso essa distância seja menor que um limiar $\dataTh$, é considerado que essa medida associada à 
+\textit{landmark} candidata. Caso contrário, é considerado que essa 
+medida pertence a uma \textit{landmark} não observada antes, e então ela 
+é inserida no vetor e matriz de informação como mostrado na Seção \ref{fig:seif-slam-landmark-insertion}.
+\begin{algorithm}[h]
+  \setstretch{1.25}
+  \caption{Associação da medida $\bsubvec{y}{t}$ com \textit{landmark} do vetor de estados}
+  \label{alg:landmark-correspondence}
+\begin{algorithmic}[1]
+  \Procedure{Teste-Correspondência-ICNN}{$\mean{t}, \cov{0:\mathrm{M}}, \bsubvec{y}{t}$}
+  \State $m \gets 0$
+  \State $c \gets \{\}$
+  \State $d \gets \infty$
+  \While{$m < \mathrm{M}$}
+    \State $\Delta_m \gets \bsubvec{y}{t} - \mb{h}^{m}(\mean{t})$
+    \State $\pi_m \gets \Delta_m^T \, \cov{m}^{-1} \, \Delta_m$
+    \If{$\pi_m < d$ \textbf{and} $\pi_m < \dataTh$}
+      \State $c \gets \{m\}$
+    \EndIf
+    \State $m \gets m + 1$
+  \EndWhile
+  \State \Return $c$
+  \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+Como pode ser observado acima, o Algoritmo utiliza as covariâncias das 
+\textit{landmarks}, denominadas por $\cov{0:\mathrm{M}}$, como 
+entrada. Porém, no SEIF não é mantida uma matriz de covariâncias, mas sim a matriz de informação. Portanto, para utilizar a técnica acima é 
+necessário ``recuperar" as covariâncias das \textit{landmarks} a partir 
+da matriz de informação.
+
+\subsection{Estimação da covariância de \textit{landmarks} a partir da 
+matriz de informação}
+Para utilizar a técnica de associação de dados, apresentada na Seção 
+anterior, com o SEIF, uma técnica para calcular a covariância das \textit{landmarks} se faz necessária. Num primeiro momento, basta inverter a 
+matriz de informação e extrair os blocos da diagonal principal. Porém, 
+dessa forma todo o esforço para manter as etapas do SEIF com 
+complexidade constante seriam minados, pois a inversão de matrizes tem 
+complexidade $\bigO{2.376}$ \cite{coppersmith1987matrix}.
+
+A fim de tratar esse problema, \cite[p.~5]{liu2003results} propõe 
+calcular a covariância das \textit{landmarks} candidatas à associação 
+de maneira aproximada levando em consideração apenas um subconjunto 
+de \textit{landmarks}, denominado Cobertor de Markov 
+(\textit{Markov Blanket}) e simbolizado por $\bsubvec{m}{c_t}^+$, e condicionando todas as demais. Esse conjunto contém as \textit{landmarks} ativas 
+$\bupvec{m}{+}$ e, as vizinhas (\textit{landmarks} conectadas na matriz de 
+informação) da \textit{landmark} candidata à associação. Um exemplo do Cobertor 
+de Markov é ilustado na Figura \ref{fig:markov-blanket}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[]{figs/pb-markov-blanket}
+  \caption{Rede de conexões entre \textit{landmarks} e o robô. A maioria das \textit{landmarks} estão representadas por círculos, as \textit{landmarks} vizinhas da \textit{landmark} candidata a associação estão representadas por quadrados. As \textit{landmarks} ativas estão coloridas de preto, a \textit{landmark} candidata está colorida de cinza. O polígono de bordas grossas delimita o conjunto do Cobertor de Markov, $\bsubvec{m}{c_t}^+$. Neste caso há interseção entre o conjunto de \textit{landmarks} vizinhas e ativas. Retirado de \cite[p.~410]{bongard2006probabilistic}.}
+  \label{fig:markov-blanket}
+\end{figure}
+
+Utilizando o resultado do condicionamento da distribuição gaussiana na forma de 
+informação apresentado no Apêndice \ref{app:info-gaussian-conditioning} e já 
+utilizado na esparsificação, calcula-se a matriz de covariância aproximada $\approxcov{\mathrm{m^j}}$ da seguinte forma:
+\begin{equation}
+  \approxcov{\mathrm{m^j}} = \proj{\mathrm{m^j}} \parentheses{\proj{\robotstate{t}, \mathrm{m^j}, \bsubvec{m}{c_t}^+}\, \infom{t} \,\projT{\robotstate{t}, \mathrm{m^j}, \bsubvec{m}{c_t}^+}}^{-1} \projT{\mathrm{m^j}}
+\end{equation}
+
+Entretanto ao contrário do que é mostrado na Figura \ref{fig:markov-blanket} 
+pode ser que não exista interseção entre o conjunto de \textit{landmarks} 
+vizinhas a candidata e o conjunto de \textit{landmarks} ativas $\bupvec{m}{+}$ 
+dentro do Cobertor de Markov. Nesses casos o cobertor deve ser aumentado de 
+forma que englobe um ``caminho'' entre o robô e a \textit{landmark} candidata. 
+Para isso, a matriz de informação pode ser interpretada como um grafo e inserir 
+as \textit{landmarks} que integram o menor caminho entre o robô e a 
+\textit{landmark} candidata.
 
 \section{Estratégia para mitigar efeito de falsas detecções de \textit{landmarks}}
+Um problema comum que ocorre na prática em sistemas SLAM é a detecção 
+errônea e/ou falsa de \textit{landmarks}, gerando medidas erradas. Isso pode 
+acontecer por erros no processamento dos dados do sensor, movimentos bruscos 
+do robô, e em sistemas multiagentes um robô pode ser confundido com uma \textit{landmark} dependendo dos tipos de \textit{landmark} e do sensor utilizado. 
+Esse último é particularmente comum no cenário desse trabalho, onde as \textit{landmarks} e os robôs possuem formato cilíndrico e o sensor do tipo LiDAR 
+fornece apenas informação espacial, sem cores ou texturas.
 
+Falsas detecções podem levar a falsas associações de novas medidas, 
+acarretando em erro de localização e consequente divergência na 
+observação de novas \textit{landmarks}. Para atenuar esse problema e 
+diminuir as chances de uma falsa \textit{landmark} causar 
+divergência dos filtros, é comum separar as \textit{landmarks} em uma lista provisória e numa lista permanente.
+
+A lista de \textit{landmarks} permanentes é composta pelas 
+\textit{landmarks} já consolidadas pelo filtro, e influenciam 
+na estimação da pose do robô. Já as \textit{landmarks} 
+provisórias são \textit{landmarks} ainda não consolidadas, as leituras 
+associadas a elas são utilizadas apenas para melhorar a estimativa de 
+sua posição e não influenciam na estimação da pose do robô.
+
+Para construir essas listas \cite{saputra2019implementation} empregou 
+o uso de um esquema de pontuação para as 
+\textit{landmarks} observadas. Esse esquema possui duas operações: 
+atualização e degradação. A operação de atualização consiste em 
+aumentar um ponto a pontuação $\mathcal{Q}$ da \textit{landmark} sempre que ela 
+é re-observada. Enquanto a degradação diminui dois pontos sempre que a 
+\textit{landmark} não é re-observada.
+\begin{equation}
+  \lscore{t+1}{j} = \begin{cases}
+    \bupvec{m}{j}\, \text{é re-observada} &\implies \lscore{t}{j} + 1 \,\, \text{(atualização)}\\
+    \bupvec{m}{j}\, \text{não é re-observada} &\implies \lscore{t}{j} - 2 \,\, \text{(degradação)}\\
+  \end{cases}
+  \label{eq:landmark-quality}
+\end{equation}
+Toda \textit{landmark} começa na lista provisória e conforme sua 
+pontuação $\mathcal{Q}$ evolui no tempo ela pode ser promovida para a 
+lista de \textit{landmarks} permanentes, passando a ser utilizada na 
+correção da pose do robô. Ou até mesmo removida no filtro caso deixe de 
+ser observada sistematicamente. Uma \textit{landmark} se torna 
+permanente quando sua pontuação a 10, e é excluída quando pontua 
+cinco pontos negativamente:
+\begin{equation}
+  \begin{cases}
+    \lscore{t}{j} \geq 10 & \text{Promoção}\\
+    \lscore{t}{j} \leq -5 & \text{Remoção}\\
+  \end{cases} 
+\end{equation}
+
+Com essa abordagem foi possível erradicar a incorporação de 
+falsas \textit{landmarks} geradas tanto no cenário com um robô quanto 
+no cenário dois robôs. Além disso, como será visto na próxima Seção \ref{sec:seif-map-exchange}, ao trocarem seus mapas os robôs enviam para o 
+outro par apenas o vetor e matriz de informação correspondentes às 
+\textit{landmarks} consolidadas pelo filtro (i.e. permanentes).
 
 \section{Conclusão do capítulo}
+Neste Capítulo foram exploradas as particularidades da estimação de 
+estado de sistemas SLAM em relação a estimação de estado de sistemas 
+convencionais. Enquanto um sistema SLAM possui vetor de estados com 
+tamanho dinâmico, o tamanho do vetor de medidas é variante no tempo, uma porção do estado é variante no tempo (a pose do robô) enquanto a 
+outra é invariante (posição das \textit{landmarks}), e a associação 
+entre medidas e estados é desconhecida a \textit{priori}. Um sistema convencional possui número de medidas fixo e os estados têm mesmo 
+tipo de variabilidade no tempo. 
+
+Também foram mostradas as adaptações necessárias para utilizar o 
+Filtro de Kalman Extendido na estimação de estado de sistemas SLAM, 
+caracterizando a técnica EKF-SLAM. Além disso, foi apresentado a técnica 
+SEIF-SLAM e como ela é baseada na formulação dual do EKF, e como 
+ela utiliza o conceito de \textit{landmarks} ativas para manter a 
+matriz de informação esparsa levando ao uso linear de memória e tempos 
+de atualização e predição constantes. Mais adiante, na Seção \ref{sec:seif-map-exchange} também será mostrado como a troca de informações 
+entre sistemas SEIF-SLAM é natural devido a utilização da parametrização 
+canônica do filtro.
+
+Além disso foi abordada a técnica de associação de dados 
+\textit{Individual Compatibility Nearest Neighbor}, que se mostrou boa 
+o suficiente para as configurações de ambiente utilizadas 
+neste trabalho. E por fim, foi tratado o problema prático da detecção 
+de falsas \textit{landmarks} e evitá-lo.
