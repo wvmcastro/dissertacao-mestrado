@@ -20,10 +20,18 @@ O ambiente consiste em uma espaço de 10$m^2$ com diversos ``postes'' de formato
   \label{fig:environment}
 \end{figure}
 
-\section{Modelo do robô}
+\section{O robô}
 Neste trabalho foi utilizado o gêmeo digital do robô \emph{Turtlebot 3} \cite{TurtleBot_3}, que é um robô de acionamento diferencial, e é equipado com 
-\textit{encoder} de rodas, uma IMU e um sensor laser do tipo LiDAR. Na Figura 
-\ref{fig:diff-drive-schematic} é representado o esquemático de um robô diferencial, as características mais importantes nesse tipo de construção 
+\textit{encoder} de rodas, uma IMU e um sensor laser do tipo LiDAR.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figs/robot-closeup.jpg}
+  \caption{Gêmeo digital do robô \textit{Turtlebot 3}. Os circuitos eletrônicos do robô real não estão representados. O sensor LiDAR encontra-se no topo do robô.}
+  \label{fig:turtlebot-digital-twin}
+\end{figure}
+
+\subsection{Modelo do robô}
+Na Figura \ref{fig:diff-drive-schematic} é representado o esquemático de um robô diferencial, as características mais importantes nesse tipo de construção 
 são: o raio da roda, $r$, e a distância entre os eixos das rodas, $2d$. A 
 pose do robô, no instante $t$, é definida como:
 \begin{equation}
