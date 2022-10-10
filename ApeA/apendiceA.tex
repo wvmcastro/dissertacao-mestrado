@@ -3,7 +3,7 @@
 As três operações principais do EKF-SLAM (predição, atualização e inserção de novas \textit{landmarks}) estão descritas nos Algoritmos \ref{alg:ekf-slam-prediction}, \ref{alg:ekf-slam-update} e \ref{alg:ekf-slam-landmark-insertion}, respectivamente. Por fim, o Algoritmo \ref{alg:ekf-slam-full} descreve o EKF-SLAM completo, composto pelas três operações. A correção na orientação, para que ela permaneça dentro do 
 intervalo $\brac{-\pi, \pi}$, é omitida tanto no Algoritmo \ref{alg:ekf-slam-prediction} quanto no \ref{alg:ekf-slam-update}.
 
-\begin{algorithm}
+\begin{algorithm}[h]
   \setstretch{1.5}
   \caption{Etapa de predição do EKF-SLAM}
   \label{alg:ekf-slam-prediction}
@@ -53,7 +53,7 @@ intervalo $\brac{-\pi, \pi}$, é omitida tanto no Algoritmo \ref{alg:ekf-slam-pr
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
+\begin{algorithm}[h]
   \setstretch{1.5}
   \caption{Etapa de inserção de nova \textit{landmark} do EKF-SLAM}
   \label{alg:ekf-slam-landmark-insertion}

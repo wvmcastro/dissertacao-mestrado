@@ -1,5 +1,56 @@
-% Texto do Primeiro Anexo
-\section{Uma Seção do Primeiro Anexo}
-% Texto da primeira secao do primeiro anexo
-Algum texto na primeira seção do primeiro anexo.
+\section{Lema da Inversão. Fórmula de  Sherman/Morrison}
+\label{annex:inversion-lemma}
+A fórmula de Sherman/Morrison, também conhecida como lema da inversão especializado,
+é definido a seguir, retirado de \cite[p.~50]{bongard2006probabilistic}.
 
+\begin{lem}
+Para qualquer matrizez quadradas invertíveis $\bvec{R}$ e $\bvec{Q}$ e qualquer matriz $\bvec{P}$ com dimensões apropriadas, o seguinte é verdadeiro:
+\begin{equation}
+\parentheses{\bvec{R} + \bvec{PQ}\bvecT{P}}^\mathbf{{-1}} = \bvec{R^{-1}} - \bvec{R^{-1}}\bvec{P}\parentheses{\bvec{Q^{-1}} + \bvecT{P}\bvec{R^{-1}P}}^\mathbf{{-1}}\bvecT{P}\bvec{R^{-1}}
+\end{equation}
+assumindo que todas as matrizes acima podem ser invertidas como definido na premissa.
+\begin{proof}
+Defina $\bvec{\Psi} = \parentheses{\bvec{Q^{-1}} + \bvecT{P}\bvec{R^{-1}}\bvec{P}}^\mathbf{-1}$. É suficiente mostrar que:
+\begin{equation*}
+\parentheses{\bvec{R^{-1}} - \bvec{R^{-1}}\bvec{P}\bvec{\Psi}\bvecT{P}\bvec{R^{-1}}} \parentheses{\bvec{R} + \bvec{PQ}\bvecT{P}} = \bvec{I}
+\end{equation*}
+Isso é mostrado através de uma série de manipulações:
+\begin{equation}
+\begin{aligned}
+    &= \blue{\bvec{R^{-1} R}} + \bvec{R^{-1} P Q P^T} - \bvec{R^{-1} P \Psi P^T \magenta{R^{-1} R}} - \bvec{R^{-1} P \Psi P^T R^{-1} P Q P^T} \\
+    &= \blue{\bvec{I}} + \bvec{R^{-1} P Q P^T} - \bvec{R^{-1} P \Psi P^T \magenta{I}} - \bvec{R^{-1} P \Psi P^T R^{-1} P Q P^T}\\
+    &= \bvec{I} + \bvec{\magenta{R^{-1} P} Q P^T} - \bvec{\magenta{R^{-1} P} \Psi P^T} - \bvec{\magenta{R^{-1} P} \Psi P^T R^{-1} P Q P^T}\\
+    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\Psi P^T} - \bvec{\Psi P^T R^{-1} P Q P^T}\right]\\
+    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\Psi \blue{Q^{-1} Q} P^T} - \bvec{\Psi P^T R^{-1} P Q P^T}\right]\\
+    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\magenta{\Psi} Q^{-1}\blue{ Q P^T}} - \bvec{\magenta{\Psi} P^T R^{-1} P \blue{Q P^T}}\right]\\
+    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\magenta{\Psi}} \left(\bvec{ Q^{-1}} - \bvec{P^T R^{-1} P}\right)\bvec{\blue{Q P^T}}\right]\\
+    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\Psi} \blue{\left(\bvec{ Q^{-1}} - \bvec{P^T R^{-1} P}\right)}\bvec{Q P^T}\right]\\
+    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\Psi} \blue{\bvec{\Psi^{-1}}}\bvec{Q P^T}\right]\\
+    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{Q P^T}\right]\\
+    &= \bvec{I} 
+\end{aligned}
+\end{equation}
+
+\end{proof}
+\label{lem:inversion-lemma}
+
+\end{lem}
+
+
+\section{Inversão na forma de blocos}
+\label{annex:blockwise-inversion-lemma}
+Seja a matriz $(m+n) \times (m+n)$, $\bvec{M}$, particionada na seguinte forma de blocos:
+\begin{equation}
+    \bvec{M} = \begin{bmatrix}
+        \bvec{A} & \bvec{B} \\ \bvec{C} & \bvec{D}
+    \end{bmatrix}
+\end{equation}
+onde as matrizes $\mat{A}{m}{m}$ e $\mat{D}{n}{n}$ são invertíveis, então temos que $\bvec{M}^{-1}$ é dado por:
+\begin{equation}
+    \newcommand{\commonTerm}{\parentheses{\bvec{D-C}\bvec{A}^{-1}\bvec{B}}^{-1}}
+    \bvec{M}^{-1} = \begin{bmatrix}
+        \bvec{A}^{-1} + \bvec{A}^{-1}\bvec{B} \commonTerm \bvec{C} \bvec{A}^{-1} & -\bvec{A}^{-1}\bvec{B}\commonTerm \\
+        -\commonTerm \bvec{C} \bvec{A}^{-1} & \commonTerm
+    \end{bmatrix}
+    \label{eq:blockwise-matrix-inversion}
+\end{equation}
