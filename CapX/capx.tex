@@ -17,7 +17,7 @@ descrito na Seção \ref{sec:slam-measurement} (\nameref{sec:slam-measurement}).
 Os dados brutos do sensor LiDAR utilizado, consistem numa sequência de 
 distâncias $\{r^0, r^1, \dots, r^N\}$. Esses valores são gerados pela reflexão de feixes de laser, emitidos pelo sensor, nas superfícies 
 presentes no ambiente. Os feixes são disparados de maneira sequencial no 
-sentido anti-horário a partir do eixo $x$ do sistema de coordenadas do sensor. 
+sentido anti-horário, a partir do eixo $x$ do sistema de coordenadas do sensor. 
 Além disso, o sensor também fornece as posições angulares $\theta_0$ 
 do primeiro e $\theta_N$ do último feixe, e o incremento na posição angular $\Delta \theta$ entre o feixe $k$ e o feixe $k+1$.
 
@@ -57,11 +57,11 @@ cartesianas \cite[p.~903]{al2009error}.
   \label{fig:lidar-data-processing-pipeline}
 \end{figure}
 
-Para começar, é necessário extrair os pontos que correspondem à reflexões nas 
+Para começar, é necessário extrair os pontos que correspondem às reflexões nas 
 superfícies dos cilindros presentes no ambiente. Para isso, observa-se que há uma variação brusca nas distâncias lidas pelo sensor quando os feixes são 
 refletidos pelas superfícies dos cilindros. Ao analisar a derivada do sinal, 
 representada na Figura \ref{fig:sensor-derivative}, podemos notar que o intervalo de medidas 
-correspondente à reflexões dos cilindros se encontram entre uma variação 
+correspondente às reflexões dos cilindros se encontram entre uma variação 
 negativa seguida rapidamente de uma variação positiva na curva da derivada.
 \begin{figure}[]
   \centering

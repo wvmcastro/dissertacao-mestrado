@@ -7,11 +7,11 @@ Eq. \ref{eq:moments-gaussian-probabilistic-distribution}, parametrizada pelos mo
   \label{eq:moments-gaussian-probabilistic-distribution}
 \end{equation}
 
-Essa técnica derivada do KF para sistemas não lineares é conhecida como Filtro de Kalman Extendido (EKF). O EKF é muito utilizado em aplicações reais, pois a grande maioria dos sistemas reais são não lineares, como o movimento de um robô diferencial, por exemplo. Além disso o modelo de medida do sensor é, muitas vezes, uma função não linear do estado do sistema.
+Essa técnica derivada do KF para sistemas não lineares é conhecida como Filtro de Kalman Estendido (EKF). O EKF é muito utilizado em aplicações reais, pois a grande maioria dos sistemas reais são não lineares, como o movimento de um robô diferencial, por exemplo. Além disso o modelo de medida do sensor é, muitas vezes, uma função não linear do estado do sistema.
 
-Neste capítulo, serão descritas as alterações necessárias no EKF clássico para que ele possa ser aplicado na resolução do problema de SLAM, estimando a pose do robô e a posição das \textit{landmarks}, o que é conhecido como EKF-SLAM. Além disso, também serão abordadas técnicas decorrentes do EKF-SLAM como EIF-SLAM e SEIF-SLAM, sendo esta última a técnica de estimação utilizada neste trabalho.
+Neste capítulo, serão descritas as alterações necessárias no EKF clássico para que ele possa ser aplicado na resolução do problema de SLAM, estimando a pose do robô e a posição das \textit{landmarks}, o que é conhecido como EKF-SLAM. Além disso, também serão abordadas técnicas decorrentes do EKF-SLAM como EIF-SLAM (Filtro de Informação Estendido) e SEIF-SLAM (Filtro de Informação Estendido Esparso), sendo esta última a técnica de estimação utilizada neste trabalho.
 
-\section{Filtro de Kalman Extendido}
+\section{Filtro de Kalman Estendido}
 \label{sec:ekf}
 Para que seja possível estimar o estado de um sistema utilizando-se KF, é 
 necessário conhecer duas equações: a primeira, denominada modelo do sistema, 
@@ -25,7 +25,7 @@ modela a transição de estado do sistema a partir do estado anterior e da entra
 Como o modelo do sistema $\mb{g}(\mathord{\bullet}, \mathord{\bullet})$, e o modelo de medida $\mb{h}(\mathord{\bullet}, \mathord{\bullet})$ não são exatos, suas incertezas e erros de modelagem são aproximados por ruídos gaussianos $\mb{\epsilon}_t \sim \normal{\bvec{0}}{\bsubvec{R}{t}}$ e $\mb{\delta}_t \sim \normal{\bvec{0}}{\bsubvec{Q}{t}}$. Quando $\mb{g}(\mathord{\bullet}, \mathord{\bullet})$ e/ou $\mb{h}(\mathord{\bullet}, \mathord{\bullet})$ não são lineares, o EKF pode ser utilizado para estimar o estado 
 do sistema. 
 
-As Equações de \ref{eq:ekf-prediction} até \ref{eq:ekf-estimate-error-covariance} definem o EKF \footnote{O leitor pode estanhar a Equação \ref{eq:ekf-estimate-error-covariance} do erro da estimativa. Normalmente ela é escrita na forma $\cov{t} = (\bvec{I} - \bsubvec{K}{t} \bsubvec{H}{t}) \predcov{t}$, porém de acordo com \cite[p.~ 73]{lewis2017optimal}, a forma em \ref{eq:ekf-estimate-error-covariance} é uma alternativa melhor na presença de erros de arredondamento, e é frequentemente utilizada em implementações de software.} para o sistema não linear acima. Onde $\bsubvec{G}{t}$ é o jacobiano do modelo do sistema no ponto $\mean{t-1}$, e $\bsubvec{H}{t}$ é o jacobiano do modelo de medida no ponto $\predmean{t}$.
+As Equações de \ref{eq:ekf-prediction} até \ref{eq:ekf-estimate-error-covariance} definem o EKF \footnote{O leitor pode estanhar a Equação \ref{eq:ekf-estimate-error-covariance} do erro da estimativa. Normalmente ela é escrita na forma $\cov{t} = (\bvec{I} - \bsubvec{K}{t} \bsubvec{H}{t}) \predcov{t}$, porém de acordo com \citeonline[p.~ 73]{lewis2017optimal}, a forma em \ref{eq:ekf-estimate-error-covariance} é uma alternativa melhor na presença de erros de arredondamento, e é frequentemente utilizada em implementações de software.} para o sistema não linear acima. Onde $\bsubvec{G}{t}$ é o jacobiano do modelo do sistema no ponto $\mean{t-1}$, e $\bsubvec{H}{t}$ é o jacobiano do modelo de medida no ponto $\predmean{t}$.
 \begin{align}
   \predmean{t} &= \mb{g}(\mean{t-1}, \bsubvec{u}{t})
   \label{eq:ekf-prediction}\\
@@ -48,7 +48,7 @@ direta das Equações acima. São necessárias algumas alterações, pois em SLA
 \section{EKF-SLAM}
 Para aplicar o EKF na solução de SLAM, é necessário entender 
 como o vetor de estados $\bvec{x}$ é composto (aqui o subíndice $t$ é omitido, pois não é importante para esta discussão). Como tanto a pose do 
-robô, como o mapa são estimados, o vetor de estados é composto por ambos. 
+robô, quanto o mapa são estimados, o vetor de estados é composto por ambos com apresentado na Equação \ref{eq:slam-state-vector}, abaixo.
 \begin{equation}
   \bvec{x} = \begin{bmatrix}
     \bsubvec{x}{\mathrm{r}} \\
@@ -70,7 +70,7 @@ mede novas \textit{landmarks}.
   \label{eq:feature-map}
 \end{equation}
 
-Utilizando a definição do vetor de estados do EKF-SLAM acima, as próximas três Seções (\ref{sec:ekf-slam-prediction}, \ref{sec:ekf-slam-update} e \ref{sec:ekf-slam-landmark-insertion}) descrevem as alterações necessários e/ou desejáveis no EKF para sua aplicação em SLAM. O algoritmo completo pode ser encontrado no Apêndice \ref{app:alg-ekf-slam}.
+Utilizando a definição do vetor de estados do EKF-SLAM acima (Eq. \ref{eq:slam-state-vector}), as próximas três Seções (\ref{sec:ekf-slam-prediction}, \ref{sec:ekf-slam-update} e \ref{sec:ekf-slam-landmark-insertion}) descrevem as alterações necessários e/ou desejáveis no EKF para sua aplicação em SLAM. O algoritmo completo pode ser encontrado no Apêndice \ref{app:alg-ekf-slam}.
 
 \subsection{EKF-SLAM: Predição (Movimento do robô)}
 \label{sec:ekf-slam-prediction}
@@ -153,7 +153,7 @@ matriz de covariância, modificadas no passo de predição do EKF-SLAM.
   \centering
   \includestandalone[width=.45\textwidth]{figs/ekfslam-prediction}
   \caption{Partes modificadas do vetor média e da matriz de covariância durante o movimento do robô. O vetor média é representado pela barra na esquerda, e a matriz de covariância pelo quadrado na direita. As partes modificadas, em tons de cinza, correspondem ao estado do robô $\mean{\mathrm{r}}$  e sua autocovariância $\cov{\mathrm{rr}}$ (cinza escuro), e às covariâncias cruzadas, $\cov{\mathrm{rm}}$ e $\cov{\mathrm{mr}}$, entre o robô e o mapa (cinza claro). Note que as partes correspondentes ao mapa, $\mean{\mathrm{m}}$ e $\cov{\mathrm{mm}}$, 
-  permanecem inalteradas (branco). Adaptado de \cite[p.~10]{jsola}.}
+  permanecem inalteradas (branco). Adaptado de \citeonline[p.~10]{jsola}.}
   \label{fig:ekfslam-prediction}
 \end{figure}
 
@@ -206,7 +206,7 @@ do vetor de estados e da matriz de covariância do sistema SLAM, utilizadas no c
 A Figura \ref{fig:ekf-slam-update} deixa claro que todos os elementos do vetor média e da 
 matriz de covariâncias são atualizados pelas Equações \ref{eq:ekf-update} e \ref{eq:ekf-estimate-error-covariance}, mesmo o cálculo da inovação sendo esparso. Isso ocorre porque no EKF todas as \textit{landmarks} são 
 correlacionadas, mesmo que muitas dessas correlações sejam próximas de zero. 
-Esse tipo de correlação ``fraca'' será explorada pelo Filtro de Informação Extendido Esparso, a fim de obter-se um algoritmo de estimação mais eficiente.
+Esse tipo de correlação ``fraca'' será explorada pelo Filtro de Informação Estendido Esparso, a fim de obter-se um algoritmo de estimação mais eficiente.
 
 \begin{figure}[h]
   \centering
@@ -230,6 +230,7 @@ que é resultado da concatenação do vetor atual, com a posição da nova
         \mb{f}(\bsubvec{x}{t}, \bvec{y}{^j})
       \end{bmatrix}
 \end{equation}
+
 Porém, não basta apenas adicionar a nova \textit{landmark} no vetor de estados, é necessário adicioná-la também na matriz de covariâncias. Quando 
 o robô observa uma nova \textit{landmark}, é esperado que o erro de estimação 
 da posição dessa nova \textit{landmark} seja influenciado pelo erro da 
@@ -293,8 +294,8 @@ Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-me
   \label{fig:ekf-slam-landmark-insertion}
 \end{figure}
 
-\section{Filtro de Informação Extendido (EIF)}
-O Filtro de Kalman Extendido, apresentado na Seção \ref{sec:ekf} utiliza a
+\section{Filtro de Informação Estendido (EIF)}
+O Filtro de Kalman Estendido, apresentado na Seção \ref{sec:ekf} utiliza a
 parametrização de momentos (Eq. \ref{eq:moments-gaussian-probabilistic-distribution}) para representar a 
 distribuição de probabilidade 
 gaussiana. Já o Filtro de Informação utiliza a chamada representação canônica, composta pelo vetor de informação, $\infov{}$, e pela matriz de informação, $\infom{}$. Definidos a seguir:
@@ -308,7 +309,7 @@ gaussiana. Já o Filtro de Informação utiliza a chamada representação canôn
   \label{eq:info-matrix}
 \end{equation}
 Com as parametrizações acima, o EKF pode ser reescrito na forma do Filtro de 
-Informação Extendido:
+Informação Estendido:
 \begin{align}
   \mean{t-1} &= \infom{t-1}^{-1} \infov{t-1}
   \label{eq:eif-mean-recuperation} \\
@@ -353,19 +354,19 @@ No entanto, ao empregar o EIF no problema SLAM nota-se que grande parte dos
 blocos fora da diagonal principal da matriz de informação são quase nulos, ou 
 seja, agregam pouca informação ao sistema. Isso se deve à estrutura do problema 
 SLAM, pois grande parte das correlações entre \textit{landmarks} (portanto 
-fora da diagonal principal) são propagadas pela incerteza na pose do robô, 
+fora da diagonal principal) são propagadas pela incerteza da pose do robô, 
 quando essas (as \textit{landmarks}) são observadas por ele. Apenas 
 \textit{landmarks} dentro de uma mesma vizinhança são observadas juntas 
 resultando em alta correlação.
 
-Esse aspecto é explorado pelo Filtro de Informação Extendido Esparso (SEIF), 
+Esse aspecto é explorado pelo Filtro de Informação Estendido Esparso (SEIF), 
 por meio de aproximações o SEIF mantém a matriz de informação diagonalizada, 
 aproximando os elementos fora da diagonal para zero. Isso leva o SEIF a otimizar 
 operações e ter complexidade de tempo constante, enquanto mantém uso linear de 
 memória. A próxima Seção descreve o SEIF e seus detalhes de implementação.
 
 \section{SEIF-SLAM}
-Essa Seção descreve o Filtro de Informação Extendido Esparso (SEIF), e 
+Essa Seção descreve o Filtro de Informação Estendido Esparso (SEIF), e 
 como ele endereça as principais desvantagens do EIF clássico no 
 contexto de SLAM. Será mostrado como ele mantém complexidade 
 linear no uso de memória, e complexidade de tempo constante nos passos de predição e atualização, independentemente do número de 
@@ -387,7 +388,7 @@ que $\covf{\bvec{m}^j, \bvec{m}^k} \neq \bvec{0},
 \textit{landmarks} são correlacionadas, o SEIF tenta eliminar a maioria 
 dessas correlações, a fim de obter uma matriz de informação esparsa.
 
-Para isso, ele mantém dois conjuntos de landmarks $\bsubvec{m}{t}^+$ e $\bsubvec{m}{t}^-$, cuja inter relação está descrita na Equação \ref{eq:seif-active-passive-sets}. O conjunto $\bsubvec{m}{t}^+$ é composto pelas \textit{landmarks} ativas, que estão
+Para isso, ele mantém dois conjuntos de landmarks $\bsubvec{m}{t}^+$ e $\bsubvec{m}{t}^-$, cuja inter-relação está descrita na Equação \ref{eq:seif-active-passive-sets}. O conjunto $\bsubvec{m}{t}^+$ é composto pelas \textit{landmarks} ativas, que estão
 ``ligadas'' ao robô no tempo $t$, ou seja, 
 $\covf{\bsubvec{x}{R, t}, \bsubvec{m}{t}^+} \neq 0$. Já o conjunto 
 $\bsubvec{m}{t}^-$ é 
@@ -434,8 +435,8 @@ tempo constante de atualização e predição.
 \newcommand{\predmeanTValue}{\mean{t-1} + \bsubvecT{M}{x_\mathrm{r}} \mb{\delta}_{r,t}}
 O passo de predição do SEIF-SLAM está condensado no Algoritmo \ref{alg:seif-slam-prediction}, abaixo. As Seções que se seguem derivam os 
 passos do algoritmo a partir das equações de predição do EIF, \ref{eq:eif-info-matrix-prediction}, \ref{eq:eif-info-vector-prediction} e \ref{eq:eif-mean-prediction}. A esparsidade da matriz de informação é 
-usada como premissa para garantir o tempo de execução constante, 
-a esparsificação em sí será tratada mais adiante, por hora vamos assumir que a matriz é esparsa.
+usada como premissa para garantir o tempo de execução constante. 
+A esparsificação em sí será tratada mais adiante, por hora vamos assumir que a matriz é esparsa.
 
 \begin{algorithm}[h]
   \setstretch{1.4}
@@ -628,8 +629,8 @@ obedecendo a identidade $\infov{} = \infom{}\mean{}$. Porém esse ajuste não vi
 \label{sec:seif-mean-recovery}
 Outro desafio a ser resolvido no SEIF-SLAM, para manter o tempo de 
 predição e/ou atualização constantes, é o cálculo do vetor média. 
-Fundamental para as linearizações dos modelos de movimento e medida, e para no cálculo do vetor de informação na etapa de esparsificação. Na Equação 
-\ref{eq:eif-mean-recuperation}, do Filtro de Informação Extendido, esse cálculo 
+Fundamental para as linearizações dos modelos de movimento e medida, e para o cálculo do vetor de informação na etapa de esparsificação. Na Equação 
+\ref{eq:eif-mean-recuperation}, do Filtro de Informação Estendido, esse cálculo 
 é feito através da inversão da matriz de informação, 
 e, mesmo numa matriz esparsa, essa operação não é constante.
 
@@ -684,7 +685,7 @@ estado predito, portanto o vetor $\predmean{t}$ é utilizado como ponto de parti
 \end{algorithm}
 
 Como pode ser notado na linha 2 do algoritmo acima, dentre todas as 
-\textit{landmarks} apenas as ativas são atualizadas. Além da pose do 
+\textit{landmarks} apenas as ativas são atualizadas, além da pose do 
 robô, é claro. Isso se deve novamente à esparsidade da matriz de 
 informação, pois a atualização de uma \textit{landmark} só contribui 
 para a estimação da posição de suas vizinhas e da pose do robô. 
@@ -705,7 +706,7 @@ conhecidas. Mais adiante na Seção \ref{sec:data-association} será
 abordado uma maneira de como essas correspondências são estabelecidas. 
 Ao contrário dos outros passos, no passo de atualização a esparsidade da 
 matriz de informação não influencia e/ou altera nada em relação ao 
-Filtro de Informação Extendido. As equações de atualização nas linhas 
+Filtro de Informação Estendido. As equações de atualização nas linhas 
 3 e 4 abaixo, são as mesmas equações \ref{eq:eif-info-matrix-update} e 
 \ref{eq:eif-info-vector-update} do EIF.
 
@@ -728,7 +729,7 @@ Filtro de Informação Extendido. As equações de atualização nas linhas
 A atualização acima altera apenas os elementos referentes ao robô e à 
 j-ésima \textit{landmark} tanto na matriz de informação quanto no vetor 
 de informação, como é ilustrado na Figura \ref{fig:seif-slam-update}. O SEIF 
-herda o caráter "local" da atualização do EIF, e difere do EKF onde a 
+herda o caráter ``local'' da atualização do EIF, e difere do EKF onde a 
 atualização altera todos os elementos do vetor média e da matriz de 
 covariâncias como foi mostrado na Figura \ref{fig:ekf-slam-update}.
 \begin{figure}[h]
@@ -867,7 +868,7 @@ novas porções possui complexidade $\bigO{n}$.
 \subsection{SEIF-SLAM: Esparsificação da matriz de informação}
 A esparsidade da matriz de informação foi utilizada como premissa em 
 toda a discussão nas Seções \ref{sec:seif-prediction}, \ref{sec:seif-mean-recovery} e \ref{sec:seif-update}. Esta Seção mostrará como a operação de esparsificação é realizada, mas primeiro será 
-ilustrado como a matriz de de informação é povoada nos passos de 
+ilustrado como a matriz de informação é povoada nos passos de 
 atualização e predição e como a esparsificação elimina a informação 
 cruzada entre \textit{landmarks}, mostrada na Figura \ref{fig:seif-slam-kappa}, tornando a matriz de informação esparsa.
 
@@ -958,11 +959,11 @@ ao longo do tempo e, como a esparsificação impede a criação de
 conexões entre \textit{landmarks}. Como foi mostrado, a 
 esparsificação consiste em ''desativar" conexões entre \textit{landmarks} e o robô, isto é, tornar a pose do robô 
 condicionalmente independente da posição da \textit{landmark} 
-desativada. Neste exemplo isso é obtido através da aproximação 
+desativada. Neste exemplo, isso é obtido através da aproximação 
 $\pr{\robotstate{t+1} \given \bvec{m}^1, \bvec{m}^2} \approx \pr{\robotstate{t+1} \given \bvec{m}^2}$. Em distribuições multivariadas gaussianas, a independência condicional entre 
 variáveis implica nulidade entre os elementos correspondentes da matriz de informação.
 
-Para realizar a esparsificação da matriz de informação do SEIF-SLAM, vamos retomar os conjuntos de \textit{landmarks} $\bsubvec{m}{t}^+$ e $\bsubvec{m}{t}^-$ definidos na Seção \ref{sec:seif-active-passive-landmarks}. Também 
+Para realizar a esparsificação da matriz de informação do SEIF-SLAM, vamos retomar os conjuntos de \textit{landmarks} $\bsubvec{m}{t}^+$ e $\bsubvec{m}{t}^-$, ativas e passivas, respectivamente e já definidos na Seção \ref{sec:seif-active-passive-landmarks}. Também 
 vamos subdividir $\bsubvec{m}{t}^+$ em:
 \begin{equation}
   \bsubvec{m}{t}^+ = \bsubvec{m}{t}^{++} \cup \bsubvec{m}{t}^{+-}
@@ -972,9 +973,9 @@ onde
   \item $\bsubvec{m}{t}^{+-}$ é a porção do conjunto de 
   \textit{landmarks} ativas $\bsubvec{m}{t}^+$ que serão tornadas passivas, 
   ou seja, passarão a compor o conjunto $\bsubvec{m}{t}^-$ e terá suas 
-  informações cruzadas com o robô zeradas
+  informações cruzadas com o robô zeradas.
   \item $\bsubvec{m}{t}^{++}$ é a porção do conjunto de \textit{landmarks} 
-  que continuarão ativas após a etapa de esparsificação
+  que continuarão ativas após a etapa de esparsificação.
 \end{itemize}
 A esparsificação consiste em quebrar a distribuição de probabilidade do 
 problema SLAM em \ref{eq:online-slam-probability} utilizando a regra do produto e aproximar a distribuição $\pr{\robotstate{t} \given \bupvec{m}{+-}, \bupvec{m}{++}, \bupvec{m}{-} = 0}$ pela marginal $\pr{\robotstate{t} \given \bupvec{m}{++}, \bupvec{m}{-} = 0}$, como é 
@@ -991,7 +992,7 @@ mostrado abaixo:
 \label{eq:seif-sparsification-derivation}
 \end{equation}
 
-Os cálculos das matrizes de informações correspondentes às distribuições da última linha acima do desenvolvimento acima serão feitos com base na discussão em \cite[p.~401]{bongard2006probabilistic} e, dos resultados de manipulação de distribuições gaussianas na forma canônica presentes no Apêndice \ref{annex:info-gaussian-manipulation}. 
+Os cálculos das matrizes de informações correspondentes às distribuições da última linha do desenvolvimento acima serão feitos com base na discussão em \cite[p.~401]{bongard2006probabilistic} e, dos resultados de manipulação de distribuições gaussianas na forma canônica presentes no Apêndice \ref{annex:info-gaussian-manipulation}. 
 Primeiramente vamos calcular a matriz $\infom{t}^{0}$ correspondente 
 a $\pr{\robotstate{t}, \bupvec{m}{+-}, \bupvec{m}{++} \given \bupvec{m}{-} = 0}$, isso é feito extraindo os elementos correspondentes a 
 todas as variáveis de estado exceto $\bupvec{m}{-}$:
@@ -1067,8 +1068,9 @@ Para calcular a inovação, $\bsubvec{z}{t} = \bupvec{y}{j} - \mb{h}(\mean{t})$,
 corresponde. Porém, até o momento, tanto na atualização do EKF-SLAM quanto do SEIF-SLAM, essa correspondência foi dada como premissa. 
 Mas um sistema SLAM precisa lidar com o problema da associação de medidas e \textit{landmarks}, pois essas associações são desconhecidas 
 e precisam ser feitas sempre que as \textit{landmarks} não podem ser 
-identificadas individualmente utilizando apenas a medida do sensor \cite[p.~4]{liu2003results}. Além disso, é preciso diferenciar quando entre os momentos 
-que uma \textit{landmark} é re-observada e quando é observada pela primeira vez.
+identificadas individualmente utilizando apenas a medida do sensor \cite[p.~4]{liu2003results}. Dessa forma é preciso diferenciar quando uma 
+\textit{landmark} é re-observada e quando é observada pela primeira vez e, além disso associar a medida à \textit{landmark} correta pois caso 
+contrário o filtro irá divergir.
 
 Portanto nessa Seção é apresentado um método de associação entre as 
 medidas lidas e as \textit{landmarks} presentes no vetor de estados do 
@@ -1138,7 +1140,7 @@ de Markov é ilustado na Figura \ref{fig:markov-blanket}.
 \end{figure}
 
 Utilizando o resultado do condicionamento da distribuição gaussiana na forma de 
-informação apresentado no Apêndice \ref{app:info-gaussian-conditioning} e já 
+informação apresentado no Anexo \ref{annex:info-gaussian-conditioning} e já 
 utilizado na esparsificação, calcula-se a matriz de covariância aproximada $\approxcov{\mathrm{m^j}}$ da seguinte forma:
 \begin{equation}
   \approxcov{\mathrm{m^j}} = \proj{\mathrm{m^j}} \parentheses{\proj{\robotstate{t}, \mathrm{m^j}, \bsubvec{m}{c_t}^+}\, \infom{t} \,\projT{\robotstate{t}, \mathrm{m^j}, \bsubvec{m}{c_t}^+}}^{-1} \projT{\mathrm{m^j}}
@@ -1218,7 +1220,7 @@ entre medidas e estados é desconhecida a \textit{priori}. Um sistema convencion
 tipo de variabilidade no tempo. 
 
 Também foram mostradas as adaptações necessárias para utilizar o 
-Filtro de Kalman Extendido na estimação de estado de sistemas SLAM, 
+Filtro de Kalman Estendido na estimação de estado de sistemas SLAM, 
 caracterizando a técnica EKF-SLAM. Além disso, foi apresentado a técnica 
 SEIF-SLAM e como ela é baseada na formulação dual do EKF, e como 
 ela utiliza o conceito de \textit{landmarks} ativas para manter a 
