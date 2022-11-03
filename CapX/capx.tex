@@ -91,7 +91,7 @@ erro médio quadrático entre cada conjunto de pontos e seu círculo.
 Por fim são considerados apenas os círculos cujo erro médio quadrático para 
 seus pontos correspondentes é inferior a um limiar $\epsilon = 10^{-3}$ e 
 cujo raio seja superior a 6cm. Essa última condição é especialmente útil no 
-cenário multiagente, pois evita de que um robô confunda o sensor LiDAR (que 
+cenário multiagente, pois evita que um robô confunda o sensor LiDAR (que 
 fica montado no topo do robô, conforme visto na Figura \ref{fig:turtlebot-digital-twin}) do outro com uma \textit{landmark}.
 
 \begin{figure}[]
@@ -117,14 +117,14 @@ partir das observações a partir do centro da cena representada na Figura
 \ref{fig:laser-beams-visualization}.
 
 Para utilizar grade de ocupação são adotadas duas hipóteses 
-simplificadoras: a primeira é que a as células são independentes e o 
+simplificadoras: a primeira é que as células são independentes e o 
 estado de ocupação de uma célula não diz nada sobre o estado de outra; a 
 segunda é que o ambiente é estático. Embora essas duas premissas sejam 
 falsas, grades de ocupação funcionam muito bem na prática inclusive em 
 ambientes dinâmicos. A primeira hipótese é falsa porque se uma célula 
 representa a ocupação de parte do corpo de um objeto, é muito provável 
 que suas vizinhas também estejam ocupadas por esse objeto. E a segunda 
-porque porque há outros agentes se movimentando no ambiente.
+porque há outros agentes se movimentando no ambiente.
 
 Utilizando essas hipóteses, cada célula pode ser modelada como uma variável aleatória binária 
 que pode assumir os estados livre ou ocupado, e cujo estado é constante 
@@ -163,7 +163,7 @@ sensor LiDAR é utilizado o algoritmo de desenho de linha
 de Bresenham \cite{bresenham1965algorithm}. Inicialmente 
 esse algoritmo foi criado para desenhar linhas em \textit{plotters} 
 digitais, mas ele também pode ser usado para desenhar linhas em grades de 
-pixel, como monitores. Aqui ele usado para ``desenhar'' o feixe do 
+pixel, como monitores. Aqui ele é usado para ``desenhar'' o feixe do 
 LiDAR, com origem no sensor e extremidade calculada pelo modelo de medida 
 inverso, na grade de ocupação. Então as células utilizadas no desenho são 
 as células interceptadas pelo feixe, como é ilustrado na Figura \ref{fig:bresenham-demo}.
@@ -194,7 +194,7 @@ na Figura \ref{fig:simplified-inv-measurement-model}.
 
 \subsection{Representação em \textit{log odds}}
 Implementações do filtro de Bayes binário são comumente realizadas na 
-forma do logaritmo da razão de chances (\textit{log odds ratio}) \cite[p.~94]{bongard2006probabilistic}. A razão de chances, ou \textit{odds} é a 
+forma do logaritmo da razão de chances (\textit{log odds ratio}) \cite[p.~94]{bongard2006probabilistic}. A razão de chances, ou \textit{odds}, é a 
 razão entre a probabilidade de ocorrência de um evento (a célula 
 estar ocupada), dividida pela razão da não ocorrência desse evento (a 
 célula estar livre). Se $\pr{c_{ij} \given \bsubvec{y}{1:t}}$ é a probabilidade da célula $c_{ij}$ 
@@ -204,7 +204,7 @@ estar ocupada dada as medidas dos sensor LiDAR até o instate $t$, então a sua 
 \end{equation}
 A atualização recursiva da razão de chances da ocupação de uma célula é 
 dada pelo produto de razões mostrado na Equação \ref{eq:recursive-bayes-filter-update} abaixo \cite[p.~96]{bongard2006probabilistic}. A primeira razão corresponde à razão de 
-chances do ocupação do modelo de medida inverso, cuja distribuição de 
+chances de ocupação do modelo de medida inverso, cuja distribuição de 
 probabilidade foi mostrada na Figura \ref{fig:simplified-inv-measurement-model}, o termo do meio é o termo 
 recursivo, e o da direita representa algum conhecimento incial que se 
 possa ter sobre o ambiente.
@@ -243,5 +243,52 @@ Na Seção anterior foi mostrado como as grades de ocupação são utilizadas
 para representar ambiente e como essa representação é construída e 
 mantida. Nessa seção será mostrado como a grande pode ser empregada para 
 determinar regiões alvo para exploração dos agentes e como elas são 
-úteis para evitar obstáculos e evitar que os robôs colidam com outros 
-objetos.
+úteis para evitar obstáculos.
+
+A técnica de exploração utilizada nesse trabalho é uma simplificação 
+da exploração orientada ao ganho de informação, denominada ganho binário. 
+Ela consiste em guiar o robô para a região desconhecida mais próxima 
+na grade de ocupação, e também é conhecida por \emph{exploração baseada em fronteira}. Apesar de ser uma técnica simples, ela tende a funcionar 
+bem na prática, pois sempre guia o robô em direção a terreno desconhecido 
+\cite[p.~584]{bongard2006probabilistic}. Se o robô estivesse no centro 
+da grade representada na Figura \ref{fig:grid-map-big-rep}, ele 
+selecionaria a célula com ocupação desconhecida (azul) mais próxima, e com uma distância de segurança mínima de uma célula ocupada, para 
+explorar.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.45\textwidth}
+    \includegraphics[width=\textwidth]{figs/grid_map_view_big.pdf} 
+    \caption{Mapa de grade de ocupação}
+    \label{fig:grid-map-big-rep}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{figs/grid-map.png} 
+    \caption{Visualização da grade de ocupação no software RVIZ}
+    \label{fig:}
+  \end{subfigure}
+  \caption{Diferentes representações de uma mesma grade de ocupação.}
+  \label{fig:occupancy-grid-visualization-comparsion}
+\end{figure}
+
+Além de selecionar o novo ponto para onde deve seguir, o robô também 
+precisa estabelecer um caminho livre de obstáculos que o leve de sua 
+posição atual para a posição de destino. Para isso o mapa de grade é 
+transformado em um mapa de custo, e o robô calcula o caminho com menor custo até a célula de destino. O custo de uma célula é inversamente 
+proporcional a sua distância para as células ocupadas mais próximas, o 
+resultado pode ser visualizado como um ``mapa de calor'' na Figura 
+\ref{fig:costmap}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.6\textwidth]{figs/costmap.png}
+  \caption{Mapa de custo referente à grade de ocupação da Figura \ref{fig:occupancy-grid-visualization-comparsion}. As regiões quentes (vermelho) representam células de maior custo. Enquanto as células 
+  frias (azul escuro) representam células de baixo custo.}
+  \label{fig:costmap}
+\end{figure}
+
+Para obter o caminho com menor custo, o mapa de custo é modelado como 
+um grafo com os custos das arestas iguais aos custos da células e então 
+o menor caminho é obtido utilizando o algoritmo de Dijkstra, ou sua 
+variante com heurística o A*.

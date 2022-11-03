@@ -1,4 +1,5 @@
 \newcommand{\measurementModel}{$\mb{h}(\bullet, \bullet)$}
+\newcommand{\invMeasurementModel}{$\mb{f}(\bullet, \bullet)$}
 
 \begin{longtable}{ll}
 $\robotstate{t}$ & Pose do robô no instante t \\
@@ -17,11 +18,13 @@ $\predcov{t}$ &  Predição da matriz de covariância no tempo $t$\\
 $\bsubvec{K}{t}$ &  Ganho de Kalman no tempo $t$\\
 $\mb{g}_\mathrm{r}(\bullet, \bullet)$ &  Modelo de movimento do robô\\
 \measurementModel &  Modelo de medida do sensor laser\\
-$\mb{f}(\bullet, \bullet)$ &  Modelo de medida inverso do sensor laser\\
+\invMeasurementModel &  Modelo de medida inverso do sensor laser\\
 $\expv{\bullet}$ & Operador esperança \\
 $\nullmat{m}{n}$ & Matriz nula de dimensão $m \times n$ \\
 $\bsubvec{I}{n}$ & Matriz identidade de dimensão $n$ \\
 $\covf{\bullet}$ & Covariância\\
-$\proj{}$ & Matriz de projeção
+$\proj{}$ & Matriz de projeção\\
+$\tr$ & Transformação afim\\
+$\trr{j\to k}$ & Transformação de corpo rígido do sistema $j$ para o sistema $k$
 \end{longtable}
 

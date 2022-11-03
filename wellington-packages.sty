@@ -8,6 +8,19 @@
 \usetikzlibrary{shapes.geometric}
 \tikzset{>={Latex[round]}}
 
+\usetikzlibrary{positioning,fit,backgrounds}
+
+\tikzset{
+    module/.style={%
+        draw, rounded corners,
+        minimum width=#1,
+        minimum height=7mm,
+        font=\sffamily
+        },
+    module/.default=2cm,
+    >=LaTeX
+}
+
 \usepackage{relsize} % mathsmaller
 \usepackage{amsmath}
 \usepackage{mathtools} %boldsymbol
@@ -25,3 +38,6 @@
 
 \usepackage{caption}
 \usepackage{subcaption}
+
+
+\DeclareMathOperator{\IAE}{IAE}

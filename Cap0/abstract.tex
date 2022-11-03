@@ -1,0 +1,16 @@
+The Simultaneous Localization and Mapping problem, known by the acronym SLAM, asks whether it is possible for a robot to be placed in an environment
+unknown a priori, and incrementally build a map of this
+environment while simultaneously locating itself on this map without the
+need for a location infrastructure such as GPS.
+
+Solving the SLAM problem is critical for mobile robotics
+autonomy. However, although already solved, it is not a trivial task.
+both from a theoretical and implementation point of views.
+Depending on robot dynamics, sensors used, computing power available or need for navigation and guidance, the solution
+can become more or less complex.
+
+This work develops a multi-agent solution in a simulated environment
+for the 2D SLAM problem. For this, it uses the Sparse Extended Information Filter, along with other algorithms for navigation,
+data association and map representation. The advantages of the distributed solution of the
+SLAM problem, in comparison with the original problem, are workload sharing
+between the agents and the information redundancy.

@@ -1,28 +1,36 @@
 % \import{..}{wellington-commands.tex}
 
-% talves refinar essa intro com: "Mobile robotic systems are developing very rapidly; how- ever, real-world applications in GPS-denied environments require robust mapping and perception techniques to en- able mobile systems to autonomously navigate complex environments." - review of multiple robot slam
+A robótica móvel está se desenvolvendo rapidamente, no entanto, aplicações 
+em ambientes sem uma infraestrutura de mapeamento global exigem técnicas 
+de mapeamento e percepção robustas para capacitar agente móveis a 
+navegar de maneira autônoma em ambientes complexos \cite{saeedi2016multiple}. Aplicações dessa 
+natureza não surgem apenas da exploração de outros planetas onde não há 
+GPS, por exemplo. Pelo contrário, há diversos cenários na Terra onde o 
+GPS não funciona adequadamente, como debaixo d'água, 
+em minas subterrâneas e dentro de construções. Este problema é denominado SLAM e resolvê-lo implica em empoderar soluções de robótica móvel, 
+que atuem nesses cenários, com aplicações reais e comerciais.
 
 O problema de Mapeamento e Localização Simultâneos conhecido pela sigla SLAM por conta do termo em inglês \textit{Simultaneous Localization and Mapping}, pergunta se é possível para um robô móvel ser colocado em um ambiente desconhecido a priori e incrementalmente construir um mapa deste ambiente enquanto simultaneamente se localiza neste mapa. Ou seja, tanto a trajetória da plataforma móvel quanto a localização das características do mapa (também conhecidas por \textit{landmarks}) são estimadas em tempo real sem a necessidade de nenhum conhecimento a priori de suas localizações \cite{durrant2006simultaneous}, ou infra estrutura de localização prévia, como GPS.
 
-SLAM também já foi conhecido como Mapeamento e Localização Concorrentes (CML, do inglês \textit{Concurrent Mapping and Localization}), porém este termo caiu em desuso a partir de 1995 quando o termo SLAM foi cunhando em \cite{durrant1996localization} no Simpósio Internacional de Pesquisa em Robótica, ISSR, onde originalmente era chamado \textit{Simultaneous Localization and Map Building}. A solução do problema de SLAM é fundamental para atingir a robótica móvel autônoma e independente de operadores \cite{durrant2006simultaneous}. Entretanto resolver o problema de localização e mapeamento simultâneos, apesar de solucionado, não é uma tarefa trivial tanto do ponto de vista teórico como do ponto de vista da implementação \cite{durrant1996localization}.
+SLAM também já foi conhecido como Mapeamento e Localização Concorrentes (CML, do inglês \textit{Concurrent Mapping and Localization}), porém este termo caiu em desuso a partir de 1995 quando o termo SLAM foi cunhando por \citeonline{durrant1996localization} no Simpósio Internacional de Pesquisa em Robótica, ISSR, onde originalmente era chamado \textit{Simultaneous Localization and Map Building}. A solução do problema de SLAM é fundamental para atingir a robótica móvel autônoma e independente de operadores \cite{durrant2006simultaneous}. Entretanto resolver o problema de localização e mapeamento simultâneos, apesar de solucionado, não é uma tarefa trivial tanto do ponto de vista teórico como do ponto de vista da implementação \cite{durrant1996localization}.
 
 \subsection*{Caracterização do problema}
-Imagine um robô dotado de um sensor extrínseco, capaz de capturar medidas relacionadas ao 
+Imagine um robô se deslocando por um ambiente e dotado de um sensor extrínseco, capaz de capturar medidas relacionadas ao 
 ambiente e, um sensor intrínseco capaz de medir os comandos de 
-controle executados, se deslocando. Até o instante \emph{t} as seguintes 
+controle executados. Até o instante \emph{t} as seguintes 
 quantidades são observadas:
 
 \begin{itemize}
-  \item $\robotstate{t}$: o vetor de estados descrevendo a pose do robô no instante \emph{t}
+  \item $\robotstate{t}$: o vetor de estados descrevendo a pose do robô no instante \emph{t}.
   \item $\robotstate{1:t} = \{ \robotstate{1}, \robotstate{2}, \dots, 
-  \robotstate{t-1}, \robotstate{t} \}$: histórico de poses do robô até o instante \emph{t}
-  \item $\bsubvec{u}{t}$: o vetor de controle executado pelo robô no instante \emph{t}
+  \robotstate{t-1}, \robotstate{t} \}$: histórico de poses do robô até o instante \emph{t}.
+  \item $\bsubvec{u}{t}$: o vetor de controle executado pelo robô no instante \emph{t}.
   \item $\bsubvec{u}{1:t} = \{ \bsubvec{u}{1}, \bsubvec{u}{2}, \dots, 
-  \bsubvec{u}{t-1}, \bsubvec{u}{t} \}$: histórico de controles executados pelo robô até o instante \emph{t}
+  \bsubvec{u}{t-1}, \bsubvec{u}{t} \}$: histórico de controles executados pelo robô até o instante \emph{t}.
   \item $\bsubvec{z}{t}$: o vetor de medidas no instante \emph{t}
   \item $\bsubvec{z}{1:t} = \{ \bsubvec{z}{1}, \bsubvec{z}{2}, \dots, 
-  \bsubvec{z}{t-1}, \bsubvec{z}{t} \}$: o conjunto de todas as medidas realizadas até o instante \emph{t}
-  \item $\bvec{m}$: o vetor de mapa, constituído pelas posições das características do ambiente consideradas pelo robô
+  \bsubvec{z}{t-1}, \bsubvec{z}{t} \}$: o conjunto de todas as medidas realizadas até o instante \emph{t}.
+  \item $\bvec{m}$: o vetor de mapa, constituído pelas posições das características do ambiente consideradas pelo robô.
 \end{itemize}
 
 De maneira bastante sucinta, os problemas de SLAM consistem em estimar uma das 
@@ -62,7 +70,7 @@ e capítulos subsequentes a este.
 
 Como mencionado anteriormente, há duas classes de problemas de SLAM: 
 \textit{online} SLAM e \textit{full} SLAM, e, portanto, duas classes de 
-algoritmos para resolve-los. Os algoritmos \textit{full} SLAM também são chamados 
+algoritmos para resolvê-los. Os algoritmos \textit{full} SLAM também são chamados 
 de \emph{offline SLAM} por serem normalmente utilizados em etapas de pós 
 processamento, como refinamento de mapas. Esses algoritmos exigem mais 
 recursos, tanto de processamento quanto de memória para serem processados. 
@@ -76,9 +84,9 @@ ser utilizados no processo de tomada de decisão do agente durante a execução 
 tarefa de mapeamento. 
 
 Contudo, para que um robô consiga estimar precisamente sua pose $\bvec{x}$, é 
-necessário alimentar os algoritmos com as medidas $\bvec{u}$ provenientes dos 
+necessário alimentar os algoritmos com as medidas $\bvec{u}$, provenientes dos 
 sensores intrínsecos (\textit{encoders}, giroscópios e acelerômetros), e, 
-também, medidas $\bvec{z}$ do ambiente obtidas por sensores extrínsecos. O erro 
+também, com as medidas $\bvec{z}$ do ambiente obtidas por sensores extrínsecos. O erro 
 entre a posição esperada pelo robô de um objeto, dada a estimativa que o robô tem da sua pose e, a posição desse objeto lida pelo sensor extrínseco, pode ser 
 utilizado para atualizar a confiança que o robô tem sobre a sua pose, por 
 exemplo. Aqui, objeto significa qualquer aspecto do ambiente com características 
@@ -106,7 +114,7 @@ pontos onde cada ponto é descrito pela distância e posição angular em relaç
 sensor.
 
 Com um algoritmo capaz de estimar \ref{eq:online-slam-probability} ou 
-\ref{eq:full-slam-probability} e sensores apropriados para alimenta-lo, um robô 
+\ref{eq:full-slam-probability} e sensores apropriados para alimenta-lo, 
 um robô é capaz de performar SLAM como foi apresentado até agora. Porém, ao mapear 
 o ambiente, o robô pode explora-lo de maneira autônoma, ou, quando 
 o cenário permite, ser controlado remotamente por um operador. Em cenários 
@@ -164,16 +172,100 @@ em outras pesquisas, permitindo que cada um de seus módulos
 modificado de forma individual. Além disso, permite que mais módulos sejam 
 adicionados, estendendo as capacidades do sistema aqui desenvolvido.
 
-Para a simulação do ambiente, sensores e agentes utilizou-se o simulador Gazebo \cite{Koenig-2004-394}
+Para a simulação do ambiente, sensores e agentes, utilizou-se o também 
+amplamente difundido, simulador Gazebo \cite{Koenig-2004-394}. Sua escolha 
+se deu por conta de suas simulações fidedignas de sensores, massa, fricção, 
+e inúmeras outras variáveis físicas, e também por sua natural integração 
+com o ROS.
 
-tocar no assunto que o gazebo realiza simulacoes fidedignas de sensores, mass, 
-friction, and numerous other physics variables
-dizer que ele oferece um controle muito grande sobre quase todos os aspectos 
-da simulacao desde condicoes de luz até coeficientes de atrito
-textura, transparencia e cor
-
-\section{Motivação}
+% \section{Motivação}
 
 \section{Estrutura de um sistema SLAM}
+Um sistema SLAM multiagente distribuído e descentralizado, como o 
+desenvolvido neste trabalho, é resultado da sinergia entre diferentes 
+módulos/algoritmos com funções e responsabilidades delimitadas. Cada um 
+resolvendo um dos aspectos do problema, a listagem a seguir enumera, de 
+maneira sucinta, os módulos que compõem a solução desenvolvida nesse trabalho: 
+\begin{itemize}
+  \item \textbf{Transformação de leituras em dados}: utilizar as leituras 
+  brutas do sensor LiDAR e extrair medidas para alimentar o modelo de medida.
+  \item \textbf{Representação do ambiente}: há diferentes formas de 
+  representar o ambiente como mapas de \textit{landmarks} ou mapas 
+  métricos em grade.
+  \item \textbf{Exploração e Navegação}: para que os agentes mapeiem o 
+  ambiente é necessário que identifiquem regiões inexploradas e possuam 
+  capacidade de navegar até essas regiões evitando obstáculos ou até 
+  mesmo outros agentes.
+  \item \textbf{Comunicação entre agentes}: durante a aproximação entre 
+  agentes, ocorre a troca dos mapas: tanto o mapa métrico quanto o de 
+  \textit{landmarks}.
+  \item \textbf{Cálculo de posição relativa}: após uma comunicação é 
+  preciso calcular a posição relativa entre os agentes para que os mapas 
+  sejam combinados corretamente.
+  \item \textbf{Associação de dados}: o robô utiliza os erros entre as 
+  medidas fornecidas para o modelo e sua estimativa das mesmas, para 
+  corrigir sua pose e a posição das \textit{landmarks} em seu mapa. 
+  Para isso é necessário estabelecer quais leituras são 
+  re-observações, e portanto serão utilizadas na correção, e quais são 
+  novas observações de \textit{landmarks} que serão incorporadas ao mapa.
+  \item \textbf{Filtro}: é o que estima a pose do robô e a posição das \textit{landmarks} de fato, utilizando como entrada as leituras dos 
+  sensores intrínsecos, as medidas processadas e as relações 
+  estabelecidas pela associação de dados.
+\end{itemize}
+
+
+
+Dessa forma o desenvolvimento de 
+um sistema SLAM também pode ser visto como um problema de Engenharia de
+\textit{Software}, cujo objetivo é desenvolver módulos isolados que podem 
+ser unitariamente substituídos e/ou reutilizados desde que suas interfaces 
+sejam mantidas.
+
+Pensar o problema dessa forma torna o trabalho mais flexível, de fácil alteração e manutenção. 
+Por exemplo: o algoritmo filtragem, utilizado para estimar a pose do robô e as 
+posições das \textit{landmarks}, pode ser substituído independentemente do 
+\textit{pipeline} de processamento de dados dos sensores, desde que sejam 
+mantidas as estruturas de troca de informação entre eles. 
+Outro aspecto importante é que a arquitetura de separação de 
+responsabilidades força que as alterações no sistema sejam unitárias, 
+tornando mais fácil o isolamento e identificação de erros decorrentes 
+dessas alterações.
+
+É comum agrupar esses módulos em dois macro grupos denominados 
+\textit{back end} e \textit{front end}. O \textit{front end} abstrai dados de 
+sensores em modelos úteis para a estimação e também é onde geralmente são colocados os módulos de comportamento de alto nível como a exploração, enquanto o \textit{back end} utiliza 
+o dado abstrato produzido pelo \textit{front end} para estimar o estado do 
+sistema \cite{cadena2016past}.
+
+Neste trabalho, além do processamento dos dados do sensor extrínseco, o 
+\textit{front end} também acumula outras responsabilidades como a representação 
+métrica do ambiente, na forma de mapas de grade, a comunicação com outros 
+agentes, o cálculo da posição relativa entre agentes, e também, a navegação 
+autônoma. E o \textit{back end} é composto pelo algoritmo de filtragem, 
+responsável por estimar o estado do sistema dadas as leituras extrínsecas e intrínsecas, e pela associação de dados. Esse último normalmente é 
+associado ao \textit{front end} \cite[]{cadena2016past}, mas aqui foi 
+colocado no \textit{back end} por conta da técnica utilizada estar 
+incorporada ao filtro.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=.8\textwidth]{figs/slam-architecture.tex}
+  \caption{Arquitetura simplificada do sistema SLAM desenvolvido neste trabalho. As entradas do sistema estão indicadas em vermelho, enquanto as saídas estão em verde. Em azul é 
+  possível observar algumas inter relações entre módulos.}
+  \label{fig:slam-architecture}
+\end{figure}
 
 \section{Organização do trabalho}
+O próximo capítulo apresenta o ambiente simulado assim como o robô e os 
+modelos de cinemática e medida utilizados. A organização do restante do 
+trabalho é pautada pela Figura \ref{fig:slam-architecture}, o Capítulo 
+3 trata da maioria aspectos do \textit{back end}, começa discorrendo uma técnica clássica para resolver o problema de SLAM e termina discutindo a técnica utilizada nesse trabalho. Porém a troca de mapas de fora. 
+
+O Capítulo 4 é sobre os diversos componentes do \textit{front end} menos 
+o cálculo de posição relativa entre os agentes. Tanto esse cálculo, 
+quanto a troca de mapas do \textit{back end} são concentrados no 
+Capítulo 5 por comporem a característica fundamental de 
+sistemas multiagentes.
+
+Por fim o Capítulo 6 avalia e discute o sistema desenvolvido através de 
+experimentos no ambiente simulado. E o Capítulo 7 é a Conclusão.

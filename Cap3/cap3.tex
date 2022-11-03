@@ -2,7 +2,7 @@ O famoso Filtro de Kalman (KF) é uma técnica de estimação ótima para sistem
 Eq. \ref{eq:moments-gaussian-probabilistic-distribution}, parametrizada pelos momentos média e covariância. Ele foi desenvolvido simultaneamente em 1958 por Peter Swerling, e em 1960 por Rudolf Kalman \cite[p.~40]{bongard2006probabilistic}. Apesar de sua otimalidade ser garantida apenas para sistemas lineares, ele é aplicado em sistemas não lineares também. Para isso, é feita uma aproximação linear em torno da estimativa do estado atual do sistema, utilizando-se série de Taylor, e a premissa de que os termos de ordem maior ou igual a dois são desprezíveis.
 
 \begin{equation}
-  \pr{\bvec{x}} = \boldsymbol{\eta} \exp\parentheses{-\frac{1}{2} 
+  \pr{\bvec{x}} = \eta \exp\parentheses{-\frac{1}{2} 
   \parentheses{\bvec{x} - \mean{}}^T \cov{}^{-1}\parentheses{\bvec{x} - \mean{}}}
   \label{eq:moments-gaussian-probabilistic-distribution}
 \end{equation}
@@ -327,7 +327,7 @@ Informação Estendido:
 \end{align}
 e a distribuição de probabilidade na Eq. \ref{eq:moments-gaussian-probabilistic-distribution} pode ser reescrita como:
 \begin{equation}
-  \pr{\bvec{x}} = \boldsymbol{\eta} \exp\parentheses{-\frac{1}{2} 
+  \pr{\bvec{x}} = \eta \exp\parentheses{-\frac{1}{2} 
   \bvecT{x} \infom{} \bvec{x} + \bvecT{x}\infov{}}
   \label{eq:canonical-gaussian-probabilistic-distribution}
 \end{equation}
@@ -1075,14 +1075,14 @@ contrário o filtro irá divergir.
 Portanto nessa Seção é apresentado um método de associação entre as 
 medidas lidas e as \textit{landmarks} presentes no vetor de estados do 
 sistema SLAM. Esa etapa é necessária em qualquer sistema SLAM 
-independentemente do ``\textit{backend}" utilizado (EKF, EIF, Filtro 
+independente do ``\textit{backend}'' utilizado (EKF, EIF, Filtro 
 de Partículas, etc), no entanto a discussão aqui apresentada focará nas 
 particularidades do SEIF.
 
-Para calcular as correspondências foi utilizada o método guloso \textit{Individual Compatibility Nearest Neighbor} (ICNN), Algoritmo \ref{alg:landmark-correspondence}, em linhas gerais
+Para calcular as correspondências foi utilizado o método guloso \textit{Individual Compatibility Nearest Neighbor} (ICNN), Algoritmo \ref{alg:landmark-correspondence}, em linhas gerais
 ele atribui a \textit{landmark} cuja distribuição de probabilidade 
 possui a menor distância de Mahalanobis \cite{mclachlan1999mahalanobis} 
-para a medida lida. E caso essa distância seja menor que um limiar $\dataTh$, é considerado que essa medida associada à 
+para a medida lida. E caso essa distância seja menor que um limiar $\dataTh$, essa medida é associada à 
 \textit{landmark} candidata. Caso contrário, é considerado que essa 
 medida pertence a uma \textit{landmark} não observada antes, e então ela 
 é inserida no vetor e matriz de informação como mostrado na Seção \ref{fig:seif-slam-landmark-insertion}.
@@ -1111,7 +1111,7 @@ medida pertence a uma \textit{landmark} não observada antes, e então ela
 Como pode ser observado acima, o Algoritmo utiliza as covariâncias das 
 \textit{landmarks}, denominadas por $\cov{0:\mathrm{M}}$, como 
 entrada. Porém, no SEIF não é mantida uma matriz de covariâncias, mas sim a matriz de informação. Portanto, para utilizar a técnica acima é 
-necessário ``recuperar" as covariâncias das \textit{landmarks} a partir 
+necessário ``recuperar'' as covariâncias das \textit{landmarks} a partir 
 da matriz de informação.
 
 \subsection{Estimação da covariância de \textit{landmarks} a partir da 
@@ -1121,7 +1121,7 @@ anterior, com o SEIF, uma técnica para calcular a covariância das \textit{land
 matriz de informação e extrair os blocos da diagonal principal. Porém, 
 dessa forma todo o esforço para manter as etapas do SEIF com 
 complexidade constante seriam minados, pois a inversão de matrizes tem 
-complexidade $\bigO{2.376}$ \cite{coppersmith1987matrix}.
+complexidade $\bigO{2.376 n}$ \cite{coppersmith1987matrix}.
 
 A fim de tratar esse problema, \cite[p.~5]{liu2003results} propõe 
 calcular a covariância das \textit{landmarks} candidatas à associação 
@@ -1176,7 +1176,7 @@ provisórias são \textit{landmarks} ainda não consolidadas, as leituras
 associadas a elas são utilizadas apenas para melhorar a estimativa de 
 sua posição e não influenciam na estimação da pose do robô.
 
-Para construir essas listas \cite{saputra2019implementation} empregou 
+Para construir essas listas \citeonline{saputra2019implementation} empregou 
 o uso de um esquema de pontuação para as 
 \textit{landmarks} observadas. Esse esquema possui duas operações: 
 atualização e degradação. A operação de atualização consiste em 
@@ -1195,7 +1195,7 @@ pontuação $\mathcal{Q}$ evolui no tempo ela pode ser promovida para a
 lista de \textit{landmarks} permanentes, passando a ser utilizada na 
 correção da pose do robô. Ou até mesmo removida no filtro caso deixe de 
 ser observada sistematicamente. Uma \textit{landmark} se torna 
-permanente quando sua pontuação a 10, e é excluída quando pontua 
+permanente quando sua pontuação chega a 10, e é excluída quando pontua 
 cinco pontos negativamente:
 \begin{equation}
   \begin{cases}
@@ -1206,7 +1206,7 @@ cinco pontos negativamente:
 
 Com essa abordagem foi possível erradicar a incorporação de 
 falsas \textit{landmarks} geradas tanto no cenário com um robô quanto 
-no cenário dois robôs. Além disso, como será visto na próxima Seção \ref{sec:seif-map-exchange}, ao trocarem seus mapas os robôs enviam para o 
+no cenário com dois robôs. Além disso, como será visto na próxima Seção \ref{sec:seif-map-exchange}, ao trocarem seus mapas os robôs enviam para o 
 outro par apenas o vetor e matriz de informação correspondentes às 
 \textit{landmarks} consolidadas pelo filtro (i.e. permanentes).
 

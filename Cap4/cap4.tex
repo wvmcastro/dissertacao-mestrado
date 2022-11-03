@@ -1,0 +1,14 @@
+Neste trabalho foi desenvolvido um sistema SLAM multiagente distribuído e 
+descentralizado, no qual todo o processamento é feito pelos agentes sem a presença de uma figura reguladora central, utilizando o Filtro de Informação Estendido Esparso e explorando seu baixo uso de memória e tempo de processamento constante (desconsiderando-se associação de dados).
+
+O sistema é capaz de resolver o problema SLAM nos cenários nos quais foi 
+testado em um ambiente simulado. Porém ficou claro que a falta de 
+coordenação entre os agentes limita o ganho de eficiência esperado de 
+um sistema com mais de um robô, como discutido na Seção \ref{sec:exp-known-initial-pose}. Dessa forma um trabalho futuro deve focar na coordenação entre agentes com o objetivo de dividir a carga de trabalho.
+
+Em relação a troca de mapas, há espaço para melhorias na técnica de registro de nuvem de pontos utilizada, possibilitando maior taxa de sucesso na troca de mapas 
+no cenário onde a pose inicial dos agentes não é fornecida como debatido na Seção \ref{sec:exp-unknown-initial-pose}.
+
+Outro aspecto que merece ser contemplado num trabalho futuro, é a recuperação após uma falsa associação de medida e \textit{landamrk}, e/ou a 
+utilização de uma técnica de associação de dados mais robusta. Apesar da 
+lista de \textit{landmarks} provisórias ter evitado esse problema, notou-se que as \textit{landmarks} demoram ser inicializadas no filtro perdendo-se informação.
