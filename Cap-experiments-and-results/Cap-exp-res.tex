@@ -5,7 +5,7 @@ Este primeiro experimento visa medir a capacidade do SEIF em estimar a
 pose do robô enquanto ele explora o ambiente de maneira autônoma, 
 e compara essa estimativa 
 com a odometria das rodas. Além disso, compara-se a estimativa do SEIF 
-variando o tamanho do conjunto de \textit{landmarks} 
+variando o cardinalidade do conjunto de \textit{landmarks} 
 ativas $\{\bupvec{m}{+}\}$. O critério de comparação utilizado foi o 
 Erro Absoluto Integral (IAE) (Equação \ref{eq:iae-error}) da posição estimada $\bvec{\hat{x}}$, em 
 relação à pose real $\bvec{x}$ colhida do simulador. Para repetir o experimento com outro tamanho de $\{\bupvec{m}{+}\}$ foram gravadas a sequência de entradas $\bsubvec{u}{1:t}$ 
@@ -74,7 +74,7 @@ Como esperado, ambas as configurações do SEIF estimaram
 de maneira satisfatória tanto a posição quanto a 
 orientação do robô quando comparadas com a estimação da 
 odometria. Porém, nota-se que a configuração com 
-o tamanho do conjunto $\{\bupvec{m}{+}\}$ menor estimou 
+o cardinalidade do conjunto $\{\bupvec{m}{+}\}$ menor estimou 
 melhor tanto a posição quanto a orientação, o que vai 
 contra o consenso geral e a observação de \citeonline[p.~408]{bongard2006probabilistic} de que quanto maior o conjunto 
 $\bupvec{m}{+}$ melhor é a estimativa. A causa dessa divergência não foi 
@@ -98,7 +98,7 @@ memória quando utilizada uma estrutura de dados adequada para a representação
 de matrizes esparsas.
 
 O perfil de uso de memória observado mostrou-se como esperado, quanto maior 
-o tamanho do conjunto de \textit{landmarks} ativas $\bupvec{m}{+}$, maior o 
+o cardinalidade do conjunto de \textit{landmarks} ativas $\bupvec{m}{+}$, maior o 
 consumo de memória pelo SEIF-SLAM. E além disso, todas as parametrizações 
 muito menos memória quando comparados com o EKF-SLAM.
 
@@ -109,7 +109,7 @@ muito menos memória quando comparados com o EKF-SLAM.
 \label{table:memory-usage}
 \begin{tabularx}{\textwidth}{@{}YYY@{}}
 \hline
-Tamanho do conjunto $\{\bupvec{m}{+}\}$ & Elementos não nulos da matriz de informação & 
+cardinalidade do conjunto $\{\bupvec{m}{+}\}$ & Elementos não nulos da matriz de informação & 
 Economia em relação ao EKF-SLAM\footnotemark{} \\ 
 \hline
 2 & 1721 & 69.40\% \\

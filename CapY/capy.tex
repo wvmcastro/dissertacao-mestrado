@@ -28,7 +28,7 @@ das razões de chances (\textit{log odds}), do mapa do outro ao seu
 próprio. Isso é muito simples por conta da natureza aditiva da 
 representação em \textit{log odds}, como mostrado na Equação \ref{eq:occupancy-grid-log-odds}.
 
-No entanto, para que um robô incorpore os mapas (grade e \textit{landamrks}) do outro aos seus prórpios, é necessário antes que se determine a posição relativa entre eles para transformar os 
+No entanto, para que um robô incorpore os mapas (grade e \textit{landmarks}) do outro aos seus prórpios, é necessário antes que se determine a posição relativa entre eles para transformar os 
 mapas que estão no sistema de referência local do outro, para o seu 
 próprio sistema de referência local, alinhando assim os elementos comuns 
 que aparecem em ambos.
@@ -54,7 +54,7 @@ ambiente são alinhadas resultando em uma nuvem mais completa.
 \end{figure}
 
 Com isso, ao utilizar como nuvem de pontos o mapa 
-e \textit{landamrks} de cada robô e restringir que a transformação $\tr$ seja uma transformação de corpo rígido $\trr{}$, é possível determinar 
+e \textit{landmarks} de cada robô e restringir que a transformação $\tr$ seja uma transformação de corpo rígido $\trr{}$, é possível determinar 
 a posição 
 relativa entre eles. A Transformação $\trr{}$ é definida por um ângulo
 de rotação e um vetor de descolamento entre dois sistemas de referência:
@@ -304,7 +304,7 @@ no conjunto
 de \textit{landmarks} que foram observadas por ambos os robôs do par e
 portanto tiveram seus elementos fundidos.
 
-\subsection{Troca grades de ocupação}
+\subsection{Troca de grades de ocupação}
 Similarmente a troca do vetor e matriz de informação, as células da 
 grade de ocupação de um robô são projetadas na do outro por meio da 
 transformação $\trr{j \to k}$. O logaritmo da razão de chance da \textit{i}-ésima célula da grade de ocupação do robô $k$ é atualizada da 
@@ -322,7 +322,7 @@ vista, mas que foram observadas pelo outro robô.
   \centering
   \begin{subfigure}{0.45\textwidth}
     \includegraphics[width=\textwidth]{figs/grid-rb1.png}
-    \caption{Mapa de grande do robô 1. O robô está no centro da grade 
+    \caption{Mapa de grade do robô 1. O robô está no centro da grade 
       em amarelo.}
     % \label{fig:}
   \end{subfigure}
@@ -335,11 +335,11 @@ vista, mas que foram observadas pelo outro robô.
   \end{subfigure}
   \begin{subfigure}{0.65\textwidth}
     \includegraphics[width=\textwidth]{figs/map-merge.png}
-    \caption{Mapa de grade do robô 1 após incorporar o mapa de grande 
+    \caption{Mapa de grade do robô 1 após incorporar o mapa de grade 
       do robô 2. }
     % \label{fig:}
   \end{subfigure}
-  \caption{As imagens menores representam os mapas de grande 
+  \caption{As imagens menores representam os mapas de grade 
   individuais de cada robô. A imagem maior representa o mapa de grade do
   primeiro robô após receber o mapa de grade do segundo. Note que algumas
   células com probabilidade de ocupação 0.5 (nem ocupada e nem desocupada) pelo robô 1 passam a ter probabilidade de ocupação diferente de 0.5 pois são observadas do ponto de vista do robô 2.}

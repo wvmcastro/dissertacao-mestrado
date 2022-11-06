@@ -8,9 +8,9 @@ $\bsubvec{u}{t}$ & Entrada de controle no instante t\\
 $\bsubvec{u}{0:t}$ & Conjunto das entradas de controle to instante 0 até t\\
 $\bsubvec{z}{t}$ & Medida do sensor extrínseco no instante t \\
 $\bsubvec{z}{0:t}$ & Conjunto das medidas do sensor extrínseco do instante 0 até t \\
-$\bvec{m}$ & mapa do ambiente, constituído das coordenadas das \textit{landmarks} \\
-$\pr{\robotstate{t}, \bvec{m} \given \bsubvec{z}{1:t}, \bsubvec{u}{1:t}, \robotstate{0}}$ & Distribuição do problema online SLAM \\
-$\pr{\robotstate{0:t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, \robotstate{0}}$ & Distribuição do problema full SLAM\\
+$\bvec{m}$ & Mapa do ambiente, constituído das coordenadas das \textit{landmarks} \\
+$\pr{\robotstate{t}, \bvec{m} \given \bsubvec{z}{1:t}, \bsubvec{u}{1:t}, \robotstate{0}}$ & Função densidade de probabilidade (pdf) do problema online SLAM \\
+$\pr{\robotstate{1:t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, \robotstate{0}}$ & Função densidade de probabilidade (pdf) do problema full SLAM\\
 $\mean{t}$ & Vetor média no instante $t$\\
 $\predmean{t}$ & Predição do vetor média no instante $t$\\
 $\cov{t}$ &  Matriz de covariância no tempo $t$\\
