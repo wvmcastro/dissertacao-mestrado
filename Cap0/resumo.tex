@@ -10,9 +10,23 @@ Dependendo da dinâmica do robô, sensores utilizados, recurso
 computacional disponível, necessidade de navegação e guiamento, a solução 
 pode se tornar mais ou menos complexa.
 
-Este trabalho desenvolve uma solução multiagente em ambiente simulado 
+Este trabalho desenvolve uma solução multiagente descentralizada e distribuída em ambiente simulado 
 para o problema SLAM 2D. Para isso emprega o uso do Filtro de Informação 
 Esparso, juntamente com outros algoritmos de navegação, associação de 
 dados e de representação de mapas. As vantagens da solução distribuída do 
 problema SLAM, em relação ao problema original, são a divisão da carga 
 de trabalho entre os agentes e a redundância de informação.
+
+A solução desenvolvida apresenta uso de memória significativamente 
+reduzido, mais de 50\%, em relação à abordagem mais clássica EKF-SLAM. 
+Além disso, apesar de não possuir coordenação entre os agentes 
+observaram-se ganhos no tempo de exploração no cenário com dois agentes 
+em comparação com um único agente.
+
+Porém, justamente pela falta de 
+coordenação entre os robôs, o desempenho de tempo no cenário com 
+três agentes foi inferior ao com um único agente. Outra limitação ocorre 
+quando a pose inicial dos agentes não é informada, pois o método de 
+estimação da pose relativa entre os agentes não se mostrou robusto o 
+suficiente para garantir a troca dos mapas com sucesso sempre que eles se 
+aproximam.

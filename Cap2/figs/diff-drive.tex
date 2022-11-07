@@ -16,8 +16,8 @@
 \tdplotsetmaincoords{0}{-40}
     \begin{tikzpicture}[tdplot_main_coords]
         \tdplotsetrotatedcoords{0}{0}{-40}
-        \draw[->, thick, tdplot_rotated_coords] (-5, -3.5, 0) -- (-4, -3.5, 0);
-        \draw[->, thick, tdplot_rotated_coords] (-5, -3.5, 0) -- (-5, -2.5, 0);
+        \draw[->, thick, tdplot_rotated_coords] (-5, -3.5, 0) -- (-4, -3.5, 0) node[anchor=north] {$\hat{x}$};
+        \draw[->, thick, tdplot_rotated_coords] (-5, -3.5, 0) -- (-5, -2.5, 0) node[anchor=east] {$\hat{y}$};
         \node[tdplot_rotated_coords, anchor=north] at (-5, -3.5, 0) {\{s\}};
         % main body
         \draw[name path=corpo_borda_inferior, thick] (-2.5, -2.5, 0) -- (2.5, -2.5, 0);
