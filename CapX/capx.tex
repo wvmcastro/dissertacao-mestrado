@@ -2,14 +2,14 @@ No capítulo anterior foram abordadas as soluções EKF e SEIF, com maior
 foco neste último, do problema de estimação que deve ser resolvido por um 
 sistema SLAM. Mas apenas resolver a estimação não é suficiente, existem 
 outras capacidades ``comportamentais'' que um robô deve possuir para 
-performar SLAM, como: processamento de leituras dos sensores, construir 
-representações úteis do ambiente e, a partir dessas representações traçar 
+desempenhar a tarefa SLAM, como processamento de leituras dos sensores, construir 
+representações úteis do ambiente e, a partir dessas representações, traçar 
 trajetórias a fim de explorá-lo e aumentar seu conhecimento a respeito 
-do mesmo. Todos esses aspectos são compreendidos pelo \textit{front-end} 
-como mostrado na Figura \ref{fig:slam-architecture}, e nesse capítulo serão abordadas as soluções para alguns de seus componentes.
+do mesmo. Esses aspectos são compreendidos pelo \textit{front-end} 
+como mostrado na Figura \ref{fig:slam-architecture} e, nesse capítulo, serão abordadas as soluções para alguns deles.
 
 \section{Dados do sensor laser}
-Essa Seção explica o formato dos dados brutos do sensor LiDAR, e como eles 
+Essa Seção explica o formato dos dados brutos do sensor LiDAR e como eles 
 são processados e transformados nos dados utilizados pelo modelo de medida 
 descrito na Seção \ref{sec:slam-measurement} (\nameref{sec:slam-measurement}).
 
@@ -43,10 +43,9 @@ leitura feita no ambiente mostrado na Figura \ref{fig:environment}.
 \end{figure}
 
 \subsection{Processamento de dados}
-Para transformar o dado bruto, a sequência de distâncias na Figura 
+Para transformar os dados brutos da sequência de distâncias, apresentada na Figura 
 \ref{fig:sensor-raw-data}, nas medidas consumidas pelo modelo de medida 
-descrito na Seção \emph{\nameref{sec:slam-measurement}}, é proposto um 
-\textit{pipeline} de processamento de dados, Figura \ref{fig:lidar-data-processing-pipeline},cujo último estágio é o 
+descrito na Seção \emph{\nameref{sec:slam-measurement}}, é proposta uma sequência de passos para processar as medidas, conforme a Figura \ref{fig:lidar-data-processing-pipeline} cujo último estágio é o 
 algoritmo de estimação de círculos a partir de pontos em coordenadas 
 cartesianas \cite[p.~903]{al2009error}.
 
@@ -74,7 +73,7 @@ negativa seguida rapidamente de uma variação positiva na curva da derivada.
 \end{figure}
 
 O próximo passo consiste em transformar o sinal para a representação em 
-coordenadas cartesianas, e segmentar os conjuntos de pontos correspondentes aos intervalos entre picos e vales do sinal de derivada computado anteriormente, como é mostrado na Figura \ref{fig:sensor-data-cartesian}.
+coordenadas cartesianas e segmentar em conjuntos os pontos nos intervalos entre picos e vales do sinal de derivada, como é mostrado na Figura \ref{fig:sensor-data-cartesian}.
 Então, cada um desses conjuntos é fornecido como entrada do Algoritmo 
 \ref{alg:circle-fit} (listado no Anexo \ref{annex:circle-fit}), o resultado 
 são círculos que melhor explicam esses conjuntos de pontos (Figura \ref{fig:detected-circles}), juntamente com o 

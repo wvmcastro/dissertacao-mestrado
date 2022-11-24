@@ -1,0 +1,64 @@
+\section{Matriz de informação aumentada a partir da matriz de covariância}
+\label{app:dev-landmark-insertion-info-matrix}
+Para derivar a inserção de \textit{landmark} no EIF/SEIF, vamos partir 
+dos resultados da inserção de \textit{landmark} no EKF apresentados na 
+Seção \ref{sec:ekf-slam-landmark-insertion}. Por comodidade, repetiremos 
+a Equação \ref{eq:ekf-landmark-insertion-covariance} com o resultado 
+do aumento da matriz de covariância:
+\begingroup
+\renewcommand{\arraystretch}{1.5}
+\begin{equation*}
+  \bsubvec{P}{t}^* = \eqCovarianceAugmented \tag{\ref{eq:ekf-landmark-insertion-covariance} repetida}
+\end{equation*}
+\endgroup
+e aplicando a equivalência $\bvec{\Omega}^{-1} = \bvec{P}$, pode-se reescrever a expressão acima como:
+% \newcommand{\eqOmegaInv}{\bsubvec{\Omega}{t}^{-1}}
+\begingroup
+\renewcommand{\arraystretch}{1.5}
+\begin{equation}
+  \brac{\bsubvec{\Omega}{t}^*}^{-1} = \begin{bmatrix}
+    \eqOmegaInv & \eqOmegaInv \bsubvecT{F}{X} \\
+    \bsubvec{F}{X} \eqOmegaInv & \bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y}
+  \end{bmatrix}
+\end{equation}
+Invertendo ambos os lados:
+\begin{equation*}
+  \bsubvec{\Omega}{t}^* = \begin{bmatrix}
+    \bvec{X} & \bvec{Y} \\
+    \bvec{Z} & \bvec{U}
+  \end{bmatrix}
+\end{equation*}
+\endgroup
+
+Pelo lema da inversão na forma de blocos (Anexo \ref{annex:blockwise-inversion-lemma}) temos:
+\addtolength{\jot}{1.4pt}
+\begingroup
+\begin{align}
+  &\begin{aligned}
+    \blue{\bvec{U}} &=  \brac{\bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y} - \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}} \,\eqOmegaInv \bsubvecT{F}{X}}^{-1}\\
+    &= \brac{\cancel{\bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X}} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y} - \cancel{\bsubvec{F}{X} \eqOmegaInv \bsubvecT{F}{X}}}^{-1}\\
+    &= \eqU
+  \end{aligned}\\
+  &\begin{aligned}
+    \bvec{Y} &= -\cancel{\brac{\eqOmegaInv}^{-1} \eqOmegaInv}\bsubvecT{F}{X} \blue{\bvec{U}}\\
+    &= \bsubvecT{F}{X} \parentheses{\eqU} \\
+  \end{aligned}\\
+  &\begin{aligned}
+    \bvec{Z} &= -\blue{\bvec{U}} \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}}\\
+    &= -\parentheses{\eqU} \bsubvec{F}{X}
+  \end{aligned}\\
+  &\begin{aligned}
+    \bvec{X} &= \brac{\eqOmegaInv}^{-1} + \cancel{\brac{\eqOmegaInv}^{-1} \eqOmegaInv}\bsubvecT{F}{X} \,\blue{\bvec{U}} \, \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}}\\
+    &= \bsubvec{\Omega}{t} + \bsubvecT{F}{X} \parentheses{\eqU} \bsubvec{F}{X}
+  \end{aligned}
+\end{align}
+Por fim, temos que a matriz de informação aumentada é dada por:
+\renewcommand{\arraystretch}{1.5}
+\begin{equation}
+  \bsubvec{\Omega}{t}^* = \begin{bmatrix}
+    \bsubvec{\Omega}{t} + \bsubvecT{F}{X} \parentheses{\eqU} \bsubvec{F}{X} & -\bsubvecT{F}{X} \parentheses{\eqU} \\
+    -\parentheses{\eqU} \bsubvec{F}{X} & \eqU
+  \end{bmatrix} 
+  \label{eq:seif-landmark-insertion-information-matrix-app}
+\end{equation}
+\endgroup
