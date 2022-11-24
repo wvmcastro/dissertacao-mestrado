@@ -1,9 +1,9 @@
 
 \section{Comparação SEIF vs Odometria}
 
-Este primeiro experimento visa medir a capacidade do SEIF em estimar a 
+Este primeiro experimento visa medir a capacidade do SEIF para estimar a 
 pose do robô enquanto ele explora o ambiente de maneira autônoma, 
-e compara essa estimativa 
+mediante comparação da estimativa 
 com a odometria das rodas. Além disso, compara-se a estimativa do SEIF 
 variando o cardinalidade do conjunto de \textit{landmarks} 
 ativas $\{\bupvec{m}{+}\}$. O critério de comparação utilizado foi o 
@@ -18,12 +18,11 @@ do sensor LiDAR.
   \label{eq:iae-error}
 \end{equation}
 
-A Tabela \ref{table:iae} lista os valores obtidos para o IAE. E a Figura \ref{fig:iae} ilustra a evolução 
+A Tabela \ref{table:iae} lista os valores obtidos para o IAE e a Figura \ref{fig:iae} ilustra a evolução 
 temporal do erro da estimativa de posição do robô. Além 
 da posição, também foi avaliado o erro na estimação da 
 orientação, ilustrado na Figura \ref{fig:theta-error}. Em ambas as 
-Figuras os valores obtidos pelo SEIF são mostrados separadamente pois na 
-escala do erro da odometria eles aparecem sobrepostos.
+Figuras, os valores obtidos pelo SEIF são mostrados separadamente, pois aparecem sobrepostos na escala do escala do erro da odometria.
 
 \begin{table}[]
 \caption{Erro Integral Absoluto da trajetória do robô para diferentes estimadores}
@@ -42,12 +41,12 @@ SEIF $\bupvec{m}{+} = 8$ & 8.04 \\ \hline
   \centering
   \begin{subfigure}{.75\textwidth}
     \includegraphics[width=\textwidth]{figs/iae-odom-seif.pdf} 
-    \caption{Evolução temporal do erro da estimativa de posição pela odometria e das duas configurações do SEIF com $\lvert \bupvec{m}{+}\rvert = 4 $ e $\lvert \bupvec{m}{+}\rvert = 8 $.}
+    \caption{Evolução temporal do erro da estimativa de posição pela odometria e duas configurações do SEIF com $\lvert \bupvec{m}{+}\rvert = 4 $ e $\lvert \bupvec{m}{+}\rvert = 8 $.}
     \label{fig:iae-odom-and-seifs}
   \end{subfigure}
   \begin{subfigure}{.75\textwidth}
     \includegraphics[width=\textwidth]{figs/iae-seifs.pdf} 
-    \caption{Evolução temporal do erro da estimativa de posição das duas configurações do SEIF com $\lvert \bupvec{m}{+}\rvert = 4 $ e $\lvert \bupvec{m}{+}\rvert = 8 $.}
+    \caption{Evolução temporal do erro da estimativa de posição pelas duas configurações do SEIF com $\lvert \bupvec{m}{+}\rvert = 4 $ e $\lvert \bupvec{m}{+}\rvert = 8 $.}
     \label{fig:iae-seifs}
   \end{subfigure}
   \caption{Erros de estimação da posição do robô durante exploração parcial do ambiente da Figura \ref{fig:environment}}
@@ -89,23 +88,23 @@ as entradas e leituras foram novamente gravadas para alimentar as
 diferentes configurações do SEIF.
 
 As quantidades de elementos não nulos da matriz de informação de cada 
-parametrização estão compiladas na Tabela \ref{table:memory-usage}, e um 
+parametrização estão compiladas na Tabela \ref{table:memory-usage} e um 
 comparativo com a quantidade de memória que seria utilizado pelo EKF-SLAM, 
 com a mesma quantidade de \textit{landmarks}, é ilustrado na Figura \ref{fig:seif-memory-usage}. Por fim, as matrizes de informação são mostradas na 
-Figura \ref{fig:seif-info-matrix-memory} para se ter uma uma ilustração de 
-sua estrutura e quantidade e quantidade de elementos nulos, que não ocupam 
+Figura \ref{fig:seif-info-matrix-memory} para ilustrar 
+sua estrutura e quantidade de elementos nulos, que não ocupam 
 memória quando utilizada uma estrutura de dados adequada para a representação 
 de matrizes esparsas.
 
-O perfil de uso de memória observado mostrou-se como esperado, quanto maior 
+O perfil de uso de memória observado mostrou-se como esperado; quanto maior 
 o cardinalidade do conjunto de \textit{landmarks} ativas $\bupvec{m}{+}$, maior o 
-consumo de memória pelo SEIF-SLAM. E além disso, todas as parametrizações 
-muito menos memória quando comparados com o EKF-SLAM.
+consumo de memória pelo SEIF-SLAM. Além disso, todas as parametrizações 
+usam muito menos memória quando comparados com o EKF-SLAM.
 
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 \begin{table}[]
 \centering
-\caption{Quantidade de elementos não nulos da matriz de informação esparsa para diferentes parametrizações do SEIF-SLAM}
+\caption{Quantidade de elementos não nulos da matriz de informação esparsa para diferentes configurações do SEIF-SLAM}
 \label{table:memory-usage}
 \begin{tabularx}{\textwidth}{@{}YYY@{}}
 \hline
@@ -119,12 +118,12 @@ Economia em relação ao EKF-SLAM\footnotemark{} \\
 \end{tabularx}
 \end{table}
 
-\footnotetext{Embora esses valores correspondam ao número de elementos nulos em re relação ao tamanho total da matriz de informação, eles não representam necessariamente a economia de memória. Pois para que a a matriz esparsa seja representada é necessário utilizar memória extra para organizar o arranjo de armazenamento dos elementos. Porém, essa quantidade tende a ser irrisória quando comparada com a quantidade total de elementos de uma matriz densa. Na estrutura de dados utilizada nesse trabalho, a quantidade de memória utilizada para armazenas a matriz esparsa é da ordem de $\bigO{2n + N}$, onde $n$ é a quantidade de elementos não nulos e $N$ é a dimensão da matriz. Porém esses valores podem variar dependendo da técnica utilizada para armazenar a matriz.}
+\footnotetext{Embora esses valores correspondam ao número de elementos nulos em relação ao tamanho total da matriz de informação, eles não representam necessariamente economia de memória. Para que a matriz esparsa seja representada é necessário utilizar memória extra para organizar o espaço de armazenamento dos elementos. Porém, essa quantidade tende a ser irrisória quando comparada com a quantidade total de elementos de uma matriz densa. Na estrutura de dados utilizada nesse trabalho, a quantidade de memória utilizada para armazenar a matriz esparsa é da ordem de $\bigO{2n + N}$, onde $n$ é a quantidade de elementos não nulos e $N$ é a dimensão da matriz. Porém, esses valores podem variar dependendo da técnica utilizada para armazenar a matriz.}
 
 \begin{figure}
   \centering
   \includegraphics[width=0.7\textwidth]{figs/seif-memory-usage.pdf}
-  \caption{Uso de memória para diferentes parametrizações do SEIF-SLAM com diferentes tamanhos (2, 4, 8) do conjunto de \textit{landmarks} ativas. A linha tracejada representa a quantidade de elementos quem a matriz do EKF-SLAM teria para o mesmo cenário.}
+  \caption{Uso de memória para diferentes parametrizações do SEIF-SLAM com diferentes tamanhos (2, 4, 8) do conjunto de \textit{landmarks} ativas. A linha tracejada representa a quantidade de elementos que a matriz do EKF-SLAM teria para o mesmo cenário.}
   \label{fig:seif-memory-usage}
 \end{figure}
 
@@ -153,25 +152,25 @@ Economia em relação ao EKF-SLAM\footnotemark{} \\
 
 \section{Mapeamento conjunto e descentralizado}
 Esse experimento avalia cenários com mais de um robô desempenhando SLAM 
-e trocando mapas entre sí como mostrado na Seção \ref{sec:seif-map-exchange}. Como tanto o vetor e matrix de informações 
-quanto as grades de ocupação são compartilhados entre os agente, esse 
+e trocando mapas entre si como mostrado na Seção \ref{sec:seif-map-exchange}. Como tanto o vetor e a matrix de informação 
+quanto as grades de ocupação são compartilhados entre os agentes, esse 
 experimento é dividido em duas partes.
 
-Na primeira o objetivo é medir a 
+Na primeira, o objetivo é medir a 
 capacidade dos agentes de trocar os vetores e matrizes de informação 
-entre sí (Seção \ref{sec:seif-info-exchange}) no cenário ideal onde a
-transformação entre seus sistemas de referências é exata e conhecida, para isso são fornecidas as poses iniciais de cada agente. Enquanto que 
-na segunda, os agentes não conhecem suas poses inicias e usam o 
+entre si (Seção \ref{sec:seif-info-exchange}) no cenário ideal onde a
+transformação entre seus sistemas de referências é exata e conhecida; para isso são fornecidas as poses iniciais de cada agente. Já 
+na segunda parte, os agentes não conhecem suas poses iniciais e usam o 
 registro de nuvem de pontos para calcular as transformações.
 
-Nos cenários multiagente a comunicação ocorre sempre que dois robôs 
+Nos cenários multiagente, a comunicação ocorre sempre que dois robôs 
 chegam a uma distância de dois metros um do outro e há um intervalo 
 mínimo de 60 segundos entre duas comunicações consecutivas de um mesmo 
 par de robôs. Erros de comunicação ou degeneração de mensagens não são 
 simulados.
 
 Para medir o desempenho de mapeamento dos robôs, 
-calcula-se a área coberta 
+computa-se a área coberta 
 por eles ao longo do tempo. A área coberta é definida como a soma das 
 áreas de todas as células da grade de ocupação que possuem probabilidade 
 de ocupação diferente de 50\%.
@@ -181,7 +180,7 @@ de ocupação diferente de 50\%.
 Além do ganho de redundância, sistemas multiagentes também podem 
 apresentar ganho de eficiência ao dividir a carga de trabalho entre os 
 robôs. Para efeitos de comparação, primeiro foi realizado o mapeamento 
-com apenas um robô, a curva da área coberta pelo tempo é ilustrada na 
+com apenas um robô; a curva da área coberta pelo tempo é ilustrada na 
 Figura \ref{fig:area-coverage-single-robot}. Logo após o experimento foi repetido no mesmo ambiente com dois e três 
 robôs, as curvas estão ilustradas na Figura \ref{fig:know-initial-pose-area-coverage}.
 
@@ -214,10 +213,10 @@ robôs, as curvas estão ilustradas na Figura \ref{fig:know-initial-pose-area-co
 
 A Tabela \ref{table:multiagent-exploration-know-initial-pose} registra o momento em que todos os agentes 
 dos diferentes sistemas alcançam a marca de 90\% de área mapeada. Como é 
-possível notar, quando houve ganho de eficiência ele não foi fez o tempo 
-cair pela metade. E ainda no cenário com três robôs esse ganho foi negativo, o sistema levou mais tempo que o sistema com um único agente. 
+possível notar, quando houve ganho de eficiência com dois robôs ele não fez o tempo 
+cair pela metade. E, ainda no cenário com três robôs, esse ganho foi negativo; o sistema levou mais tempo que o sistema com um único agente. 
 Isso pode ser explicado por dois motivos: o primeiro é que não há uma 
-política de exploração conjunta acordada entre os agentes, cada um 
+política de exploração conjunta acordada entre os agentes; cada um 
 explora o ambiente com base nas fronteiras presentes nos seus mapas 
 individuais sem levar em consideração a posição de seus pares em relação 
 a essas fronteiras; o segundo motivo é que a navegação se torna mais 
@@ -237,7 +236,7 @@ Quantidade de agentes & Tempo para 90\% de área coberta (s) & Eficiência em re
 \end{tabularx}
 \end{table}
 
-Apesar do ganho de eficiência geral dos sistemas ficarem abaixo do 
+Apesar do ganho ficar abaixo do 
 esperado, observando as Figuras \ref{fig:area-coverage-single-robot} e 
 \ref{fig:know-initial-pose-area-coverage} é possível ver que o tempo 
 levado pelo primeiro agente dos sistemas multiagentes para atingir a 
@@ -281,15 +280,14 @@ Além dos problemas de sincronia entre os agentes, já citados no experimento
 anterior, neste exemplo também foram observados problemas com a estimação 
 da transformação entre os mapas de \textit{landmarks} dos agentes. 
 Enquanto no experimento anterior a troca de mapas entre os robôs sempre 
-ocorre com sucesso, pois eles sabem suas poses iniciais e portanto sabem 
-relacionar o mapa de um com o do outro. Neste nem toda aproximação dos 
+ocorre com sucesso, pois eles sabem suas poses iniciais e, portanto, sabem 
+relacionar o mapa de um com o do outro, neste experimento nem toda aproximação dos 
 robôs resultou em troca dos mapas, pois muitas vezes eles não conseguiram 
-estimar a transformação entre os mapas.
+estimar a transformação.
 
 Este experimento também teve que ser repetido mais de uma vez, pois em 
 algumas execuções os robôs estimavam a transformação errada, incorporando 
-a informação do outro de maneira errada e provocando divergência do 
-filtro. Desse modo a técnica de registro de nuvem de pontos utilizada 
-se mostrou capaz de calcular a transformação entre os mapas dos robôs, 
-mas não se mostrou robusta e confiável.
+a informação do outro robô de maneira errada e provocando divergência do 
+filtro. Desse modo, a técnica de registro de nuvem de pontos utilizada 
+não se mostrou robusta para estimar a transformação entre os mapas dos robôs.
 

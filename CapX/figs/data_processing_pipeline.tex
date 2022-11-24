@@ -25,14 +25,14 @@
 
       \path[-latex, ultra thick] (derivative) edge (cartesianData);
 
-      \node[align=center] (cartesianDataText) at (cartesianData -| derivativeText) {Segmentação dos pontos entre\\os pontos de mínimo e máximo do\\sinal de derivada. E transformação\\
+      \node[align=center] (cartesianDataText) at (cartesianData -| derivativeText) {Segmentação dos pontos entre\\os pontos de mínimo e máximo do\\sinal de derivada, transformação\\
       para coordenadas cartesianas.};
 
       \node[below=of cartesianData] (circleFit) {\includestandalone[width=0.4\textwidth]{circle_detection}};
 
       \path[-latex, ultra thick] (cartesianData) edge (circleFit);
       
-      \node[align=center] (circleFitText) at (cartesianDataText |- circleFit) {\textbf{SAÍDA}\\Estimação dos círculos que\\descrevem os conjuntos de pontos.\\Com $r > 6.5cm$ e $\sigma < \epsilon$};
+      \node[align=center] (circleFitText) at (cartesianDataText |- circleFit) {\textbf{SAÍDA}\\Estimação dos círculos que\\descrevem os conjuntos de pontos,\\com $r > 6.5cm$ e $\sigma < \epsilon$};
 
       \node[circle, draw=black, ultra thick, left=of derivativeText] (2) {2};
       \node[circle, draw=black, ultra thick, left=of cartesianDataText] {3};

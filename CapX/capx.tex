@@ -52,7 +52,7 @@ cartesianas \cite[p.~903]{al2009error}.
 \begin{figure}[]
   \includegraphics[width=\textwidth]{figs/data_processing_pipeline.pdf}
   \caption{Sequência de passos para processar os dados brutos do sensor LiDAR e
-  transforma-los em dados úteis para o modelo de medida utilizado.}
+  transformá-los em dados úteis para o modelo de medida utilizado.}
   \label{fig:lidar-data-processing-pipeline}
 \end{figure}
 
@@ -75,9 +75,9 @@ negativa seguida rapidamente de uma variação positiva na curva da derivada.
 O próximo passo consiste em transformar o sinal para a representação em 
 coordenadas cartesianas e segmentar em conjuntos os pontos nos intervalos entre picos e vales do sinal de derivada, como é mostrado na Figura \ref{fig:sensor-data-cartesian}.
 Então, cada um desses conjuntos é fornecido como entrada do Algoritmo 
-\ref{alg:circle-fit} (listado no Anexo \ref{annex:circle-fit}), o resultado 
-são círculos que melhor explicam esses conjuntos de pontos (Figura \ref{fig:detected-circles}), juntamente com o 
-erro médio quadrático entre cada conjunto de pontos e seu círculo.
+\ref{alg:circle-fit} (listado no Anexo \ref{annex:circle-fit}); o resultado 
+são círculos estimados que melhor se ajustam a cada um desses conjuntos de pontos (Figura \ref{fig:detected-circles}), juntamente com o 
+erro médio quadrático da estimação ($\sigma$) de cada círculo.
 \begin{figure}[]
   \centering
   \includegraphics[width=.8\textwidth]{figs/sensor_data_cartesian.pdf}
@@ -87,23 +87,22 @@ erro médio quadrático entre cada conjunto de pontos e seu círculo.
   \label{fig:sensor-data-cartesian}
 \end{figure}
 
-Por fim são considerados apenas os círculos cujo erro médio quadrático para 
-seus pontos correspondentes é inferior a um limiar $\epsilon = 10^{-3}$ e 
-cujo raio seja superior a 6cm. Essa última condição é especialmente útil no 
+São considerados apenas os círculos cujo erro médio quadrático $\sigma < \epsilon$ é inferior ao limiar $\epsilon = 10^{-3}$ e 
+cujo raio seja superior a 6.5 cm. Essa última condição é especialmente útil no 
 cenário multiagente, pois evita que um robô confunda o sensor LiDAR (que 
 fica montado no topo do robô, conforme visto na Figura \ref{fig:turtlebot-digital-twin}) do outro com uma \textit{landmark}.
 
 \begin{figure}[]
   \centering
   \includegraphics[width=.8\textwidth]{figs/circle_detection.pdf}
-  \caption{Em azul, os conjuntos de pontos selecionados como pertencentes à superfícies das \textit{landmarks}. Em verde, os círculos 
-  estimados para cada conjunto.}
+  \caption{Em azul, os conjuntos de pontos selecionados como pertencentes às superfícies das \textit{landmarks}. Em verde, os círculos 
+  estimados para cada conjunto de pontos decorrentes das medidas obtidas do sensor.}
   \label{fig:detected-circles}
 \end{figure}
 
 \section{Mapa em grade}
 Até o momento o ambiente foi representado apenas como um conjunto de 
-\textit{landmarks}, embora essa representação seja muito útil para a 
+\textit{landmarks}; embora essa representação seja muito útil para a 
 estimação, abordada no Capitulo \ref{ch:back-end}, ela não é adequada 
 para representar outros aspectos do ambiente além das próprias \textit{landmarks}. O robô não consegue representar a presença de outros 
 objetos, paredes ou até mesmo outros agentes.
@@ -115,14 +114,14 @@ não \cite{elfes1989using}. A Figura \ref{fig:occuopancy-grid-represetation} ilu
 partir das observações a partir do centro da cena representada na Figura 
 \ref{fig:laser-beams-visualization}.
 
-Para utilizar grade de ocupação são adotadas duas hipóteses 
+Para utilizar grade de ocupação, são adotadas duas hipóteses 
 simplificadoras: a primeira é que as células são independentes e o 
 estado de ocupação de uma célula não diz nada sobre o estado de outra; a 
 segunda é que o ambiente é estático. Embora essas duas premissas sejam 
-falsas, grades de ocupação funcionam muito bem na prática inclusive em 
+falsas, grades de ocupação funcionam muito bem na prática, inclusive em 
 ambientes dinâmicos. A primeira hipótese é falsa porque se uma célula 
 representa a ocupação de parte do corpo de um objeto, é muito provável 
-que suas vizinhas também estejam ocupadas por esse objeto. E a segunda 
+que suas vizinhas também estejam ocupadas por esse objeto. Já a segunda, 
 porque há outros agentes se movimentando no ambiente.
 
 Utilizando essas hipóteses, cada célula pode ser modelada como uma variável aleatória binária 
@@ -153,18 +152,17 @@ grade seja definida inicialmente, ou dinâmica.
 Uma vez que o ambiente está segmentado em células, utiliza-se o modelo de 
 medida inverso \invMeasurementModel (Seção \ref{sec:inverse-measurement-model}) para determinar a qual célula pertence 
 a extremidade do feixe da leitura do LiDAR. Caso o comprimento do feixe 
-seja menor que o alcance máximo do sensor a probabilidade de ocupação da 
-célula, que contém a extremidade do feixe, aumenta. Enquanto as das 
-células ao longo do feixe diminui.
+seja menor que o alcance máximo do sensor, aumenta a probabilidade de ocupação da 
+célula que contém a extremidade do feixe, enquanto diminui as das 
+células ao longo do feixe.
 
 Para determinar quais células da grade são interceptadas pelos feixes do 
-sensor LiDAR é utilizado o algoritmo de desenho de linha 
-de Bresenham \cite{bresenham1965algorithm}. Inicialmente 
+sensor LiDAR, é utilizado o algoritmo de desenho de linha 
+de Bresenham \cite{bresenham1965algorithm}. Inicialmente, 
 esse algoritmo foi criado para desenhar linhas em \textit{plotters} 
-digitais, mas ele também pode ser usado para desenhar linhas em grades de 
-pixel, como monitores. Aqui ele é usado para ``desenhar'' o feixe do 
+digitais. Aqui, ele é usado para ``desenhar'' o feixe do 
 LiDAR, com origem no sensor e extremidade calculada pelo modelo de medida 
-inverso, na grade de ocupação. Então as células utilizadas no desenho são 
+inverso, na grade de ocupação. As células no algoritmo de desenho são 
 as células interceptadas pelo feixe, como é ilustrado na Figura \ref{fig:bresenham-demo}.
 
 \begin{figure}
@@ -178,9 +176,9 @@ as células interceptadas pelo feixe, como é ilustrado na Figura \ref{fig:brese
   \label{fig:bresenham-demo}
 \end{figure}
 
-Por fim é preciso definir uma distribuição de probabilidade de ocupação 
-das células para o modelo de medida inverso. Por conta da boa precisão 
-de sensores do tipo LiDAR utilizou-se um modelo simplificado, ilustrado 
+Por fim, é preciso definir uma distribuição de probabilidade de ocupação 
+das células para o modelo de medida inverso. Por conta da boa qualidade 
+de sensores do tipo LiDAR, utilizou-se um modelo simplificado, ilustrado 
 na Figura \ref{fig:simplified-inv-measurement-model}.
 
 \begin{figure}
@@ -193,11 +191,11 @@ na Figura \ref{fig:simplified-inv-measurement-model}.
 
 \subsection{Representação em \textit{log odds}}
 Implementações do filtro de Bayes binário são comumente realizadas na 
-forma do logaritmo da razão de chances (\textit{log odds ratio}) \cite[p.~94]{bongard2006probabilistic}. A razão de chances, ou \textit{odds}, é a 
+forma do logaritmo da razão de chances (\textit{log odds ratio}) \cite[p.~94]{bongard2006probabilistic}. A razão de chances é a 
 razão entre a probabilidade de ocorrência de um evento (a célula 
 estar ocupada), dividida pela razão da não ocorrência desse evento (a 
 célula estar livre). Se $\pr{c_{ij} \given \bsubvec{y}{1:t}}$ é a probabilidade da célula $c_{ij}$ 
-estar ocupada dada as medidas dos sensor LiDAR até o instate $t$, então a sua razão de chances é:
+estar ocupada dada as medidas dos sensor LiDAR até o instante $t$, então a sua razão de chances é:
 \begin{equation}
   \frac{\pr{c_{ij}\given \bsubvec{y}{1:t}}}{\pr{\neg c_{ij}\given \bsubvec{y}{1:t}}} = \frac{\pr{c_{ij}\given \bsubvec{y}{1:t}}}{1 - \pr{c_{ij}\given \bsubvec{y}{1:t}}}
 \end{equation}
@@ -217,12 +215,12 @@ Definindo o logaritmo da razão de chances, também conhecido por logit, por:
 \end{equation}
 Aplicando a definição acima na 
 Equação \ref{eq:recursive-bayes-filter-update}, ela pode ser reescrita 
-na forma da Equação \ref{fig:occuopancy-grid-represetation}:
+na forma:
 \begin{equation}
   l_t = \log\parentheses{\frac{\text{Modelo-de-medida-inverso}}{1 - \text{Modelo-de-medida-inverso}}} + l_{t-1} - l_0
   \label{eq:occupancy-grid-log-odds}
 \end{equation}
-E a probabilidade de ocupação de uma célula pode ser recuperada 
+e a probabilidade de ocupação de uma célula pode ser recuperada 
 utilizando a relação na Equação \ref{eq:log-odds-to-probability}.
 \begin{equation}
   p = 1 - \frac{1}{1 + \exp({l_t})}
@@ -232,8 +230,8 @@ utilizando a relação na Equação \ref{eq:log-odds-to-probability}.
 Como fica claro na Equação \ref{eq:occupancy-grid-log-odds}, a 
 incorporação de novas leituras se resume a uma simples adição. Esse 
 aspecto da representação em \textit{log odds} será muito útil mais 
-adiante quando os agentes trocarem suas grades de ocupação, pois após 
-o alinhamento entre as grades a fusão entre elas também será uma simples 
+adiante quando os agentes trocarem suas grades de ocupação, pois, após 
+o alinhamento entre as grades, a fusão entre elas também será uma simples 
 soma.
 
 \section{Exploração Autônoma}
@@ -251,8 +249,7 @@ na grade de ocupação, e também é conhecida por \emph{exploração baseada em
 bem na prática, pois sempre guia o robô em direção a terreno desconhecido 
 \cite[p.~584]{bongard2006probabilistic}. Se o robô estivesse no centro 
 da grade representada na Figura \ref{fig:grid-map-big-rep}, ele 
-selecionaria a célula com ocupação desconhecida (azul) mais próxima, e com uma distância de segurança mínima de uma célula ocupada, para 
-explorar.
+selecionaria para explorar a célula com ocupação desconhecida (azul) mais próxima e com uma distância de segurança mínima de uma célula ocupada.
 
 \begin{figure}
   \centering
@@ -263,7 +260,8 @@ explorar.
   \end{subfigure}
   \hfill
   \begin{subfigure}{0.49\textwidth}
-    \includegraphics[width=\textwidth]{figs/grid-map.png} 
+    \centering
+    \includegraphics[width=\textwidth, angle=-90]{figs/grid-map.png} 
     \caption{Visualização da grade de ocupação no software RVIZ}
     \label{fig:}
   \end{subfigure}
@@ -273,16 +271,16 @@ explorar.
 
 Além de selecionar o novo ponto para onde deve seguir, o robô também 
 precisa estabelecer um caminho livre de obstáculos que o leve de sua 
-posição atual para a posição de destino. Para isso o mapa de grade é 
-transformado em um mapa de custo, e o robô calcula o caminho com menor custo até a célula de destino. O custo de uma célula é inversamente 
-proporcional a sua distância para as células ocupadas mais próximas, o 
+posição atual para a posição de destino. Para isso, o mapa de grade é 
+transformado em um mapa de custo e o robô computa o caminho com menor custo até a célula de destino. O custo de uma célula é inversamente 
+proporcional a sua distância para as células ocupadas mais próximas; o 
 resultado pode ser visualizado como um ``mapa de calor'' na Figura 
 \ref{fig:costmap}.
 
 \begin{figure}
   \centering
   \includegraphics[width=0.6\textwidth]{figs/costmap.png}
-  \caption{Mapa de custo referente à grade de ocupação da Figura \ref{fig:occupancy-grid-visualization-comparsion}. As regiões quentes (vermelho) representam células de maior custo. Enquanto as células 
+  \caption{Mapa de custo referente à grade de ocupação da Figura \ref{fig:occupancy-grid-visualization-comparsion}. As regiões quentes (vermelho) representam células de maior custo, enquanto as células 
   frias (azul escuro) representam células de baixo custo.}
   \label{fig:costmap}
 \end{figure}

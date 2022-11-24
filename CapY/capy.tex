@@ -4,42 +4,42 @@ um robô resolva o problema SLAM ativamente: reconhecimento de
 exploração, estimação e um mecanismo para evitar que \textit{landmarks} 
 espúrias sejam incorporadas ao filtro causando divergência e falha. 
 Porém, resta explorar um aspecto fundamental para sistema multiagentes: 
-a troca de informações e a subsequente inclusão dos mapas de um agente 
+a troca de informações e a subsequente inclusão do conteúdo do mapa de um agente 
 no(s) do(s) outro(s), e vice e versa.
 
 A troca de informação par a par entre os agentes é o mecanismo que 
-caracteriza um sistema SLAM multiagente descentralizado, e que confere 
+caracteriza um sistema SLAM multiagente descentralizado e que confere 
 a ele redundância de informação e robustez frente a falhas de agentes. 
 Além disso, também pode propiciar que os agentes dividam a carga de 
-trabalho na exploração concluindo a tarefa em menos tempo.
+trabalho na exploração, concluindo a tarefa em menos tempo.
 
 Essa troca pode acontecer em dois níveis: filtro e mapa de grade. 
 Quando um robô incorpora as informações do filtro de seu par, 
 ele pode aumentar a informação a respeito das \textit{landmarks} já 
-conhecidas por ele e que também foram observadas pelo seu par, e ainda 
+conhecidas por ele e que também foram observadas pelo seu par, além de poder 
 adquirir informação de \textit{landmarks} que ainda não foram 
 observados por ele, mas foram observadas pelo seu par. A matriz e vetor 
-de informação de um é incorporado nos do outro.
+de informação de um é incorporado no do outro.
 
 Similarmente, a troca dos mapas de grade de ocupação permite a mesma 
-coisa do ponto de vista do mapa de grade. Durante a comunicação um 
+coisa do ponto de vista do mapa de grade. Durante a comunicação, um 
 agente incorpora as probabilidades de ocupação, ou melhor o logaritmo 
 das razões de chances (\textit{log odds}), do mapa do outro ao seu 
 próprio. Isso é muito simples por conta da natureza aditiva da 
 representação em \textit{log odds}, como mostrado na Equação \ref{eq:occupancy-grid-log-odds}.
 
-No entanto, para que um robô incorpore os mapas (grade e \textit{landmarks}) do outro aos seus prórpios, é necessário antes que se determine a posição relativa entre eles para transformar os 
-mapas que estão no sistema de referência local do outro, para o seu 
+No entanto, para que um robô incorpore os mapas (grade e \textit{landmarks}) do outro aos seus própios, é necessário antes que se determine a posição relativa entre eles para transformar os 
+mapas que estão no sistema de referência local do outro para o seu 
 próprio sistema de referência local, alinhando assim os elementos comuns 
 que aparecem em ambos.
 
-\section{Cálculo da posição relativa entre agentes}
+\section{Computação da posição relativa entre agentes}
 \label{sec:point-cloud-registration}
 
-Para determinar a posição relativa entre os robôs utilizou-se a técnica 
+Para determinar a posição relativa entre os robôs, utilizou-se a técnica 
 de registro de nuvens de pontos, que consiste em estimar uma 
-transformação $\mathcal{T}$ que ao ser aplicada em uma nuvem de pontos 
-\emph{fonte} a melhor alinhe com uma nuvem de pontos \emph{alvo}. Um 
+transformação $\mathcal{T}$ que, ao ser aplicada em uma nuvem de pontos 
+\emph{fonte}, melhor a alinhe com uma nuvem de pontos \emph{alvo}. Um 
 exemplo de registro de nuvens de pontos é mostrado na Figura 
 \ref{fig:point-cloud-registration-example}, onde duas nuvens de um mesmo 
 ambiente são alinhadas resultando em uma nuvem mais completa.
@@ -57,7 +57,7 @@ Com isso, ao utilizar como nuvem de pontos o mapa
 e \textit{landmarks} de cada robô e restringir que a transformação $\tr$ seja uma transformação de corpo rígido $\trr{}$, é possível determinar 
 a posição 
 relativa entre eles. A Transformação $\trr{}$ é definida por um ângulo
-de rotação e um vetor de descolamento entre dois sistemas de referência:
+de rotação e um vetor de translação entre dois sistemas de referência:
 \begin{equation}
   \trr{} = \begin{bmatrix}
     \theta & d_x & d_y 
@@ -66,36 +66,36 @@ de rotação e um vetor de descolamento entre dois sistemas de referência:
 \end{equation}
 
 A premissa para utilizar essa técnica é que ao 
-explorar o mesmo ambiente os mapas criados por cada robô possui 
+explorar o mesmo ambiente, o mapa criado por cada robô possui 
 elementos (\textit{landmarks}) em comum com 
-os mapas dos demais, e portanto é possível identificar e estabelecer 
+os mapas dos demais e, portanto, é possível identificar e estabelecer 
 relação entre as \textit{landmarks} em comum para determinar a 
 transformação $\trr{}$ que melhor as alinhem.
 
 Porém, como a única informação que caracteriza uma \textit{landmark} é a 
-sua posição, no sistema de referência local, fica difícil determinar se 
-ela também foi observada pelo outro par e, portanto está em seu mapa. Essa 
+sua posição no sistema de referência local, fica difícil determinar se 
+ela também foi observada por outros e, portanto, está em seu mapa. Essa 
 dificuldade se deve à utilização do sensor LiDAR, pois em soluções que usam 
 câmeras RGB ou de RGB-D, as texturas e cores podem ser utilizadas para 
 identificar pontos de interesse.
 
 Para superar essa limitação, utilizou-se um descritor de características 
 para descrever uma \textit{landmark} a partir de sua vizinhança, dessa 
-forma criando uma ``digital'' que se repetiria no outro mapa, 
+forma criando uma ``impressão digital'' que se repetiria no outro mapa, 
 possibilitando identificar quando uma mesma \textit{landmark} foi observada 
 pelo outro par. Então foi desenvolvido um descritor de características 
-inspirado no descritor \textit{Spin Image} \cite{johnson1999using}, 
+inspirado no descritor \textit{Spin Image} \cite{johnson1999using} 
 para o caso planar do mapa de \textit{landmarks}. A Figura \ref{fig:feature-descriptor} ilustra o descritor. Ele define uma 
-vizinhança em torno da \textit{landmark} descrita, e a divide em setores. 
-Cada setor possui uma posição correspondente no vetor de características, 
-em cada posição do vetor é colocada a quantidade de \textit{landmarks} 
-vizinhas, a \textit{landmark} descrita, em seu setor correspondente.
+vizinhança em torno da \textit{landmark} descrita e a divide em setores. 
+Cada setor possui uma posição correspondente no vetor de características; 
+a cada posição do vetor corresponde a quantidade de \textit{landmarks} 
+vizinhas à \textit{landmark} descrita em seu setor correspondente.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.6\textwidth]{figs/feature-descriptor.tex}
   \caption{Ilustração do descritor de característica utilizado para 
-  relacionar \textit{landmarks} entre os mapas dos agente. As \textit{landmarks} estão representadas por círculos em cinza, a \textit{landmark} descrita é representada em magenta. O vetor descritor está representado no canto inferior esquerdo. Cada posição do vetor corresponde a um setor da circunferência tracejada. Os setores que 
+  relacionar \textit{landmarks} entre os mapas dos agente. As \textit{landmarks} estão representadas por círculos em cinza, a \textit{landmark} descrita é representada em magenta. O vetor descritor está representado no canto inferior direito. Cada posição do vetor corresponde a um setor da circunferência tracejada. Os setores que 
   possuem \textit{landmarks} vizinhas estão realçados em tons de azul.}
   \label{fig:feature-descriptor}
 \end{figure}
@@ -111,11 +111,11 @@ Aplicando a transformação obtida no mapa de \textit{landmarks} do outro
 robô, o primeiro avalia quantas \textit{landmarks} a transformação alinha 
 corretamente, e se há alguma \textit{landmark} com alinhamento indefinido. 
 Um alinhamento é tido como correto quando a distância $d$ entre as 
-\textit{landmarks} é menor que um limiar $\delta_{\text{near}}$, e como 
+\textit{landmarks} é menor que um limiar $\delta_{\text{near}}$ e como 
 indefinido se a distância está entre os limiares 
 $\delta_{\text{near}} \leq d < \delta_{far}$. A transformação é então aceita 
-como correta se não existe alinhamentos indefinidos e a quantidade de 
-alinhamentos corretos é maior ou igual a três.
+como correta se não existirem alinhamentos indefinidos e a quantidade de 
+alinhamentos corretos é maior ou igual a quatro.
 
 % TODO: fazer imagem do pipeline de registro
 
@@ -131,7 +131,7 @@ respectivas representações.
 
 \subsection{Troca do vetor e matriz de informação}
 \label{sec:seif-info-exchange}
-A exposição que segue abaixo nessa Seção é inspirada em \cite[Seção~12.11]{bongard2006probabilistic}. 
+A exposição que segue abaixo nessa Seção segue de \cite[Seção~12.11]{bongard2006probabilistic}. 
 
 Para que um robô incorpore os vetores de estado e informação e a matriz 
 de informação um do outro, é necessário antes mudar o sistema de 
@@ -208,10 +208,10 @@ $j$ para o sistema de referência do robô $k$, como:
   \label{eq:state-vector-change-reference-frame}
 \end{equation}
 
-Com o resultado a mudança de sistema de referência do robô $j$ para o 
+Com o resultado, a mudança de sistema de referência do robô $j$ para o 
 do robô $k$, mostrado na Equação 
 \ref{eq:state-vector-change-reference-frame}, e usando como hipótese 
-que não há ganho ou perca de informação ao mudar o sistema de referência 
+que não há ganho ou perda de informação ao mudar o sistema de referência 
 dos vetores e matrizes do robô $j$ para o robô $k$, ou seja que
 \begin{equation}
   \pr{\bsubvec{x}{t}^{j\to k} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}}
@@ -261,7 +261,7 @@ Com o vetor de informação e a matriz de informação do
 robô $j$ reescritos no sistema de referência do robô $k$, Equações \ref{eq:infov-transformed} e \ref{eq:infom-transformed} respectivamente, criamos as seguintes grandezas aumentadas:
 \begin{align}
   \infov{t}^* &= \begin{bmatrix}
-    \infov{t}^k & \infov{t}^{j\to k}
+    \brac{\infov{t}^k}^T & \brac{\infov{t}^{j\to k}}^T
   \end{bmatrix}^T\\
   \infom{t}^* &= \begin{bmatrix}
     \infom{t}^k & \bvec{0}\\
@@ -269,13 +269,13 @@ robô $j$ reescritos no sistema de referência do robô $k$, Equações \ref{eq:
   \end{bmatrix} 
 \end{align}
 
-O vetor e a matriz de informação aumentados é simplesmente o vetor e matriz do robô $k$ concatenados com o 
+O vetor e a matriz de informação aumentados são simplesmente o vetor e matriz do robô $k$ concatenados com o 
 vetor e matriz de informação do robô $j$ transformados para o sistema 
 de referência do robô $k$. Portanto, há mais de uma linha/bloco que 
 possui informação relacionada a uma mesma \textit{landmark} que foi observada 
 por ambos os robôs separadamente, então resta ainda fundir linhas e 
-blocos que dizem respeito à mesma \textit{landmark}. Para isso basta 
-somá-los, no exemplo abaixo supõe-se que os blocos 2 e 4 do vetor e 
+blocos que dizem respeito à mesma \textit{landmark}. Para isso, basta 
+somá-los; no exemplo abaixo, supõe-se que os blocos 2 e 4 do vetor e 
 matriz de informação correspondem ao mesmo objeto:
 \begin{align}
   \begin{bmatrix}
@@ -285,7 +285,7 @@ matriz de informação correspondem ao mesmo objeto:
     \infom{41} & \infom{42} & \infom{43} & \infom{44}
   \end{bmatrix} &\rightarrow \begin{bmatrix}
     \infom{11} & \infom{12} + \infom{14} & \infom{13}\\
-    \infom{21}+\infom{41} & \infom{22}+\infom{42} + \infom{24}\infom{44} & \infom{23}+\infom{43} \\
+    \infom{21}+\infom{41} & \infom{22}+\infom{42} + \infom{24}+\infom{44} & \infom{23}+\infom{43} \\
     \infom{31} & \infom{32} + \infom{34} & \infom{33} \\
   \end{bmatrix}
   \label{eq:info-matrix-fusion}\\
@@ -296,13 +296,13 @@ matriz de informação correspondem ao mesmo objeto:
   \end{bmatrix}
 \end{align}
 
-Por último, depois da fusão bos blocos da matriz e do vetor de 
+Por último, depois da fusão dos blocos da matriz e do vetor de 
 informação, é necessário ajustar os elementos correspondentes do vetor 
 média. Para isso foi utilizado o método descrito no Algoritmo \ref{alg:seif-slam-mean-recovery}, mas ao invés da otimização ser realizada 
 num conjunto de \textit{landmarks} observadas, ela é realizada 
 no conjunto 
-de \textit{landmarks} que foram observadas por ambos os robôs do par e
-portanto tiveram seus elementos fundidos.
+de \textit{landmarks} que foram observadas por ambos os robôs do par e,
+portanto, tiveram seus elementos fundidos.
 
 \subsection{Troca de grades de ocupação}
 Similarmente a troca do vetor e matriz de informação, as células da 
@@ -310,7 +310,7 @@ grade de ocupação de um robô são projetadas na do outro por meio da
 transformação $\trr{j \to k}$. O logaritmo da razão de chance da \textit{i}-ésima célula da grade de ocupação do robô $k$ é atualizada da 
 seguinte forma:
 \begin{equation}
-  l_i^k = l_i^{j\to k} + l_i^k + l_0^k
+  l_i^k = l_i^{j\to k} + l_i^k - l_0^k
 \end{equation}
 
 A Figura \ref{fig:grid-map-exchange} ilustra a fusão das grades de 
@@ -329,7 +329,7 @@ vista, mas que foram observadas pelo outro robô.
   \hfill
   \begin{subfigure}{0.45\textwidth}
     \includegraphics[width=\textwidth]{figs/grid-rb2.png}
-    \caption{Mapa de grande do robô 1. O robô está no centro da grade 
+    \caption{Mapa de grande do robô 2. O robô está no centro da grade 
       em vermelho.}
     % \label{fig:}
   \end{subfigure}
@@ -342,6 +342,6 @@ vista, mas que foram observadas pelo outro robô.
   \caption{As imagens menores representam os mapas de grade 
   individuais de cada robô. A imagem maior representa o mapa de grade do
   primeiro robô após receber o mapa de grade do segundo. Note que algumas
-  células com probabilidade de ocupação 0.5 (nem ocupada e nem desocupada) pelo robô 1 passam a ter probabilidade de ocupação diferente de 0.5 pois são observadas do ponto de vista do robô 2.}
+  células com probabilidade de ocupação 0.5 (nem ocupada e nem desocupada) pelo robô 1 passam a ter probabilidade de ocupação diferente de 0.5, pois são observadas do ponto de vista do robô 2.}
   \label{fig:grid-map-exchange}
 \end{figure}

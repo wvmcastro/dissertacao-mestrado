@@ -102,13 +102,13 @@ Porém, nem todo sensor é capaz de fornecer essas duas medidas; câmeras RGB, p
 exemplo, conseguem  informar apenas a direção angular.
 
 Então, de acordo com a presença/ausência dessas componentes os termos: 
-\textit{Range Only}, \textit{Bearing Only} e \textit{Range-Bearing} SLAM são 
+\textit{Range Only}, \textit{Bearing Only} e Distância-Azimute SLAM são 
 utilizados para identificar qual classe de medidas do ambiente está sendo
 utilizada na solução do problema. \textit{Range Only} significa que a medida 
 possui apenas a 
 componente de distância. Em medidas \textit{Bearing Only}, apenas a direção 
-angular é lida. Em \textit{Range-Bearing} ambas as quantidades são lidas; em 
-\textit{Range-Bearing} SLAM são comumente utilizados sensores do tipo 
+angular é lida. Em Distância-Azimute ambas as quantidades são lidas; em 
+Distância-Azimute SLAM são comumente utilizados sensores do tipo 
 \emph{LIDAR} (\textit{Light Detection and Ranging}), que retornam uma nuvem de 
 pontos na qual cada ponto é descrito pela distância e direção angular em relação ao 
 sensor.
