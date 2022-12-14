@@ -29,7 +29,11 @@
 \pgfplotsset{compat=1.12}
 \usepgfplotslibrary{fillbetween}
 
-\usepackage{algorithm}
+\usepackage[chapter]{algorithm}
+\makeatletter
+\renewcommand*{\ALG@name}{Algoritmo}
+\makeatother
+
 \usepackage{algpseudocode}
 \algrenewcommand\algorithmicprocedure{\textbf{function}}
 

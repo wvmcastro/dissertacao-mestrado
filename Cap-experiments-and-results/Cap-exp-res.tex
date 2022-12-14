@@ -5,7 +5,7 @@ Este primeiro experimento visa medir a capacidade do SEIF para estimar a
 pose do robô enquanto ele explora o ambiente de maneira autônoma, 
 mediante comparação da estimativa 
 com a odometria das rodas. Além disso, compara-se a estimativa do SEIF 
-variando o cardinalidade do conjunto de \textit{landmarks} 
+variando a cardinalidade do conjunto de \textit{landmarks} 
 ativas $\{\bupvec{m}{+}\}$. O critério de comparação utilizado foi o 
 Erro Absoluto Integral (IAE) (Equação \ref{eq:iae-error}) da posição estimada $\bvec{\hat{x}}$, em 
 relação à pose real $\bvec{x}$ colhida do simulador. Para repetir o experimento com outro tamanho de $\{\bupvec{m}{+}\}$ foram gravadas a sequência de entradas $\bsubvec{u}{1:t}$ 
@@ -22,7 +22,7 @@ A Tabela \ref{table:iae} lista os valores obtidos para o IAE e a Figura \ref{fig
 temporal do erro da estimativa de posição do robô. Além 
 da posição, também foi avaliado o erro na estimação da 
 orientação, ilustrado na Figura \ref{fig:theta-error}. Em ambas as 
-Figuras, os valores obtidos pelo SEIF são mostrados separadamente, pois aparecem sobrepostos na escala do escala do erro da odometria.
+Figuras, os valores obtidos pelo SEIF são mostrados separadamente, pois aparecem sobrepostos na escala do erro da odometria.
 
 \begin{table}[]
 \caption{Erro Integral Absoluto da trajetória do robô para diferentes estimadores}
@@ -97,7 +97,7 @@ memória quando utilizada uma estrutura de dados adequada para a representação
 de matrizes esparsas.
 
 O perfil de uso de memória observado mostrou-se como esperado; quanto maior 
-o cardinalidade do conjunto de \textit{landmarks} ativas $\bupvec{m}{+}$, maior o 
+o cardinalidade do conjunto de \textit{landmarks} ativas $\bupvec{m}{+}$, maior a 
 consumo de memória pelo SEIF-SLAM. Além disso, todas as parametrizações 
 usam muito menos memória quando comparados com o EKF-SLAM.
 
@@ -152,7 +152,7 @@ Economia em relação ao EKF-SLAM\footnotemark{} \\
 
 \section{Mapeamento conjunto e descentralizado}
 Esse experimento avalia cenários com mais de um robô desempenhando SLAM 
-e trocando mapas entre si como mostrado na Seção \ref{sec:seif-map-exchange}. Como tanto o vetor e a matrix de informação 
+e trocando mapas entre si como mostrado na Seção \ref{sec:seif-map-exchange}. Como tanto o vetor e a matriz de informação 
 quanto as grades de ocupação são compartilhados entre os agentes, esse 
 experimento é dividido em duas partes.
 

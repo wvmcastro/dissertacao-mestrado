@@ -22,10 +22,11 @@ modela a transição de estado do sistema a partir do estado anterior e da entra
   \bsubvec{y}{t} &= \mb{h}(\bsubvec{x}{t}) + \mb{\delta}_t
   \label{eq:measurement-model}
 \end{align}
-Como o modelo do sistema $\mb{g}(\mathord{\bullet}, \mathord{\bullet})$, e o modelo de medida $\mb{h}(\mathord{\bullet}, \mathord{\bullet})$ não são exatos, suas incertezas e erros de modelagem são aproximados por ruídos gaussianos $\mb{\epsilon}_t \sim \normal{\bvec{0}}{\bsubvec{R}{t}}$ e $\mb{\delta}_t \sim \normal{\bvec{0}}{\bsubvec{Q}{t}}$. Quando $\mb{g}(\mathord{\bullet}, \mathord{\bullet})$ e/ou $\mb{h}(\mathord{\bullet}, \mathord{\bullet})$ não são lineares, o EKF pode ser utilizado para estimar o estado 
+\newcommand{\EKFSystemModel}{$\mb{g}(\bullet, \bullet)$}
+Como o modelo do sistema \EKFSystemModel{}, e o modelo de medida \measurementModel{} não são exatos, suas incertezas e erros de modelagem são aproximados por ruídos gaussianos $\mb{\epsilon}_t \sim \normal{\bvec{0}}{\bsubvec{R}{t}}$ e $\mb{\delta}_t \sim \normal{\bvec{0}}{\bsubvec{Q}{t}}$. Quando \EKFSystemModel{} e/ou \measurementModel{} não são lineares, o EKF pode ser utilizado para estimar o estado 
 do sistema. 
 
-As Equações de \ref{eq:ekf-prediction} até \ref{eq:ekf-estimate-error-covariance} definem o EKF \footnote{O leitor pode estanhar a Equação \ref{eq:ekf-estimate-error-covariance} do erro da estimativa. Normalmente ela é escrita na forma $\cov{t} = (\bvec{I} - \bsubvec{K}{t} \bsubvec{H}{t}) \predcov{t}$, porém de acordo com \citeonline[p.~ 73]{lewis2017optimal}, a forma em \ref{eq:ekf-estimate-error-covariance} é uma alternativa melhor na presença de erros de arredondamento, e é frequentemente utilizada em implementações de software.} para o sistema não linear acima. Sendo $\bsubvec{G}{t}$ é o jacobiano do modelo do sistema no estado estimado atualizado prévio $\mean{t-1}$ e $\bsubvec{H}{t}$ é o jacobiano do modelo de medida no estado estimado predito $\predmean{t}$.
+As Equações de \ref{eq:ekf-prediction} até \ref{eq:ekf-estimate-error-covariance} definem o EKF \footnote{O leitor pode estanhar a Equação \ref{eq:ekf-estimate-error-covariance} do erro da estimativa. Normalmente ela é escrita na forma $\cov{t} = (\bvec{I} - \bsubvec{K}{t} \bsubvec{H}{t}) \predcov{t}$, porém de acordo com \citeonline[p.~ 73]{lewis2017optimal}, a forma em \ref{eq:ekf-estimate-error-covariance} é uma alternativa melhor na presença de erros de arredondamento, e é frequentemente utilizada em implementações de software.} para o sistema não linear acima. Sendo $\bsubvec{G}{t}$ o jacobiano do modelo do sistema no estado estimado atualizado prévio $\mean{t-1}$ e $\bsubvec{H}{t}$ é o jacobiano do modelo de medida no estado estimado predito $\predmean{t}$.
 \begin{align}
   \predmean{t} &= \mb{g}(\mean{t-1}, \bsubvec{u}{t})
   \label{eq:ekf-prediction}\\
@@ -48,7 +49,7 @@ direta das Equações acima. São necessárias algumas alterações, pois em SLA
 \section{EKF-SLAM}
 Para aplicar o EKF na solução de SLAM, é necessário entender 
 como o vetor de estados $\bvec{x}$ é composto (aqui o subíndice $t$ é omitido, pois não é importante para esta discussão). Como tanto a pose do 
-robô, quanto o mapa são estimados, o vetor de estados é composto por ambos com apresentado na Equação \ref{eq:slam-state-vector}, abaixo.
+robô, quanto o mapa são estimados, o vetor de estados é composto por ambos como apresentado na Equação \ref{eq:slam-state-vector}, abaixo.
 \begin{equation}
   \bvec{x} = \begin{bmatrix}
     \bsubvec{x}{\mathrm{r}} \\
@@ -234,7 +235,7 @@ que é resultado da concatenação do vetor atual com a posição da nova
 Porém, não basta apenas adicionar a nova \textit{landmark} no vetor de estados, é necessário adicioná-la também na matriz de covariância. Quando 
 o robô observa uma nova \textit{landmark}, é esperado que o erro de estimação 
 da posição dessa nova \textit{landmark} seja influenciado pelo erro da 
-pose do robô, no momento da leitura, e pelo erro de de medição do sensor. 
+pose do robô, no momento da leitura, e pelo erro de medição do sensor. 
 
 Inicializar a covariância da nova \textit{landmark} com $\infty$ (ou 
 números muito grandes), como indicado em 
@@ -682,7 +683,7 @@ estado predito; portanto, o vetor $\predmean{t}$ é utilizado como ponto de part
 \end{algorithmic}
 \end{algorithm}
 
-Como pode ser notado na linha 2 do algoritmo acima, dentre todas as 
+Como pode ser notado na linha 2 do Algoritmo \ref{alg:seif-slam-mean-recovery}, dentre todas as 
 \textit{landmarks}, apenas as ativas são atualizadas, além da pose do 
 robô, é claro. Isso se deve novamente à esparsidade da matriz de 
 informação, pois a atualização de uma \textit{landmark} só contribui 
@@ -699,7 +700,7 @@ na prática, é preciso antes uma etapa que estabeleça correspondência entre
 as medidas lidas e as \textit{landmarks} existentes no vetor de estados. 
 Essa correspondência é fundamental para utilizar a \textit{landmark} $\bvec{m}^i$ correta no cálculo do modelo de medida \measurementModel, Eq. \ref{eq:range-bearing-measurement-model}.
 
-O algoritmo abaixo pressupõe que tais correspondências são 
+O Algoritmo \ref{alg:seif-slam-update-known-associations} pressupõe que tais correspondências são 
 conhecidas. A Seção \ref{sec:data-association} abordará uma maneira para estabelecer essas correspondências. 
 Ao contrário dos outros passos, a esparsidade da 
 matriz de informação não influencia nem altera nada em relação ao 
@@ -961,7 +962,7 @@ mostrado abaixo:
 \label{eq:seif-sparsification-derivation}
 \end{equation}
 
-A computação das matrizes de informações correspondentes às distribuições da última linha do desenvolvimento acima será com base na discussão em \cite[p.~401]{bongard2006probabilistic} e na manipulação de distribuições gaussianas na forma canônica presentes no Apêndice \ref{annex:info-gaussian-manipulation}. 
+A computação das matrizes de informações correspondentes às distribuições da última linha do desenvolvimento acima será com base na discussão em \cite[p.~401]{bongard2006probabilistic} e na manipulação de distribuições gaussianas na forma canônica presentes no Anexo \ref{annex:info-gaussian-manipulation}. 
 Primeiramente, vamos calcular a matriz $\infom{t}^{0}$ correspondente 
 a $\pr{\robotstate{t}, \bupvec{m}{+-}, \bupvec{m}{++} \given \bupvec{m}{-} = 0}$; isso é feito extraindo os elementos correspondentes a 
 todas as variáveis de estado exceto $\bupvec{m}{-}$:
@@ -1080,7 +1081,7 @@ medida pertence a uma \textit{landmark} não observada antes, e então ela
 \end{algorithmic}
 \end{algorithm}
 
-Como pode ser observado acima, o Algoritmo utiliza as covariâncias das 
+Como pode ser observado, o Algoritmo \ref{alg:landmark-correspondence} utiliza as covariâncias das 
 \textit{landmarks}, denominadas por $\cov{0:\mathrm{M}}$, como 
 entrada. Porém, no SEIF não é mantida uma matriz de covariância, mas sim a matriz de informação. Portanto, para utilizar a técnica acima é 
 necessário ``recuperar'' as covariâncias das \textit{landmarks} a partir 
@@ -1093,7 +1094,7 @@ anterior, com o SEIF, uma técnica para calcular a covariância das \textit{land
 matriz de informação e extrair os blocos da diagonal principal. Porém, 
 dessa forma todo o esforço para manter as etapas do SEIF com 
 complexidade constante seriam minados, pois a inversão de matrizes tem 
-complexidade $\bigO{2.376 n}$ \cite{coppersmith1987matrix}.
+complexidade $\bigO{n^{2.376}}$ \cite{coppersmith1987matrix}.
 
 A fim de tratar esse problema, \cite[p.~5]{liu2003results} propõe 
 calcular a covariância das \textit{landmarks} candidatas à associação 
@@ -1179,7 +1180,7 @@ cinco pontos negativamente:
 
 Com essa abordagem foi possível erradicar a incorporação de 
 falsas \textit{landmarks} geradas tanto no cenário com um robô quanto 
-no cenário com dois robôs. Além disso, como será visto na próxima Seção \ref{sec:seif-map-exchange}, ao trocarem seus mapas os robôs enviam para o 
+no cenário com dois robôs. Além disso, como será visto na Seção \ref{sec:seif-map-exchange}, ao trocarem seus mapas os robôs enviam para o 
 outro par apenas o vetor e matriz de informação correspondentes às 
 \textit{landmarks} consolidadas pelo filtro (i.e. permanentes).
 

@@ -193,7 +193,7 @@ na Figura \ref{fig:simplified-inv-measurement-model}.
 Implementações do filtro de Bayes binário são comumente realizadas na 
 forma do logaritmo da razão de chances (\textit{log odds ratio}) \cite[p.~94]{bongard2006probabilistic}. A razão de chances é a 
 razão entre a probabilidade de ocorrência de um evento (a célula 
-estar ocupada), dividida pela razão da não ocorrência desse evento (a 
+estar ocupada), dividida pela probabilidade da não ocorrência desse evento (a 
 célula estar livre). Se $\pr{c_{ij} \given \bsubvec{y}{1:t}}$ é a probabilidade da célula $c_{ij}$ 
 estar ocupada dada as medidas dos sensor LiDAR até o instante $t$, então a sua razão de chances é:
 \begin{equation}
@@ -238,7 +238,7 @@ soma.
 
 Na Seção anterior foi mostrado como as grades de ocupação são utilizadas 
 para representar ambiente e como essa representação é construída e 
-mantida. Nessa seção será mostrado como a grande pode ser empregada para 
+mantida. Nessa seção será mostrado como a grade pode ser empregada para 
 determinar regiões alvo para exploração dos agentes e como elas são 
 úteis para evitar obstáculos.
 
