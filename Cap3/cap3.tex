@@ -1,5 +1,5 @@
 O Filtro de Kalman (KF) é uma técnica de estimação ótima para sistemas lineares com ruídos gaussianos. Nele, a função densidade de probabilidade do estado estimado é representada por uma gaussiana, 
-Eq. \ref{eq:moments-gaussian-probabilistic-distribution}, parametrizada pelos momentos centrais média e covariância. O KF foi desenvolvido simultaneamente em 1958 por Peter Swerling e em 1960 por Rudolf Kalman \cite[p.~40]{bongard2006probabilistic}. Apesar de sua otimalidade ser garantida apenas para sistemas lineares, ele é aplicado em sistemas não lineares também. Para isso, é feita uma aproximação linear em torno da estimativa do estado atual do sistema, utilizando-se expansão por série de Taylor, e a premissa de que os termos de ordem maior ou igual a dois são desprezíveis.
+Eq. \ref{eq:moments-gaussian-probabilistic-distribution}, parametrizada pelos momentos centrais média e covariância. O KF foi desenvolvido simultaneamente em 1958 por Peter Swerling e em 1960 por Rudolf Kalman \cite[p.~40]{thrun2005probabilistic}. Apesar de sua otimalidade ser garantida apenas para sistemas lineares, ele é aplicado em sistemas não lineares também. Para isso, é feita uma aproximação linear em torno da estimativa do estado atual do sistema, utilizando-se expansão por série de Taylor, e a premissa de que os termos de ordem maior ou igual a dois são desprezíveis.
 
 \begin{equation}
   \pr{\bvec{x}} = \eta \exp\parentheses{-\frac{1}{2} 
@@ -22,7 +22,7 @@ modela a transição de estado do sistema a partir do estado anterior e da entra
   \bsubvec{y}{t} &= \mb{h}(\bsubvec{x}{t}) + \mb{\delta}_t
   \label{eq:measurement-model}
 \end{align}
-\newcommand{\EKFSystemModel}{$\mb{g}(\bullet, \bullet)$}
+\newcommand{\EKFSystemModel}{$\mb{g}(\cdot, \cdot)$}
 Como o modelo do sistema \EKFSystemModel{}, e o modelo de medida \measurementModel{} não são exatos, suas incertezas e erros de modelagem são aproximados por ruídos gaussianos $\mb{\epsilon}_t \sim \normal{\bvec{0}}{\bsubvec{R}{t}}$ e $\mb{\delta}_t \sim \normal{\bvec{0}}{\bsubvec{Q}{t}}$. Quando \EKFSystemModel{} e/ou \measurementModel{} não são lineares, o EKF pode ser utilizado para estimar o estado 
 do sistema. 
 
@@ -222,7 +222,7 @@ Nas Seções anteriores, \ref{sec:ekf-slam-prediction} e \ref{sec:ekf-slam-updat
 do EKF-SLAM para o EKF, nas já conhecidas pelo usuário comum do EKF, etapas de predição e atualização. No entanto, em EKF-SLAM uma nova operação aparece: a etapa de inserção de \textit{landmark}. Ela ocorre quando o robô observa uma \textit{landmark} que ainda não está no mapa, $\bsubvec{x}{\mathrm{m}}$, e, portanto, não é possível calcular a inovação na Equação \ref{eq:ekf-slam-innovation}. Nesse caso, a nova \textit{landmark} deve ser adicionada ao vetor de média do estado e à matriz de covariância, aumentando a dimensão do sistema.
 
 Para adicionar uma nova \textit{landmark} ao vetor de estado, será definida 
-a função $\mb{\sigma}(\bullet, \bullet)$; ela gera um novo vetor de estados 
+a função $\mb{\sigma}(\cdot, \cdot)$; ela gera um novo vetor de estados 
 que é resultado da concatenação do vetor atual com a posição da nova 
 \textit{landmark} computada segundo o modelo de medida inverso descrito na Equação \ref{eq:inverse-measurement-model} da Seção \ref{sec:inverse-measurement-model}, a partir da leitura $\bvec{y}^j$.
 \begin{equation}
@@ -239,7 +239,7 @@ pose do robô, no momento da leitura, e pelo erro de medição do sensor.
 
 Inicializar a covariância da nova \textit{landmark} com $\infty$ (ou 
 números muito grandes), como indicado em 
-\cite[p.~317]{bongard2006probabilistic}, pode ser inadequado. Portanto, devemos 
+\cite[p.~317]{thrun2005probabilistic}, pode ser inadequado. Portanto, devemos 
 calcular o erro, $\mb{\alpha}$, da nova estimativa do vetor aumentado, de 
 maneira análoga à forma como é feita nos passos de predição e atualização 
 do EKF. 
@@ -310,7 +310,7 @@ gaussiana. Já o Filtro de Informação utiliza a chamada representação canôn
   \label{eq:info-matrix}
 \end{equation}
 Com as parametrizações acima, o EKF pode ser reescrito na forma do Filtro de 
-Informação Estendido \cite[p.~76]{bongard2006probabilistic}:
+Informação Estendido \cite[p.~76]{thrun2005probabilistic}:
 \begin{align}
   \mean{t-1} &= \infom{t-1}^{-1} \infov{t-1}
   \label{eq:eif-mean-recuperation} \\
@@ -338,7 +338,7 @@ representar alto nível de incerteza é numericamente mais seguro quando compara
 com o Filtro de Kalman; aqui basta definir $\infom{} = \bvec{0}$, enquanto no KF 
 é necessário utilizar valores muito grandes na matriz de covariância. Outro 
 aspecto interessante do IF é sua naturalidade para sistemas multi-robôs, nos quais a 
-informação é coletada de maneira descentralizada \cite[p.~78]{bongard2006probabilistic}.
+informação é coletada de maneira descentralizada \cite[p.~78]{thrun2005probabilistic}.
 
 Porém, as principais desvantagens do EIF são a necessidade da recuperação da média em \ref{eq:eif-mean-recuperation} e a predição da matriz de informação em 
 \ref{eq:eif-info-matrix-prediction}, pois ambas operações envolvem a inversão 
@@ -349,7 +349,7 @@ essa usualmente possui dimensão menor que a matriz de informação.
 Em geral, para sistemas de grande dimensão, acredita-se que o EIF é 
 computacionalmente inferior, do ponto de vista de tempo de execução, em relação 
 ao EKF. Por esse motivo, ele é menos utilizado que o EKF, na prática 
-\cite[p.~78]{bongard2006probabilistic}.
+\cite[p.~78]{thrun2005probabilistic}.
 
 No entanto, ao empregar o EIF no problema SLAM, nota-se que grande parte dos 
 blocos fora da diagonal principal da matriz de informação são quase nulos, ou 
@@ -378,7 +378,7 @@ com formato próximo ao de uma matriz bloco-diagonal por meio do uso de
 \textit{landmarks} ativas e inativas, que serão descritas mais adiante. 
 Além disso, a recuperação da média, na Equação 
 \ref{eq:eif-mean-recuperation}, é modelada como um problema de 
-otimização. As Seções a seguir são baseadas na discussão em \cite[Capítulo~12.4]{bongard2006probabilistic}.
+otimização. As Seções a seguir são baseadas na discussão em \cite[Capítulo~12.4]{thrun2005probabilistic}.
 
 \subsection{SEIF-SLAM: Landmarks ativas e inativas}
 \label{sec:seif-active-passive-landmarks}
@@ -617,7 +617,7 @@ constante. O produto $\bsubvecT{M}{x_\mathrm{r}} \mb{\delta}_{r,t}$
 resulta em um vetor nulo exceto pelos primeiros três elementos, e ao 
 multiplicá-lo pela matriz de informação predita, que também é esparsa, 
 temos como resultado um vetor esparso 
-\cite[p.~398]{bongard2006probabilistic}. Portanto, é necessário um número 
+\cite[p.~398]{thrun2005probabilistic}. Portanto, é necessário um número 
 constante de operações, que independe do tamanho do mapa, para calcular o 
 vetor de informação predito \footnote{Comumente a orientação do robô é 
 normalizada para o intervalo $[-\pi, \pi[$ no vetor de média do estado, portanto é necessário 
@@ -633,7 +633,7 @@ computação usa a inversão da matriz de informação
 e, mesmo numa matriz esparsa, o tempo requerido para essa operação não é constante.
 
 Para contornar essa inversão, no SEIF esse passo é executado de uma forma completamente diferente: ele é modelado como um problema de otimização. Em 
-\cite[Cap.~12.6]{bongard2006probabilistic}, mostra-se que o vetor de média do estado é o ponto de máximo da quadrática na representação canônica da Gaussiana 
+\cite[Cap.~12.6]{thrun2005probabilistic}, mostra-se que o vetor de média do estado é o ponto de máximo da quadrática na representação canônica da Gaussiana 
 Eq. \ref{eq:canonical-gaussian-probabilistic-distribution}. Então, o 
 vetor de média do estado atualizado $\mean{t}$ pode ser calculado como:
 \begin{equation}
@@ -860,7 +860,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \caption{\textit{Landmark} $\bvec{m}^2$ também é observada}
   \end{subfigure}
   \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks}, durante a observação das 
-  \textit{landmarks} $\bvec{m}^1$ e $\bvec{m^2}$ no instante $t$. Os elementos não nulos da matriz de informação estão representados em cinza. Adaptado de \cite[p.~389]{bongard2006probabilistic}.}
+  \textit{landmarks} $\bvec{m}^1$ e $\bvec{m^2}$ no instante $t$. Os elementos não nulos da matriz de informação estão representados em cinza. Adaptado de \cite[p.~389]{thrun2005probabilistic}.}
   \label{fig:seifslam-info-matrix-construction-observation}
 \end{figure}
 
@@ -875,7 +875,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \caption{Após o movimento}
     \label{fig:seifslam-info-matrix-construction-motion-b}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks}, antes (esquerda) e depois (direita) do movimento do robô, entre os instantes $t$ e $t+1$. A conexão de movimento gerada entre as \textit{landmarks} $\bvec{m}^1$ e $\bvec{m}^2$ é mostrada em magenta, assim como os elementos correspondentes na matriz de informação. Os demais elementos não nulos estão representados em tons de cinza. Adaptado de \cite[p.~389]{bongard2006probabilistic}. }
+  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks}, antes (esquerda) e depois (direita) do movimento do robô, entre os instantes $t$ e $t+1$. A conexão de movimento gerada entre as \textit{landmarks} $\bvec{m}^1$ e $\bvec{m}^2$ é mostrada em magenta, assim como os elementos correspondentes na matriz de informação. Os demais elementos não nulos estão representados em tons de cinza. Adaptado de \cite[p.~389]{thrun2005probabilistic}. }
   \label{fig:seifslam-info-matrix-construction-motion}
 \end{figure}
 
@@ -890,7 +890,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \caption{\textit{Landmark} $\bvec{m}^3$ é observada}
     \label{fig:seifslam-info-matrix-construction-third-observation-b}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ durante a observação da \textit{landmark} $\bvec{m}^3$. Os elementos nulos da matriz de informação estão representados em branco. Adaptado de \cite[p.~389]{bongard2006probabilistic}.}
+  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ durante a observação da \textit{landmark} $\bvec{m}^3$. Os elementos nulos da matriz de informação estão representados em branco. Adaptado de \cite[p.~389]{thrun2005probabilistic}.}
   \label{fig:seifslam-info-matrix-construction-third-observation}
 \end{figure}
 
@@ -904,7 +904,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \includegraphics[width=\textwidth]{figs/seifslam-sparsification.tex} 
     \caption{Depois da esparsificação}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ antes e após a esparsificação da \textit{landmark} $\bvec{m}^1$. Os elementos nulos da matriz de informação estão representados em branco. Adaptado de \cite[p.~389]{bongard2006probabilistic}.}
+  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ antes e após a esparsificação da \textit{landmark} $\bvec{m}^1$. Os elementos nulos da matriz de informação estão representados em branco. Adaptado de \cite[p.~389]{thrun2005probabilistic}.}
   \label{fig:seifslam-info-matrix-sparsification}
 \end{figure}
 
@@ -962,7 +962,7 @@ mostrado abaixo:
 \label{eq:seif-sparsification-derivation}
 \end{equation}
 
-A computação das matrizes de informações correspondentes às distribuições da última linha do desenvolvimento acima será com base na discussão em \cite[p.~401]{bongard2006probabilistic} e na manipulação de distribuições gaussianas na forma canônica presentes no Anexo \ref{annex:info-gaussian-manipulation}. 
+A computação das matrizes de informações correspondentes às distribuições da última linha do desenvolvimento acima será com base na discussão em \cite[p.~401]{thrun2005probabilistic} e na manipulação de distribuições gaussianas na forma canônica presentes no Anexo \ref{annex:info-gaussian-manipulation}. 
 Primeiramente, vamos calcular a matriz $\infom{t}^{0}$ correspondente 
 a $\pr{\robotstate{t}, \bupvec{m}{+-}, \bupvec{m}{++} \given \bupvec{m}{-} = 0}$; isso é feito extraindo os elementos correspondentes a 
 todas as variáveis de estado exceto $\bupvec{m}{-}$:
@@ -1108,7 +1108,7 @@ de Markov é ilustado na Figura \ref{fig:markov-blanket}.
 \begin{figure}[h]
   \centering
   \includegraphics[]{figs/pb-markov-blanket}
-  \caption{Rede de conexões entre \textit{landmarks} e o robô. A maioria das \textit{landmarks} estão representadas por círculos, as \textit{landmarks} vizinhas da \textit{landmark} candidata a associação estão representadas por quadrados. As \textit{landmarks} ativas estão coloridas de preto, a \textit{landmark} candidata está colorida de cinza. O polígono de bordas grossas delimita o conjunto do Cobertor de Markov, $\bsubvec{m}{c_t}^+$. Neste caso há interseção entre o conjunto de \textit{landmarks} vizinhas e ativas. Retirado de \cite[p.~410]{bongard2006probabilistic}.}
+  \caption{Rede de conexões entre \textit{landmarks} e o robô. A maioria das \textit{landmarks} estão representadas por círculos, as \textit{landmarks} vizinhas da \textit{landmark} candidata a associação estão representadas por quadrados. As \textit{landmarks} ativas estão coloridas de preto, a \textit{landmark} candidata está colorida de cinza. O polígono de bordas grossas delimita o conjunto do Cobertor de Markov, $\bsubvec{m}{c_t}^+$. Neste caso há interseção entre o conjunto de \textit{landmarks} vizinhas e ativas. Retirado de \cite[p.~410]{thrun2005probabilistic}.}
   \label{fig:markov-blanket}
 \end{figure}
 
@@ -1119,7 +1119,7 @@ utilizado na esparsificação, calcula-se a matriz de covariância aproximada $\
   \approxcov{\mathrm{m^j}} = \proj{\mathrm{m^j}} \parentheses{\proj{\robotstate{t}, \mathrm{m^j}, \bsubvec{m}{c_t}^+}\, \infom{t} \,\projT{\robotstate{t}, \mathrm{m^j}, \bsubvec{m}{c_t}^+}}^{-1} \projT{\mathrm{m^j}}
 \end{equation}
 
-Entretanto ao contrário do que é mostrado na Figura \ref{fig:markov-blanket} 
+Entretanto, ao contrário do que é mostrado na Figura \ref{fig:markov-blanket}, 
 pode ser que não exista interseção entre o conjunto de \textit{landmarks} 
 vizinhas a candidata e o conjunto de \textit{landmarks} ativas $\bupvec{m}{+}$ 
 dentro do Cobertor de Markov. Nesses casos, o cobertor deve ser aumentado de 
@@ -1131,7 +1131,7 @@ as \textit{landmarks} que integram o menor caminho entre o robô e a
 \section{Estratégia para mitigar efeito de falsas detecções de \textit{landmarks}}
 \label{sec:false-detection-handling-strategy}
 Um problema comum que ocorre na prática em sistemas SLAM é a detecção 
-errônea e/ou falsa de \textit{landmarks}, gerando medidas erradas. Isso pode 
+errônea e/ou falsa de \textit{landmarks} gerando medidas erradas. Isso pode 
 acontecer por erros no processamento dos dados do sensor, movimentos bruscos 
 do robô, e em sistemas multiagentes um robô pode ser confundido com uma \textit{landmark} dependendo dos tipos de \textit{landmark} e do sensor utilizado. 
 Esse último é particularmente comum no cenário desse trabalho, onde as \textit{landmarks} e os robôs possuem formato cilíndrico e o sensor do tipo LiDAR 

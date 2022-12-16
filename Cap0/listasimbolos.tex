@@ -1,5 +1,6 @@
-\newcommand{\measurementModel}{$\mb{h}(\bullet)$}
-\newcommand{\invMeasurementModel}{$\mb{f}(\bullet, \bullet)$}
+\newcommand{\measurementModel}{$\mb{h}(\cdot)$}
+\newcommand{\invMeasurementModel}{$\mb{f}(\cdot, \cdot)$}
+\newcommand{\robotModel}{$\mb{g}_\mathrm{r}(\cdot, \cdot)$}
 
 \begin{longtable}{ll}
 $\robotstate{t}$ & Pose do robô no instante t \\
@@ -16,13 +17,13 @@ $\predmean{t}$ & Predição do vetor de média do estado no instante $t$\\
 $\cov{t}$ &  Matriz de covariância no tempo $t$\\
 $\predcov{t}$ &  Predição da matriz de covariância no tempo $t$\\
 $\bsubvec{K}{t}$ &  Ganho de Kalman no tempo $t$\\
-$\mb{g}_\mathrm{r}(\bullet, \bullet)$ &  Modelo de movimento do robô\\
+\robotModel &  Modelo de movimento do robô\\
 \measurementModel &  Modelo de medida do sensor laser\\
 \invMeasurementModel &  Modelo de medida inverso do sensor laser\\
-$\expv{\bullet}$ & Operador esperança \\
+$\expv{\cdot}$ & Operador esperança \\
 $\nullmat{m}{n}$ & Matriz nula de dimensão $m \times n$ \\
 $\bsubvec{I}{n}$ & Matriz identidade de dimensão $n$ \\
-$\covf{\bullet}$ & Covariância\\
+$\covf{\cdot}$ & Covariância\\
 $\infom{t}$ & Matriz de informação no tempo $t$\\
 $\predinfom{t}$ & Predição da matriz de informação no tempo $t$\\
 $\infov{t}$ & Vetor de informação no tempo $t$\\

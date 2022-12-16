@@ -127,7 +127,7 @@ porque há outros agentes se movimentando no ambiente.
 Utilizando essas hipóteses, cada célula pode ser modelada como uma variável aleatória binária 
 que pode assumir os estados livre ou ocupado, e cujo estado é constante 
 no tempo (i.e. estático). Isso sugere a utilização 
-do filtro de Bayes binário \cite[p.~94]{bongard2006probabilistic} para estimar o estado das células 
+do filtro de Bayes binário \cite[p.~94]{thrun2005probabilistic} para estimar o estado das células 
 da grade.
 
 \begin{figure}[]
@@ -191,7 +191,7 @@ na Figura \ref{fig:simplified-inv-measurement-model}.
 
 \subsection{Representação em \textit{log odds}}
 Implementações do filtro de Bayes binário são comumente realizadas na 
-forma do logaritmo da razão de chances (\textit{log odds ratio}) \cite[p.~94]{bongard2006probabilistic}. A razão de chances é a 
+forma do logaritmo da razão de chances (\textit{log odds ratio}) \cite[p.~94]{thrun2005probabilistic}. A razão de chances é a 
 razão entre a probabilidade de ocorrência de um evento (a célula 
 estar ocupada), dividida pela probabilidade da não ocorrência desse evento (a 
 célula estar livre). Se $\pr{c_{ij} \given \bsubvec{y}{1:t}}$ é a probabilidade da célula $c_{ij}$ 
@@ -200,7 +200,7 @@ estar ocupada dada as medidas dos sensor LiDAR até o instante $t$, então a sua
   \frac{\pr{c_{ij}\given \bsubvec{y}{1:t}}}{\pr{\neg c_{ij}\given \bsubvec{y}{1:t}}} = \frac{\pr{c_{ij}\given \bsubvec{y}{1:t}}}{1 - \pr{c_{ij}\given \bsubvec{y}{1:t}}}
 \end{equation}
 A atualização recursiva da razão de chances da ocupação de uma célula é 
-dada pelo produto de razões mostrado na Equação \ref{eq:recursive-bayes-filter-update} abaixo \cite[p.~96]{bongard2006probabilistic}. A primeira razão corresponde à razão de 
+dada pelo produto de razões mostrado na Equação \ref{eq:recursive-bayes-filter-update} abaixo \cite[p.~96]{thrun2005probabilistic}. A primeira razão corresponde à razão de 
 chances de ocupação do modelo de medida inverso, cuja distribuição de 
 probabilidade foi mostrada na Figura \ref{fig:simplified-inv-measurement-model}, o termo do meio é o termo 
 recursivo, e o da direita representa algum conhecimento incial que se 
@@ -247,7 +247,7 @@ da exploração orientada ao ganho de informação, denominada ganho binário.
 Ela consiste em guiar o robô para a região desconhecida mais próxima 
 na grade de ocupação, e também é conhecida por \emph{exploração baseada em fronteira}. Apesar de ser uma técnica simples, ela tende a funcionar 
 bem na prática, pois sempre guia o robô em direção a terreno desconhecido 
-\cite[p.~584]{bongard2006probabilistic}. Se o robô estivesse no centro 
+\cite[p.~584]{thrun2005probabilistic}. Se o robô estivesse no centro 
 da grade representada na Figura \ref{fig:grid-map-big-rep}, ele 
 selecionaria para explorar a célula com ocupação desconhecida (azul) mais próxima e com uma distância de segurança mínima de uma célula ocupada.
 

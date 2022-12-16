@@ -5,25 +5,24 @@ need for a location infrastructure such as GPS.
 
 Solving the SLAM problem is critical for mobile robotics
 autonomy. However, although already solved, it is not a trivial task.
-both from a theoretical and implementation point of views.
+both from theoretical and implementation points of view.
 Depending on robot dynamics, sensors used, computing power available or need for navigation and guidance, the solution
-can become more or less complex.
+becomes more or less complex.
 
-This work examines a distributed and decentralized multi-agent solution in a simulated environment
-for the 2D SLAM problem. For this, it uses the Sparse Extended Information Filter, along with other algorithms for navigation,
+We examine a distributed and decentralized multi-agent solution in a simulated environment
+for the 2D SLAM problem. For such purpose, the solution uses the Sparse Extended Information Filter, along with other algorithms for navigation,
 data association and map representation. The advantages of the distributed solution of the
 SLAM problem, in comparison with the original problem, are workload sharing
-between the agents and the information redundancy.
+between the agents and information redundancy.
 
 The developed solution has significantly less memory usage,
-presenting a reduction of more than 50\% when compared to the more classic EKF-SLAM approach.
+presenting a reduction of more than 50\% when compared to the classic EKF-SLAM approach.
 In addition, despite the lack of coordination between the agents
-gains in exploration time were observed between the scenarios with two agents and with a single agent.
+gains, in exploration time were observed in the scenario with two agents with respect to a single agent.
 
 However, precisely because of the lack of
-coordination between them, the time performance in the scenario with
-three agents was lower than with a single one. Another limitation occurs
-when the agents' initial poses are not informed, as the method used to 
-estimate the relative pose between the agents did not prove to be robust
-enough to ensure a successful map exchange whenever the robots get close 
-of each other.
+coordination between them, we observe a degraded time performance in the scenario with
+three agents relative to just a single agent. Another limitation occurs
+when the agents' initial poses are unknown, as the method estimating the relative pose between agents did not prove to be robust
+enough to ensure a successful map exchange whenever agents are in close 
+proximity of one another.

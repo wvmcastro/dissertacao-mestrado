@@ -94,7 +94,7 @@ Onde:
 Assim como os modelos de medida na próxima Seção, o modelo de movimento do 
 robô de acionamento diferencial é não linear. Portanto, é necessário calcular 
 sua matriz jacobiana em torno de um ponto $\overline{\bvec{x}}_{t-1}$ para linearização do modelo em técnicas como EKF e SEIF-SLAM, apresentadas 
-mais adiante. O jacobiano do modelo $\mb{g}_\mathrm{r}(\bullet, \bullet)$ está na Equação 
+mais adiante. O jacobiano do modelo \robotModel{} está na Equação 
 \ref{eq:motion-model-jacobian}.
 \begin{equation}
   \bsubvec{G}{R} = \bvec{I}_3 + \begin{cases}
@@ -191,7 +191,7 @@ O modelo de medida descrito na Seção anterior é também conhecido como modelo
   \label{fig:range-bearing-inverse-model-schematic}
 \end{figure}
 
-O modelo de medida inverso $\mb{f}(\bullet, \bullet)$ é descrito na Equação \ref{eq:inverse-measurement-model}. Como pode ser observado, assim como o 
+O modelo de medida inverso \invMeasurementModel{} é descrito na Equação \ref{eq:inverse-measurement-model}. Como pode ser observado, assim como o 
 modelo de medida ``direto'', o modelo de medida inverso é não linear e requer linearização para o EKF-SLAM e seus 
 algoritmos derivados. Sua matriz jacobiana, $\bvec{F}$, na Equação \ref{eq:inverse-measurement-model-jacobian-full} é composta pelos jacobianos 
 parciais em relação ao vetor de estados, $\bvec{F}_X$, e à medida da nova 
