@@ -153,7 +153,7 @@ matriz de covariância modificadas no passo de predição do EKF-SLAM.
 \begin{figure}[h]
   \centering
   \includestandalone[width=.45\textwidth]{figs/ekfslam-prediction}
-  \caption{Partes modificadas do vetor de média do estado e da matriz de covariância durante o movimento do robô. O vetor de média do estado é representado pela barra na esquerda, e a matriz de covariância pelo quadrado na direita. As partes modificadas, em tons de cinza, correspondem ao estado do robô $\mean{\mathrm{r}}$  e sua autocovariância $\cov{\mathrm{rr}}$ (cinza escuro), e às covariâncias cruzadas, $\cov{\mathrm{rm}}$ e $\cov{\mathrm{mr}}$, entre o robô e o mapa (cinza claro). Note que as partes correspondentes ao mapa, $\mean{\mathrm{m}}$ e $\cov{\mathrm{mm}}$, 
+  \caption[Elementos do vetor média e da matriz de covariância alterados no passo de predição do Filtro de Kalman Estendido de um sistema SLAM]{Partes modificadas do vetor de média do estado e da matriz de covariância durante o movimento do robô. O vetor de média do estado é representado pela barra na esquerda, e a matriz de covariância pelo quadrado na direita. As partes modificadas, em tons de cinza, correspondem ao estado do robô $\mean{\mathrm{r}}$  e sua autocovariância $\cov{\mathrm{rr}}$ (cinza escuro), e às covariâncias cruzadas, $\cov{\mathrm{rm}}$ e $\cov{\mathrm{mr}}$, entre o robô e o mapa (cinza claro). Note que as partes correspondentes ao mapa, $\mean{\mathrm{m}}$ e $\cov{\mathrm{mm}}$, 
   permanecem inalteradas (branco). Adaptado de \citeonline[p.~10]{jsola}.}
   \label{fig:ekfslam-prediction}
 \end{figure}
@@ -200,7 +200,7 @@ do vetor de estados e da matriz de covariância do sistema SLAM utilizadas na co
 \begin{figure}[h]
   \centering
   \includestandalone[width=.45\textwidth]{figs/ekfslam-innovation}
-  \caption{Partes utilizadas do vetor de média do estado e da matriz de covariância durante a computação da inovação, quando uma \textit{landmark} é observada. O vetor de média do estado é representado pela barra na esquerda, e a matriz de covariância pelo quadrado na direita. As porções utilizadas, em tons de cinza, correspondem ao estado do robô $\mean{\mathrm{r}}$ e à posição da \textit{landmark} $\bvec{m}^j$, suas autocovariâncias $\cov{\mathrm{rr}}$ e $\cov{\mathrm{m^j m^j}}$ (cinza escuro),  covariâncias cruzadas, $\cov{\mathrm{r m^j}}$ e $\cov{\mathrm{m^j r}}$, entre o robô e a j-ésima \textit{landmark} (cinza claro). Adaptado de \cite[p.~8]{jsola}.}
+  \caption[Elementos do vetor média e da matriz de covariância utilizados pelo Filtro de Kalman Estendido de um sistema SLAM na computação da inovação]{Partes utilizadas do vetor de média do estado e da matriz de covariância durante a computação da inovação, quando uma \textit{landmark} é observada. O vetor de média do estado é representado pela barra na esquerda, e a matriz de covariância pelo quadrado na direita. As porções utilizadas, em tons de cinza, correspondem ao estado do robô $\mean{\mathrm{r}}$ e à posição da \textit{landmark} $\bvec{m}^j$, suas autocovariâncias $\cov{\mathrm{rr}}$ e $\cov{\mathrm{m^j m^j}}$ (cinza escuro),  covariâncias cruzadas, $\cov{\mathrm{r m^j}}$ e $\cov{\mathrm{m^j r}}$, entre o robô e a j-ésima \textit{landmark} (cinza claro). Adaptado de \cite[p.~8]{jsola}.}
   \label{fig:ekf-slam-innovation}
 \end{figure}
 
@@ -212,7 +212,7 @@ Essa correlação ``fraca'' será explorada pelo Filtro de Informação Estendid
 \begin{figure}[h]
   \centering
   \includestandalone[width=.45\textwidth]{figs/ekfslam-update}
-  \caption{O vetor de média do estado e a matriz de covariância são completamente atualizados durante a observação de uma \textit{landmark}. Retirado de \cite[p.~8]{jsola}.}
+  \caption[Elementos do vetor média e da matriz de covariância do Filtro de Kalman Estendido de um sistema SLAM alterados no passo de atualização]{O vetor de média do estado e a matriz de covariância são completamente atualizados durante a observação de uma \textit{landmark}. Retirado de \cite[p.~8]{jsola}.}
   \label{fig:ekf-slam-update}
 \end{figure}
 
@@ -291,7 +291,7 @@ Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-me
 \begin{figure}[h]
   \centering
   \includestandalone[width=.6\textwidth]{figs/ekfslam-landmark-insertion}
-  \caption{Vetor de média do estado e matriz de covariância aumentados após inserção de nova \textit{landmark}. As partes adicionadas, em cinza, correspondem às covariâncias cruzadas entre a nova landmark e o vetor de estados anterior (cinza claro), e à média da nova \textit{landmark} e sua covariância (cinza escuro). Adaptado de \cite[p.~11]{jsola}.}
+  \caption[Elementos inseridos no vetor média e matriz de covariância do Filtro de Kalman Estendido de um sistema SLAM durante a observação de um novo \textit{landmark}]{Vetor de média do estado e matriz de covariância aumentados após inserção de nova \textit{landmark}. As partes adicionadas, em cinza, correspondem às covariâncias cruzadas entre a nova landmark e o vetor de estados anterior (cinza claro), e à média da nova \textit{landmark} e sua covariância (cinza escuro). Adaptado de \cite[p.~11]{jsola}.}
   \label{fig:ekf-slam-landmark-insertion}
 \end{figure}
 
@@ -573,7 +573,7 @@ igual a dois.
     \caption{$\mb{\kappa}_{t}$}
     \label{fig:seif-slam-kappa}
   \end{subfigure}
-  \caption{Representação das matrizes $\bsubvec{\Psi}{t}, \mb{\lambda}_t, \mb{\kappa}_t$, necessárias para calcular a 
+  \caption[Matrizes intermediárias utilizadas no passo de predição do Filtro de Informação Estendido Esparso]{Representação das matrizes $\bsubvec{\Psi}{t}, \mb{\lambda}_t, \mb{\kappa}_t$, necessárias para calcular a 
   matriz de informação predita durante o movimento do robô. Os elementos 
   nulos são representados em branco, e os não nulos em cinza/magenta. 
   As matrizes acima 
@@ -745,7 +745,7 @@ covariâncias como foi mostrado na Figura \ref{fig:ekf-slam-update}.
     \includestandalone[width=\textwidth]{figs/seifslam-infom-update}
     \caption{$\infom{t}$}
   \end{subfigure}
-  \caption{Representação dos vetores média e informação, $\mean{t}$ e $\infov{t}$ respectivamente, e da matriz de informação $\infom{t}$ na 
+  \caption[Elementos do vetor média, vetor de informação e da matriz de informação alterados no passo de atualização do Filtro de Informação Estendido Esparso de um sistema SLAM]{Representação dos vetores média e informação, $\mean{t}$ e $\infov{t}$ respectivamente, e da matriz de informação $\infom{t}$ na 
   etapa de atualização. O conjunto $\bvec{m}^+$ possui tamanho 2, e a 
   segunda \textit{landmark} é observada. Note que no vetor de média do estado, 
   a pose do robô e todas as \textit{landmarks} ativas são atualizadas, 
@@ -828,7 +828,7 @@ Assim como na matriz de informação, os componentes do vetor de informação co
 \begin{figure}[h]
   \centering
   \includestandalone[width=.6\textwidth]{figs/seifslam-landmark-insertion}
-  \caption{Vetor e matriz de informação aumentados após inserção de nova \textit{landmark}. As partes adicionadas, em cinza, correspondem à informação cruzada entre a nova landmark e o robô (cinza claro), e à média da nova \textit{landmark} e do robô, e suas informações (cinza escuro).}
+  \caption[Elementos inseridos e alterados no vetor de informação e matriz de informação do Filtro de Informação Estendido Esparso de um sistema SLAM durante a observação de um novo \textit{landmark}]{Vetor e matriz de informação aumentados após inserção de nova \textit{landmark}. As partes adicionadas, em cinza, correspondem à informação cruzada entre a nova landmark e o robô (cinza claro), e à média da nova \textit{landmark} e do robô, e suas informações (cinza escuro).}
   \label{fig:seif-slam-landmark-insertion}
 \end{figure}
 
@@ -859,7 +859,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \includegraphics[width=\textwidth]{figs/seifslam-landmark-second-observation.tex}
     \caption{\textit{Landmark} $\bvec{m}^2$ também é observada}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks}, durante a observação das 
+  \caption[Elementos da matriz de informação durante a observação de dois \textit{landmarks}]{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks}, durante a observação das 
   \textit{landmarks} $\bvec{m}^1$ e $\bvec{m^2}$ no instante $t$. Os elementos não nulos da matriz de informação estão representados em cinza. Adaptado de \cite[p.~389]{thrun2005probabilistic}.}
   \label{fig:seifslam-info-matrix-construction-observation}
 \end{figure}
@@ -875,7 +875,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \caption{Após o movimento}
     \label{fig:seifslam-info-matrix-construction-motion-b}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks}, antes (esquerda) e depois (direita) do movimento do robô, entre os instantes $t$ e $t+1$. A conexão de movimento gerada entre as \textit{landmarks} $\bvec{m}^1$ e $\bvec{m}^2$ é mostrada em magenta, assim como os elementos correspondentes na matriz de informação. Os demais elementos não nulos estão representados em tons de cinza. Adaptado de \cite[p.~389]{thrun2005probabilistic}. }
+  \caption[Elementos da matriz de informação durante o movimento do robô (passo de predição do filtro)]{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks}, antes (esquerda) e depois (direita) do movimento do robô, entre os instantes $t$ e $t+1$. A conexão de movimento gerada entre as \textit{landmarks} $\bvec{m}^1$ e $\bvec{m}^2$ é mostrada em magenta, assim como os elementos correspondentes na matriz de informação. Os demais elementos não nulos estão representados em tons de cinza. Adaptado de \cite[p.~389]{thrun2005probabilistic}. }
   \label{fig:seifslam-info-matrix-construction-motion}
 \end{figure}
 
@@ -890,7 +890,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \caption{\textit{Landmark} $\bvec{m}^3$ é observada}
     \label{fig:seifslam-info-matrix-construction-third-observation-b}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ durante a observação da \textit{landmark} $\bvec{m}^3$. Os elementos nulos da matriz de informação estão representados em branco. Adaptado de \cite[p.~389]{thrun2005probabilistic}.}
+  \caption[Elementos da matriz de informação durante observação do terceiro \textit{landmark}]{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ durante a observação da \textit{landmark} $\bvec{m}^3$. Os elementos nulos da matriz de informação estão representados em branco. Adaptado de \cite[p.~389]{thrun2005probabilistic}.}
   \label{fig:seifslam-info-matrix-construction-third-observation}
 \end{figure}
 
@@ -904,7 +904,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \includegraphics[width=\textwidth]{figs/seifslam-sparsification.tex} 
     \caption{Depois da esparsificação}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ antes e após a esparsificação da \textit{landmark} $\bvec{m}^1$. Os elementos nulos da matriz de informação estão representados em branco. Adaptado de \cite[p.~389]{thrun2005probabilistic}.}
+  \caption[Esparsificação de um \textit{landmark} na matriz de informação]{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} no instante $t+1$ antes e após a esparsificação da \textit{landmark} $\bvec{m}^1$. Os elementos nulos da matriz de informação estão representados em branco. Adaptado de \cite[p.~389]{thrun2005probabilistic}.}
   \label{fig:seifslam-info-matrix-sparsification}
 \end{figure}
 
@@ -919,7 +919,7 @@ informação cruzada entre o robô e uma \textit{landmark} impede a criação de
     \caption{Depois do movimento}
     \label{fig:seifslam-info-matrix-construction-second-motion-b}
   \end{subfigure}
-  \caption{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} durante movimento entre os instantes $t$ e $t+1$. Note que, devido à esparsificação da \textit{landmark} $\bvec{m}^1$, o movimento não gerou conexão de movimento entre as \textit{landmarks} $\bvec{m}^1$ e $\bvec{m}^3$. Os elementos nulos da matriz de informação estão representados em branco.}
+  \caption[Elementos da matriz de informação durante o passo de predição logo após esparsificação]{Matriz de informação (representada pela grade) ao lado do esquemático do robô e \textit{landmarks} durante movimento entre os instantes $t$ e $t+1$. Note que, devido à esparsificação da \textit{landmark} $\bvec{m}^1$, o movimento não gerou conexão de movimento entre as \textit{landmarks} $\bvec{m}^1$ e $\bvec{m}^3$. Os elementos nulos da matriz de informação estão representados em branco.}
   \label{fig:seifslam-info-matrix-construction-second-motion}
 \end{figure}
 
@@ -1108,7 +1108,7 @@ de Markov é ilustado na Figura \ref{fig:markov-blanket}.
 \begin{figure}[h]
   \centering
   \includegraphics[]{figs/pb-markov-blanket}
-  \caption{Rede de conexões entre \textit{landmarks} e o robô. A maioria das \textit{landmarks} estão representadas por círculos, as \textit{landmarks} vizinhas da \textit{landmark} candidata a associação estão representadas por quadrados. As \textit{landmarks} ativas estão coloridas de preto, a \textit{landmark} candidata está colorida de cinza. O polígono de bordas grossas delimita o conjunto do Cobertor de Markov, $\bsubvec{m}{c_t}^+$. Neste caso há interseção entre o conjunto de \textit{landmarks} vizinhas e ativas. Retirado de \cite[p.~410]{thrun2005probabilistic}.}
+  \caption[Visualização da rede formada entre o robô e os \textit{landmarks}]{Rede de conexões entre \textit{landmarks} e o robô. A maioria das \textit{landmarks} estão representadas por círculos, as \textit{landmarks} vizinhas da \textit{landmark} candidata a associação estão representadas por quadrados. As \textit{landmarks} ativas estão coloridas de preto, a \textit{landmark} candidata está colorida de cinza. O polígono de bordas grossas delimita o conjunto do Cobertor de Markov, $\bsubvec{m}{c_t}^+$. Neste caso há interseção entre o conjunto de \textit{landmarks} vizinhas e ativas. Retirado de \cite[p.~410]{thrun2005probabilistic}.}
   \label{fig:markov-blanket}
 \end{figure}
 

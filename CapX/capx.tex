@@ -37,7 +37,7 @@ leitura feita no ambiente mostrado na Figura \ref{fig:environment}.
     \caption{Interpolação linear das distâncias lidas pelo sensor.}
     \label{fig:sensor-raw-data}
   \end{subfigure}
-  \caption{Visualização dos feixes laser emitidos pelo sensor LiDAR e a 
+  \caption[Exemplo de uma sequência de distâncias lida pelo sensor LiDAR]{Visualização dos feixes laser emitidos pelo sensor LiDAR e a 
   respectiva leitura gerada.}
   \label{fig:sensor-visualization-and-reading}
 \end{figure}
@@ -51,7 +51,7 @@ cartesianas \cite[p.~903]{al2009error}.
 
 \begin{figure}[]
   \includegraphics[width=\textwidth]{figs/data_processing_pipeline.pdf}
-  \caption{Sequência de passos para processar os dados brutos do sensor LiDAR e
+  \caption[Sequencia de passos de processamento do dado bruto do sensor LiDAR]{Sequência de passos para processar os dados brutos do sensor LiDAR e
   transformá-los em dados úteis para o modelo de medida utilizado.}
   \label{fig:lidar-data-processing-pipeline}
 \end{figure}
@@ -65,7 +65,7 @@ negativa seguida rapidamente de uma variação positiva na curva da derivada.
 \begin{figure}[]
   \centering
   \includegraphics[width=.6\textwidth]{figs/signal_derivative.pdf}
-  \caption{Derivada central da sequência de distâncias representadas na Figura \ref{fig:sensor-raw-data}. As linhas pontilhadas em vermelho 
+  \caption[Deriva do sinal de uma sequência de distâncias lida pelo sensor LiDAR]{Derivada central da sequência de distâncias representadas na Figura \ref{fig:sensor-raw-data}. As linhas pontilhadas em vermelho 
   representam os limiares a partir dos quais os picos são interpretados 
   como início (negativo) ou fim (positivo) da superfície de um cilindro. Os picos destacados 
   em vermelho ultrapassam as valores limiares.}
@@ -81,7 +81,7 @@ erro médio quadrático da estimação ($\sigma$) de cada círculo.
 \begin{figure}[]
   \centering
   \includegraphics[width=.8\textwidth]{figs/sensor_data_cartesian.pdf}
-  \caption{Representação da leitura do sensor LiDAR em coordenadas 
+  \caption[Segmentação dos feixes refletidos pelas superfícies cilíndricas dos \textit{landmarks}]{Representação da leitura do sensor LiDAR em coordenadas 
   cartesianas. Os pontos destacados em azul correspondem a reflexões 
   das superfícies das \textit{landmarks}.}
   \label{fig:sensor-data-cartesian}
@@ -95,7 +95,7 @@ fica montado no topo do robô, conforme visto na Figura \ref{fig:turtlebot-digit
 \begin{figure}[]
   \centering
   \includegraphics[width=.8\textwidth]{figs/circle_detection.pdf}
-  \caption{Em azul, os conjuntos de pontos selecionados como pertencentes às superfícies das \textit{landmarks}. Em verde, os círculos 
+  \caption[Círculos ajustados aos conjuntos de pontos oriundos de reflexões nas superfícies dos \textit{landmarks}]{Em azul, os conjuntos de pontos selecionados como pertencentes às superfícies das \textit{landmarks}. Em verde, os círculos 
   estimados para cada conjunto de pontos decorrentes das medidas obtidas do sensor.}
   \label{fig:detected-circles}
 \end{figure}
@@ -133,7 +133,7 @@ da grade.
 \begin{figure}[]
   \centering
   \includegraphics[width=0.6\textwidth]{figs/grid_map_view_vec.pdf}
-  \caption{Grade de ocupação produzida utilizando as leituras do sensor LiDAR. As células em azul representam porções do ambiente com estado 
+  \caption[Grade de ocupação]{Grade de ocupação produzida utilizando as leituras do sensor LiDAR. As células em azul representam porções do ambiente com estado 
   desconhecido a partir da observação deste único ponto de vista. A 
   cor das demais células refletem a probabilidade de estarem ocupadas,
   quanto mais escura maior a confiança do robô de que existe algum 
@@ -168,7 +168,7 @@ as células interceptadas pelo feixe, como é ilustrado na Figura \ref{fig:brese
 \begin{figure}
   \centering
   \includegraphics[width=0.8\textwidth]{figs/bresenham_demop.pdf}
-  \caption{Uso do algoritmo de Bresenham para determinar as células 
+  \caption[Representação do algoritmo de Bresenham]{Uso do algoritmo de Bresenham para determinar as células 
   interceptadas pelo feixe (em azul) do sensor LiDAR. As células em 
   verde claro, representam o espaço atravessado pelo feixe. A célula 
   em verde escuro representam o espaço em que o feixe interceptou a 
@@ -184,7 +184,8 @@ na Figura \ref{fig:simplified-inv-measurement-model}.
 \begin{figure}
   \centering
   \includegraphics[width=0.6\textwidth]{figs/inverse-measurement-model-probability.tex}
-  \caption{Distribuição de probabilidade simplificada do modelo de 
+  \caption[Distribuição de probabilidade simplificada do modelo de 
+  medida inverso.]{Distribuição de probabilidade simplificada do modelo de 
   medida inverso.}
   \label{fig:simplified-inv-measurement-model}
 \end{figure}
@@ -265,7 +266,7 @@ selecionaria para explorar a célula com ocupação desconhecida (azul) mais pr�
     \caption{Visualização da grade de ocupação no software RVIZ}
     \label{fig:}
   \end{subfigure}
-  \caption{Diferentes representações de uma mesma grade de ocupação.}
+  \caption[Representações de uma grade de ocupação]{Diferentes representações de uma mesma grade de ocupação.}
   \label{fig:occupancy-grid-visualization-comparsion}
 \end{figure}
 
@@ -280,7 +281,7 @@ resultado pode ser visualizado como um ``mapa de calor'' na Figura
 \begin{figure}
   \centering
   \includegraphics[width=0.6\textwidth]{figs/costmap.png}
-  \caption{Mapa de custo referente à grade de ocupação da Figura \ref{fig:occupancy-grid-visualization-comparsion}. As regiões quentes (vermelho) representam células de maior custo, enquanto as células 
+  \caption[Mapa de custo de ocupação]{Mapa de custo referente à grade de ocupação da Figura \ref{fig:occupancy-grid-visualization-comparsion}. As regiões quentes (vermelho) representam células de maior custo, enquanto as células 
   frias (azul escuro) representam células de baixo custo.}
   \label{fig:costmap}
 \end{figure}

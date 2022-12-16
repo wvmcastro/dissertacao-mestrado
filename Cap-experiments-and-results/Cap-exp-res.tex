@@ -49,7 +49,7 @@ SEIF $\bupvec{m}{+} = 8$ & 8.04 \\ \hline
     \caption{Evolução temporal do erro da estimativa de posição pelas duas configurações do SEIF com $\lvert \bupvec{m}{+}\rvert = 4 $ e $\lvert \bupvec{m}{+}\rvert = 8 $.}
     \label{fig:iae-seifs}
   \end{subfigure}
-  \caption{Erros de estimação da posição do robô durante exploração parcial do ambiente da Figura \ref{fig:environment}}
+  \caption[Erros de estimação da posição do robô no experimento SEIF vs Odometria]{Erros de estimação da posição do robô durante exploração parcial do ambiente da Figura \ref{fig:environment}}
   \label{fig:iae}
 \end{figure}
 
@@ -65,7 +65,7 @@ SEIF $\bupvec{m}{+} = 8$ & 8.04 \\ \hline
     \caption{Evolução temporal do erro da estimativa da orientação do robô pelas duas configurações do SEIF com $\lvert \bupvec{m}{+}\rvert = 4 $ e $\lvert \bupvec{m}{+}\rvert = 8 $.}
     \label{fig:theta-error-seifs}
   \end{subfigure}
-  \caption{Erros de estimação da orientação do robô durante exploração parcial do ambiente da Figura \ref{fig:environment}}
+  \caption[Erros de estimação de orientação no experimento SEIF vs Odometria]{Erros de estimação da orientação do robô durante exploração parcial do ambiente da Figura \ref{fig:environment}}
   \label{fig:theta-error}
 \end{figure}
 
@@ -123,7 +123,7 @@ Economia em relação ao EKF-SLAM\footnotemark{} \\
 \begin{figure}
   \centering
   \includegraphics[width=0.7\textwidth]{figs/seif-memory-usage.pdf}
-  \caption{Uso de memória para diferentes parametrizações do SEIF-SLAM com diferentes tamanhos (2, 4, 8) do conjunto de \textit{landmarks} ativas. A linha tracejada representa a quantidade de elementos que a matriz do EKF-SLAM teria para o mesmo cenário.}
+  \caption[Comparação do uso de memória pelo Filtro de Informação Estendido Esparso em relação ao Filtro de Kalman Estendido]{Uso de memória para diferentes parametrizações do SEIF-SLAM com diferentes tamanhos (2, 4, 8) do conjunto de \textit{landmarks} ativas. A linha tracejada representa a quantidade de elementos que a matriz do EKF-SLAM teria para o mesmo cenário.}
   \label{fig:seif-memory-usage}
 \end{figure}
 
@@ -145,7 +145,7 @@ Economia em relação ao EKF-SLAM\footnotemark{} \\
     \caption{$\lvert\{ \bupvec{m}{+} \}\rvert = 8$}
     \label{fig:seif-info-matrix-08}
   \end{subfigure}
-  \caption{Representação das matrizes de informação correspondentes aos experimentos da Tabela \ref{table:memory-usage}. Os elementos nulos são representados pela cor branca, e os não nulos em escala de cinza. Quanto mais escuro o tom de cinza, maior a magnitude do valor representado.}
+  \caption[Matrizes de informação resultantes de diferentes valores de cardinalidade do conjunto de \textit{landmarks} ativas]{Representação das matrizes de informação correspondentes aos experimentos da Tabela \ref{table:memory-usage}. Os elementos nulos são representados pela cor branca, e os não nulos em escala de cinza. Quanto mais escuro o tom de cinza, maior a magnitude do valor representado.}
   \label{fig:seif-info-matrix-memory}
 \end{figure}
 
@@ -187,7 +187,7 @@ robôs, as curvas estão ilustradas na Figura \ref{fig:know-initial-pose-area-co
 \begin{figure}
   \centering
   \includegraphics[width=.6\textwidth]{figs/area_coverage_single_robot.pdf}
-  \caption{Evolução da área coberta ao longo do tempo por um único robô, 
+  \caption[Evolução da área coberta por um único robô]{Evolução da área coberta ao longo do tempo por um único robô, 
   no ambiente representado na Figura \ref{fig:environment} com área total 
   de 100 $m^2$. O robô iniciou na posição $(2.5, 2.5)$, em relação ao centro do ambiente. Os platôs correspondem a intervalos nos quais o robô está atravessando uma área já mapeada para explorar uma nova fronteira.}
   \label{fig:area-coverage-single-robot}
@@ -207,7 +207,7 @@ robôs, as curvas estão ilustradas na Figura \ref{fig:know-initial-pose-area-co
     \caption{Evolução da área coberta ao longo do tempo por três robôs. }
     \label{}
   \end{subfigure}
-  \caption{Evolução da área coberta por dois e três agentes com pose inicial conhecida. Os momentos de comunicação e troca de mapas entre os agentes podem ser identificados por saltos verticais nas curvas de área coberta por cada agente.}
+  \caption[Comparação da evolução das áreas cobertas por dois e três agentes com pose inicial conhecida]{Evolução da área coberta por dois e três agentes com pose inicial conhecida. Os momentos de comunicação e troca de mapas entre os agentes podem ser identificados por saltos verticais nas curvas de área coberta por cada agente.}
   \label{fig:know-initial-pose-area-coverage}
 \end{figure}
 
@@ -270,7 +270,7 @@ iniciais dos agentes.
     \caption{}
     \label{fig:}
   \end{subfigure}
-  \caption{Diferentes execuções do mapeamento com dois agentes com pose inicial desconhecida. Entre as execuções variou-se a pose inicial dos 
+  \caption[Comparação da evolução das áreas cobertas por dois agentes com pose inicial desconhecida]{Diferentes execuções do mapeamento com dois agentes com pose inicial desconhecida. Entre as execuções variou-se a pose inicial dos 
   agentes. As curvas da Figura da direta estão defasadas pois o segundo 
   agente foi colocado no ambiente alguns instantes depois que o primeiro.}
   \label{fig:unknown-initial-pose-area-coverage}

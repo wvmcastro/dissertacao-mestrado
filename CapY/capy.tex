@@ -48,7 +48,7 @@ ambiente são alinhadas resultando em uma nuvem mais completa.
 \begin{figure}[h]
   \centering
   \includegraphics[width=.7\textwidth]{figs/point-cloud-registration-example.png}
-  \caption{Exemplo de registro de par de nuvem de pontos. As nuvens representam porções diferentes de uma mesma cena e possuem elementos 
+  \caption[Exemplo do registro de nuvem de pontos]{Exemplo de registro de par de nuvem de pontos. As nuvens representam porções diferentes de uma mesma cena e possuem elementos 
   em comum.}
   \label{fig:point-cloud-registration-example}
 \end{figure}
@@ -94,7 +94,7 @@ vizinhas à \textit{landmark} descrita em seu setor correspondente.
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.6\textwidth]{figs/feature-descriptor.tex}
-  \caption{Ilustração do descritor de característica utilizado para 
+  \caption[Descritor de características utilizado no registro de nuvem de pontos]{Ilustração do descritor de característica utilizado para 
   relacionar \textit{landmarks} entre os mapas dos agente. As \textit{landmarks} estão representadas por círculos em cinza, a \textit{landmark} descrita é representada em magenta. O vetor descritor está representado no canto inferior direito. Cada posição do vetor corresponde a um setor da circunferência tracejada. Os setores que 
   possuem \textit{landmarks} vizinhas estão realçados em tons de azul.}
   \label{fig:feature-descriptor}
@@ -339,7 +339,7 @@ vista, mas que foram observadas pelo outro robô.
       do robô 2. }
     % \label{fig:}
   \end{subfigure}
-  \caption{As imagens menores representam os mapas de grade 
+  \caption[Fusão de mapas de grade de ocupação]{As imagens menores representam os mapas de grade 
   individuais de cada robô. A imagem maior representa o mapa de grade do
   primeiro robô após receber o mapa de grade do segundo. Note que algumas
   células com probabilidade de ocupação 0.5 (nem ocupada e nem desocupada) pelo robô 1 passam a ter probabilidade de ocupação diferente de 0.5, pois são observadas do ponto de vista do robô 2.}
