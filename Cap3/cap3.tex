@@ -1,5 +1,5 @@
 O Filtro de Kalman (KF) é uma técnica de estimação ótima para sistemas lineares com ruídos gaussianos. Nele, a função densidade de probabilidade do estado estimado é representada por uma gaussiana, 
-Eq. \ref{eq:moments-gaussian-probabilistic-distribution}, parametrizada pelos momentos centrais média e covariância. O KF foi desenvolvido simultaneamente em 1958 por Peter Swerling e em 1960 por Rudolf Kalman \cite[p.~40]{thrun2005probabilistic}. Apesar de sua otimalidade ser garantida apenas para sistemas lineares, ele é aplicado em sistemas não lineares também. Para isso, é feita uma aproximação linear em torno da estimativa do estado atual do sistema, utilizando-se expansão por série de Taylor, e a premissa de que os termos de ordem maior ou igual a dois são desprezíveis.
+Equação \ref{eq:moments-gaussian-probabilistic-distribution}, parametrizada pelos momentos centrais média e covariância. O KF foi desenvolvido simultaneamente em 1958 por Peter Swerling e em 1960 por Rudolf Kalman \cite[p.~40]{thrun2005probabilistic}. Apesar de sua otimalidade ser garantida apenas para sistemas lineares, ele é aplicado em sistemas não lineares também. Para isso, é feita uma aproximação linear em torno da estimativa do estado atual do sistema, utilizando-se expansão por série de Taylor, e a premissa de que os termos de ordem maior ou igual a dois são desprezíveis.
 
 \begin{equation}
   \pr{\bvec{x}} = \eta \exp\parentheses{-\frac{1}{2} 
@@ -15,7 +15,7 @@ Neste capítulo, serão descritas as alterações necessárias no EKF clássico 
 \label{sec:ekf}
 Para que seja possível estimar o estado de um sistema utilizando-se KF, é 
 necessário conhecer duas equações: a primeira, denominada modelo do sistema, 
-modela a transição de estado do sistema a partir do estado anterior e da entrada aplicada, Eq. \ref{eq:system-model}; a segunda, chamada de modelo de medida, relaciona o estado do sistema com a medida, gerada pelo sensor, Eq. \ref{eq:measurement-model}. 
+modela a transição de estado do sistema a partir do estado anterior e da entrada aplicada, Equação \ref{eq:system-model}; a segunda, chamada de modelo de medida, relaciona o estado do sistema com a medida, gerada pelo sensor, Equação \ref{eq:measurement-model}. 
 \begin{align}
   \bsubvec{x}{t} &= \mb{g}(\bsubvec{x}{t-1}, \bsubvec{u}{t}) + \mb{\epsilon}_t
   \label{eq:system-model}\\
@@ -71,7 +71,7 @@ mede novas \textit{landmarks}.
   \label{eq:feature-map}
 \end{equation}
 
-Utilizando a definição do vetor de estados do EKF-SLAM acima (Eq. \ref{eq:slam-state-vector}), as próximas três Seções (\ref{sec:ekf-slam-prediction}, \ref{sec:ekf-slam-update} e \ref{sec:ekf-slam-landmark-insertion}) descrevem as alterações necessários e/ou desejáveis no EKF para sua aplicação em SLAM. O algoritmo completo pode ser encontrado no Apêndice \ref{app:alg-ekf-slam}.
+Utilizando a definição do vetor de estados do EKF-SLAM acima (Equação \ref{eq:slam-state-vector}), as próximas três Seções (\ref{sec:ekf-slam-prediction}, \ref{sec:ekf-slam-update} e \ref{sec:ekf-slam-landmark-insertion}) descrevem as alterações necessários e/ou desejáveis no EKF para sua aplicação em SLAM. O algoritmo completo pode ser encontrado no Apêndice \ref{app:alg-ekf-slam}.
 
 \subsection{EKF-SLAM: Predição (Movimento do robô)}
 \label{sec:ekf-slam-prediction}
@@ -297,7 +297,7 @@ Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-me
 
 \section{Filtro de Informação Estendido (EIF)}
 O Filtro de Kalman Estendido, apresentado na Seção \ref{sec:ekf} utiliza a
-parametrização de momentos (Eq. \ref{eq:moments-gaussian-probabilistic-distribution}) para representar a 
+parametrização de momentos (Equação \ref{eq:moments-gaussian-probabilistic-distribution}) para representar a 
 distribuição de probabilidade 
 gaussiana. Já o Filtro de Informação utiliza a chamada representação canônica, composta pelo vetor de informação, $\infov{}$, e pela matriz de informação, $\infom{}$. Definidos a seguir:
 \newcommand{\ifcorrespondence}{\infov{} = \cov{}^{-1} \mean{}}
@@ -326,7 +326,7 @@ Informação Estendido \cite[p.~76]{thrun2005probabilistic}:
   \brac{\bsubvec{y}{t} - \mb{h}(\predmean{t}) + \bsubvec{H}{t}\predmean{t}}
   \label{eq:eif-info-vector-update}
 \end{align}
-e a distribuição de probabilidade na Eq. \ref{eq:moments-gaussian-probabilistic-distribution} pode ser reescrita como:
+e a distribuição de probabilidade na Equação \ref{eq:moments-gaussian-probabilistic-distribution} pode ser reescrita como:
 \begin{equation}
   \pr{\bvec{x}} = \eta \exp\parentheses{-\frac{1}{2} 
   \bvecT{x} \infom{} \bvec{x} + \bvecT{x}\infov{}}
@@ -634,7 +634,7 @@ e, mesmo numa matriz esparsa, o tempo requerido para essa operação não é con
 
 Para contornar essa inversão, no SEIF esse passo é executado de uma forma completamente diferente: ele é modelado como um problema de otimização. Em 
 \cite[Cap.~12.6]{thrun2005probabilistic}, mostra-se que o vetor de média do estado é o ponto de máximo da quadrática na representação canônica da Gaussiana 
-Eq. \ref{eq:canonical-gaussian-probabilistic-distribution}. Então, o 
+Equação \ref{eq:canonical-gaussian-probabilistic-distribution}. Então, o 
 vetor de média do estado atualizado $\mean{t}$ pode ser calculado como:
 \begin{equation}
   \begin{aligned}
@@ -694,11 +694,11 @@ constantes.
 
 \subsection{SEIF-SLAM: Passo de atualização}
 \label{sec:seif-update}
-Por hora, assim como foi feito com o EKF-SLAM na Eq. \ref{eq:ekf-slam-innovation} vamos assumir que é possível calcular a inovação 
+Por hora, assim como foi feito com o EKF-SLAM na Equação \ref{eq:ekf-slam-innovation} vamos assumir que é possível calcular a inovação 
 $\bsubvec{z}{t}^j$ a partir da medida $\bsubvec{y}{t}^j$. É claro que 
 na prática, é preciso antes uma etapa que estabeleça correspondência entre 
 as medidas lidas e as \textit{landmarks} existentes no vetor de estados. 
-Essa correspondência é fundamental para utilizar a \textit{landmark} $\bvec{m}^i$ correta no cálculo do modelo de medida \measurementModel, Eq. \ref{eq:range-bearing-measurement-model}.
+Essa correspondência é fundamental para utilizar a \textit{landmark} $\bvec{m}^i$ correta no cálculo do modelo de medida \measurementModel, Equação \ref{eq:range-bearing-measurement-model}.
 
 O Algoritmo \ref{alg:seif-slam-update-known-associations} pressupõe que tais correspondências são 
 conhecidas. A Seção \ref{sec:data-association} abordará uma maneira para estabelecer essas correspondências. 
@@ -795,9 +795,9 @@ invertendo ambos os lados utilizando o lema da inversão na forma de blocos (Ane
 \endgroup
 o desenvolvimento detalhado do resultado acima está no Apêndice \ref{app:dev-landmark-insertion-info-matrix}.
 
-Note que, ao contrário da matriz de covariância aumentada do EKF na Eq. \ref{eq:ekf-landmark-insertion-covariance} que não altera os elementos já existentes no filtro, a matriz de informação aumentada altera alguns elementos existentes; mais especificamente, ela altera a informação do robô.
+Note que, ao contrário da matriz de covariância aumentada do EKF na Equação \ref{eq:ekf-landmark-insertion-covariance} que não altera os elementos já existentes no filtro, a matriz de informação aumentada altera alguns elementos existentes; mais especificamente, ela altera a informação do robô.
 
-Isso pode ser concluído a partir da observação da forma da matrix $\bsubvec{F}{X}$, Eq. \ref{eq:inverse-measurement-model-jacobian-state-part}, nula em todos elementos exceto pelo primeiro bloco $2\times 3$. Para evidenciar essa conclusão, a Eq. \ref{eq:seif-landmark-insertion-information-matrix} é 
+Isso pode ser concluído a partir da observação da forma da matrix $\bsubvec{F}{X}$, Equação \ref{eq:inverse-measurement-model-jacobian-state-part}, nula em todos elementos exceto pelo primeiro bloco $2\times 3$. Para evidenciar essa conclusão, a Equação \ref{eq:seif-landmark-insertion-information-matrix} é 
 reescrita abaixo:
 \begingroup
 \renewcommand{\arraystretch}{1.5}
@@ -991,7 +991,7 @@ Por fim, a matriz $\infom{t}^3$ correspondente a $\pr{\bupvec{m}{+-}, \bupvec{m}
 \end{equation}
 De posse das matrizes $\infom{t}^1$, $\infom{t}^2$ e $\infom{t}^3$, a 
 matriz de informação esparsificada, $\sinfom{t}$, correspondente a distribuição 
-aproximada na Eq. \ref{eq:seif-sparsification-derivation} é obtida:
+aproximada na Equação \ref{eq:seif-sparsification-derivation} é obtida:
 \begin{equation}
   \sinfom{t} = \infom{t}^1 - \infom{t}^2 + \infom{t}^3
   \label{eq:seif-sparse-infom}
