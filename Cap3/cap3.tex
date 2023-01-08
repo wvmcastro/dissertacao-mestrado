@@ -43,6 +43,14 @@ As Equações de \ref{eq:ekf-prediction} até \ref{eq:ekf-estimate-error-covaria
   \cov{t} &= \predcov{t} - \bsubvec{K}{t}\bsubvec{Z}{t}\bsubvecT{K}{t}
   \label{eq:ekf-estimate-error-covariance}
 \end{align}
+Em que: 
+\begin{itemize}
+  \item $\predcov{t}$ é a matriz de covariância do estado predito
+  \item $\bsubvec{z}{t}$ é o vetor de inovação
+  \item $\bsubvec{Z}{t}$ é a matriz de covariância da inovação, também conhecido por matriz de inovação
+  \item $\bsubvec{K}{t}$ é o Ganho de Kalman
+  \item $\cov{t}$ é a matriz de covariância do estado atualizado
+\end{itemize}
 Porém, a resolução do problema SLAM utilizando o EKF, não é uma aplicação 
 direta das Equações acima. São necessárias algumas alterações, pois em SLAM o vetor de medidas tem tamanho variável. Esses detalhes e outras particularidades da aplicação do EKF em SLAM serão tratados na próxima Seção.
 
