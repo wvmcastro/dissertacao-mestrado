@@ -154,7 +154,7 @@ Então, a equação do erro de predição do EKF, em \ref{eq:ekf-prediction-erro
 \label{eq:ekf-slam-prediction-error-covariance}
 \end{equation}
 \renewcommand{\arraystretch}{1.0}
-A complexidade dessa operação é da ordem de $\bigO{n}$ por conta do termo $\bsubvec{G}{t}^\mathrm{r} \cov{t-1}^\mathrm{rm}$, enquanto no caso geral do EKF em que o jacobiano $\bsubvec{G}{t}$ é denso, essa complexidade é $\bigO{n^{2.376}}$, que é a complexidade da multiplicação de matrizes $n \times n$ \cite{coppersmith1987matrix}. A Figura 
+A complexidade dessa operação é da ordem de $\bigO{n}$ (vide nota\footnote{Como discutido no Apêndice \ref{app:matrix-product-analysis}, apesar da multiplicação de matrizes possuir complexidade assintótica cúbica no pior caso, como a matriz $\bsubvec{G}{t}^\mathrm{r}$ possui dimensão $3\times 3$ e a matriz $\cov{t-1}^\mathrm{rm}$ possui dimensão $3 \times (n-3)$ (onde $n$ é o tamanho do vetor de estados) há apenas uma dimensão variável (a quantidade de colunas da matriz $\cov{t-1}^\mathrm{rm}$) e portanto a complexidade se torna $\bigO{n}$.}) por conta do termo $\bsubvec{G}{t}^\mathrm{r} \cov{t-1}^\mathrm{rm}$, enquanto no caso geral do EKF em que o jacobiano $\bsubvec{G}{t}$ é denso, essa complexidade é $\bigO{n^{2.376}}$, que é a complexidade da multiplicação de matrizes $n \times n$ \cite{coppersmith1987matrix}. A Figura 
 \ref{fig:ekfslam-prediction} ilustra as porções do vetor de estados e da 
 matriz de covariância modificadas no passo de predição do EKF-SLAM.
 
@@ -334,12 +334,17 @@ Informação Estendido \cite[p.~76]{thrun2005probabilistic}:
   \brac{\bsubvec{y}{t} - \mb{h}(\predmean{t}) + \bsubvec{H}{t}\predmean{t}}
   \label{eq:eif-info-vector-update}
 \end{align}
-e a distribuição de probabilidade na Equação \ref{eq:moments-gaussian-probabilistic-distribution} pode ser reescrita como:
+em que, \begin{itemize}
+  \item $\predinfom{t}$ é a matriz de informação predita
+  \item $\predinfov{t}$ é o vetor de informação predito
+\end{itemize}
+e a distribuição de probabilidade na Equação \ref{eq:moments-gaussian-probabilistic-distribution} pode ser reescrita da seguinte forma:
 \begin{equation}
   \pr{\bvec{x}} = \eta \exp\parentheses{-\frac{1}{2} 
   \bvecT{x} \infom{} \bvec{x} + \bvecT{x}\infov{}}
   \label{eq:canonical-gaussian-probabilistic-distribution}
 \end{equation}
+como demonstrado em \cite[p.~74 e 75]{thrun2005probabilistic}.
 
 Uma vantagem do Filtro de Informação é que ele tende a ser numericamente mais estável. Além disso, 
 representar alto nível de incerteza é numericamente mais seguro quando comparado 
