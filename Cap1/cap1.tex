@@ -10,7 +10,7 @@ GPS não funciona adequadamente, como debaixo d'água,
 em minas subterrâneas e dentro de construções. Este problema é denominado SLAM e resolvê-lo implica em empoderar soluções de robótica móvel, 
 que atuem nesses cenários, com aplicações reais e comerciais.
 
-O problema de Mapeamento e Localização Simultâneos, conhecido pela sigla SLAM por conta do termo em inglês \textit{Simultaneous Localization and Mapping}, pergunta se é possível para um robô móvel ser colocado em um ambiente desconhecido a priori e incrementalmente construir um mapa deste ambiente enquanto simultaneamente se localiza neste mapa. Ou seja, tanto a trajetória da plataforma móvel quanto a localização das características do mapa (também conhecidas por \textit{landmarks}) são estimadas em tempo real sem a necessidade de nenhum conhecimento a priori de suas localizações \cite{durrant2006simultaneous}, ou infra estrutura de localização prévia, como GPS.
+O problema de Mapeamento e Localização Simultâneos, conhecido pela sigla SLAM por conta do termo em inglês \textit{Simultaneous Localization and Mapping}, pergunta se é possível para um robô móvel ser colocado em um ambiente desconhecido a priori e incrementalmente construir um mapa deste ambiente enquanto simultaneamente se localiza neste mapa. Ou seja, tanto a trajetória da plataforma móvel quanto a localização das características do mapa (também conhecidas por \textit{landmarks} ou ainda, pontos de referência) são estimadas em tempo real sem a necessidade de nenhum conhecimento a priori de suas localizações \cite{durrant2006simultaneous}, ou infra estrutura de localização prévia, como GPS.
 
 SLAM também já foi conhecido como Mapeamento e Localização Concorrentes (CML, do inglês \textit{Concurrent Mapping and Localization}), porém este termo caiu em desuso a partir de 1995 quando o termo SLAM foi cunhando por \citeonline{durrant1996localization} no Simpósio Internacional de Pesquisa em Robótica, ISSR, onde originalmente era chamado \textit{Simultaneous Localization and Map Building}. A solução do problema SLAM é fundamental para atingir a robótica móvel autônoma e independente de operadores \cite{durrant2006simultaneous}. Entretanto resolver o problema de localização e mapeamento simultâneos, apesar de solucionado, não é uma tarefa trivial tanto do ponto de vista teórico como do ponto de vista da implementação \cite{durrant1996localization}.
 
@@ -71,8 +71,7 @@ e capítulos subsequentes a este.
 Como mencionado anteriormente, há duas classes de problemas de SLAM: 
 \textit{online} SLAM e \textit{full} SLAM, e, portanto, duas classes de 
 algoritmos para resolvê-los. Os algoritmos \textit{full} SLAM também são chamados 
-de \emph{offline SLAM} por serem normalmente utilizados em etapas de pós 
-processamento, como refinamento de mapas. Esses algoritmos exigem mais 
+de \emph{offline SLAM} por serem normalmente utilizados em etapas de pós-processamento, como refinamento de mapas. Esses algoritmos exigem mais 
 recursos, tanto de processamento quanto de memória para serem processados. 
 Portanto, há grande dificuldade para utiliza-los embarcados nos agentes durante 
 a etapa de exploração do ambiente.
@@ -95,14 +94,14 @@ propriamente ditos como móveis e árvores, a pontos e quinas.
 
 Essas medidas relacionadas ao ambiente, lidas pelos sensores extrínsecos 
 (sonares, câmeras RGB, scanner laser, entre outros), possuem, em geral, duas 
-componentes comumente denominados \textit{Range} e \textit{Bearing}. 
-A componente \textit{Range} é a distância do sensor até o objeto medido, 
+componentes comumente denominados \textit{Range} e \textit{Bearing} ou, Distância e Azimute, respectivamente. 
+A componente de \textit{Range} é a distância do sensor até o objeto medido, 
 enquanto \textit{Bearing} é a direção angular do objeto em relação ao sensor. 
 Porém, nem todo sensor é capaz de fornecer essas duas medidas; câmeras RGB, por 
 exemplo, conseguem  informar apenas a direção angular.
 
 Então, de acordo com a presença/ausência dessas componentes os termos: 
-\textit{Range Only}, \textit{Bearing Only} e Distância-Azimute SLAM são 
+\textit{Range Only}, \textit{Bearing Only} e \textit{Range-Bearing} (Distância-Azimute) SLAM são 
 utilizados para identificar qual classe de medidas do ambiente está sendo
 utilizada na solução do problema. \textit{Range Only} significa que a medida 
 possui apenas a 
@@ -249,18 +248,18 @@ incorporada ao filtro.
 \end{figure}
 
 \section{Organização do trabalho}
-O próximo capítulo apresenta o ambiente simulado assim como o robô e os 
-modelos de cinemática e medida utilizados. A organização do restante do 
+O próximo capítulo apresenta os 
+modelos de cinemática e medida utilizados para o robô e o sensor, respectivamente. A organização do restante do 
 trabalho é pautada pela Figura \ref{fig:slam-architecture}, o Capítulo 
-3 trata da maioria dos aspectos do \textit{back-end}; começa discorrendo acerca de uma técnica clássica para resolver o problema SLAM e termina discutindo a técnica utilizada nesse trabalho; a porção do filtro responsável pela troca de mapas fica de fora desse capítulo para ser 
+\ref{ch:back-end} trata da maioria dos aspectos do \textit{back-end}; começa discorrendo acerca de uma técnica clássica para resolver o problema SLAM e termina discutindo a técnica utilizada nesse trabalho; a porção do filtro responsável pela troca de mapas fica de fora desse capítulo para ser 
 tratada em conjunto com a estimação de pose relativa posteriormente.
 
-O Capítulo 4 é sobre os diversos componentes do \textit{front-end}, exceto 
+O Capítulo \ref{ch:front-end} é sobre os diversos componentes do \textit{front-end}, exceto 
 a estimação de posição relativa entre os agentes. Tanto esse cálculo 
 quanto a troca de mapas do \textit{back-end} são concentrados no 
-Capítulo 5 por comporem a característica fundamental de 
+Capítulo \ref{ch:distributed-slam} por comporem a característica fundamental de 
 sistemas multiagentes.
 
-Por fim, o Capítulo 6 avalia e discute o sistema desenvolvido através de 
-experimentos no ambiente simulado. O Capítulo 7, a Conclusão, sumariza 
+Por fim, o Capítulo \ref{ch:experiments-and-results} avalia e discute o sistema desenvolvido através de 
+experimentos no ambiente simulado. O Capítulo \ref{ch:conclusion}, a Conclusão, sumariza 
 os resultados e sugere melhorias para trabalhos futuros.
