@@ -60,7 +60,7 @@ Onde:
 \end{equation}
 Assim como os modelos de medida na próxima Seção, o modelo de movimento do 
 robô de acionamento diferencial é não linear. Portanto, é necessário calcular 
-sua matriz jacobiana em torno de um ponto $\overline{\bvec{x}}_{t-1}$ para linearização do modelo em técnicas como EKF e SEIF-SLAM, apresentadas 
+sua matriz jacobiana em torno de um ponto $\overline{\bvec{x}}_{t-1}$ para linearização do modelo em técnicas como o Filtro de Kalman Estendido (EKF) e o Filtro de Informação Estendido Esparso (SEIF), apresentadas 
 mais adiante. O jacobiano do modelo \robotModel{} está na Equação 
 \ref{eq:motion-model-jacobian}.
 \begin{equation}
@@ -84,7 +84,7 @@ mais adiante. O jacobiano do modelo \robotModel{} está na Equação
 
 \section{Medidas e o modelo de medida Distância-Azimute}
 \label{sec:slam-measurement}
-A medida gerada pelo sensor LiDAR, embarcado no TurtleBot, consiste em uma nuvem de pontos planar. Essa nuvem de pontos é processada e dela são extraídas estimativas dos centros dos cilindros presentes no ambiente. Esses 
+A medida gerada pelo sensor LiDAR, embarcado no utilizado nessa investigação, consiste em uma nuvem de pontos planar. Essa nuvem de pontos é processada e dela são extraídas estimativas dos centros dos cilindros presentes no ambiente. Esses 
 centros são as medidas utilizadas pelo algoritmo de SLAM, eles são descritos 
 em termos de coordenadas polares $(r, \theta)$ no sistema de coordenadas do sensor.
 
