@@ -9,7 +9,7 @@ Equação \ref{eq:moments-gaussian-probabilistic-distribution}, parametrizada pe
 
 Essa técnica derivada do KF para sistemas não lineares é conhecida como Filtro de Kalman Estendido (EKF). O EKF é muito utilizado em aplicações reais, pois a grande maioria dos sistemas reais são não lineares, como o movimento de um robô diferencial, por exemplo. Além disso, o modelo de medida do sensor é, muitas vezes, uma função não linear do estado do sistema.
 
-Neste capítulo, serão descritas as alterações necessárias no EKF clássico para que ele possa ser aplicado na resolução do problema SLAM, estimando a pose do robô e a posição das \textit{landmarks}, o que é conhecido como EKF-SLAM. Além disso, também serão abordadas técnicas decorrentes do EKF-SLAM, como EIF-SLAM (Filtro de Informação Estendido) e SEIF-SLAM (Filtro de Informação Estendido Esparso), sendo esta última a técnica de estimação utilizada neste trabalho.
+Neste capítulo, serão descritas as alterações necessárias no EKF clássico para que ele possa ser aplicado na resolução do problema SLAM, estimando a pose do robô e a posição das \textit{landmarks}, o que é conhecido como EKF-SLAM e proposto por \citeonline{smith1986representation}. Além disso, também serão abordadas técnicas decorrentes do EKF-SLAM, como EIF-SLAM (Filtro de Informação Estendido) e SEIF-SLAM (Filtro de Informação Estendido Esparso) criado por \citeonline{thrun2004simultaneous}, sendo esta última a técnica de estimação utilizada neste trabalho.
 
 \section{Filtro de Kalman Estendido}
 \label{sec:ekf}
