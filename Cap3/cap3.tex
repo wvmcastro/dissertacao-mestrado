@@ -366,12 +366,18 @@ ao EKF. Por esse motivo, ele é menos utilizado que o EKF, na prática
 
 No entanto, ao empregar o EIF no problema SLAM, nota-se que grande parte dos 
 blocos fora da diagonal principal da matriz de informação são quase nulos, ou 
-seja, agregam pouca informação ao sistema. Isso se deve à estrutura do problema 
+seja, agregam pouca informação ao sistema, como mostrado na imagem da direita na Figura \ref{fig:cov-and-info-matrix-comparison}. Isso se deve à estrutura do problema 
 SLAM, pois grande parte das correlações entre \textit{landmarks} (portanto 
 fora da diagonal principal) são propagadas pela incerteza da pose do robô 
 quando as \textit{landmarks} são observadas. Apenas 
 \textit{landmarks} dentro de uma mesma vizinhança são observadas juntas, 
 resultando em alta correlação.
+
+\begin{figure}
+  \includegraphics[width=.95\textwidth]{figs/seif-motivation.png}
+  \caption[Comparação entre a matriz de covariância e a matriz de informação se um sistema com 50 \textit{landmarks}]{Comparação entre a matriz de covariância e a matriz de informação se um sistema com 50 \textit{landmarks}. À esquerda mapa de \textit{landmarks} do sistema, ao centro a matriz de covariância do EKF-SLAM e à direita a matriz de informação. Retirado de \citeonline{thrun2004simultaneousbook}.} 
+  \label{fig:cov-and-info-matrix-comparison}
+\end{figure}
 
 Esse aspecto é explorado pelo Filtro de Informação Estendido Esparso (SEIF); 
 por meio de aproximações o SEIF mantém a matriz de informação bloco-diagonalizada, 
@@ -392,6 +398,7 @@ com formato próximo ao de uma matriz bloco-diagonal por meio do uso de
 Além disso, a recuperação da média, na Equação 
 \ref{eq:eif-mean-recuperation}, é modelada como um problema de 
 otimização. As Seções a seguir são baseadas na discussão em \cite[Capítulo~12.4]{thrun2005probabilistic}.
+
 
 \subsection{SEIF-SLAM: Landmarks ativas e inativas}
 \label{sec:seif-active-passive-landmarks}
@@ -425,11 +432,42 @@ $\bsubvec{m}{t}^+$ concomitantemente. Portanto, a inovação de uma
 ao contrário do que acontece no EKF/EIF em que a inovação de uma 
 \textit{landmark} afeta todo o sistema.
 
-O conjunto $\bsubvec{m}{t}^+$ contém as $k$ últimas \textit{landmarks} 
+Embora o conceito dos conjuntos de \textit{landmarks} ativas e passivas 
+seja introduzido por \citeonline{thrun2004simultaneous}, não é dada uma 
+descrição detalhada de política para construir e manter esses conjuntos 
+ao longo do tempo. O único trabalho encontrado que descreve uma 
+política para esses conjuntos consiste em uma proposta mais recente do 
+SEIF denotada Filtro de Informação Estendido Exato (ESEIF) \cite{walter2007exactly}.
+
+No entanto, neste trabalho é implementada uma política diferente na qual o conjunto $\bsubvec{m}{t}^+$ contém as $k$ últimas \textit{landmarks} 
 observadas até o instante $t$, onde $k$ é a cardinalidade do conjunto. As 
 \textit{landmarks} vão entrando e saindo desse conjunto conforme o robô 
-navega no ambiente e novas \textit{landmarks} vão sendo observadas enquanto 
-outras deixam de sê-lo.
+navega no ambiente e novas \textit{landmarks} vão sendo observadas enquanto outras deixam de sê-lo, conforme exemplo na Tabela \ref{tab:active-landmarks-buffer}.
+
+\begin{table}[]
+\caption{Exemplo da política do conjunto de \textit{landmarks} ativas 
+implementada, com cardinalidade $k = 3$.}
+\label{tab:active-landmarks-buffer}
+\centering
+\begin{tabular}{cccc}
+\hline
+Tempo & Landmarks observadas & $\bupvec{m}{+}$ & $\bupvec{m}{-}$ \\ \hline
+$t_0$ & $\{\}$ & $\{\}$ &  $\{\}$\\
+$t_1$ & $\{1,2,3\}$ & $\{1,2,3\}$ & $\{\}$ \\
+$t_2$ &  $\{2,3,4\}$ & $\{2,3,4\}$ &  $\{1\}$\\
+$t_3$ &  $\{3,4\}$ & $\{2,3,4\}$ &  $\{1\}$\\
+$t_4$ &  $\{1,4,5\}$ & $\{4,1,5\}$ &  $\{2,3\}$\\
+$t_5$ &  $\{1,6,7\}$ & $\{1,6,7\}$ &  $\{2,3,4,5\}$\\
+\hline
+\end{tabular}
+\end{table}
+
+Note que o conjunto de \textit{landmarks} ativas $\bupvec{m}{+}$ em um dado instante $t$ não é 
+necessariamente composto pelas \textit{landmarks} observadas neste instante, como 
+evidenciado na linha $t_3$ da Tabela \ref{tab:active-landmarks-buffer}. Quando um subconjunto de \textit{landmarks} 
+presentes em $\bupvec{m}{+}$ foram inseridas dentro de um mesmo passo 
+de execução e precisa-se escolher alguma para ser substituída, 
+escolhe-se a de menor índice como mostrado na linha $t_2$ da Tabela \ref{tab:active-landmarks-buffer}. 
 
 Nas próximas Seções, ficará claro que a cardinalidade $k$ definida para o conjunto de 
 landmarks ativas limitará a quantidade de elementos longe da diagonal 
