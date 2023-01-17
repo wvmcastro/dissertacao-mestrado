@@ -27,19 +27,19 @@ quantidades são observadas:
   \item $\bsubvec{u}{t}$: o vetor de controle executado pelo robô no instante \emph{t}.
   \item $\bsubvec{u}{1:t} = \{ \bsubvec{u}{1}, \bsubvec{u}{2}, \dots, 
   \bsubvec{u}{t-1}, \bsubvec{u}{t} \}$: histórico de controles executados pelo robô até o instante \emph{t}.
-  \item $\bsubvec{z}{t}$: o vetor de medidas no instante \emph{t}
-  \item $\bsubvec{z}{1:t} = \{ \bsubvec{z}{1}, \bsubvec{z}{2}, \dots, 
-  \bsubvec{z}{t-1}, \bsubvec{z}{t} \}$: o conjunto de todas as medidas realizadas até o instante \emph{t}.
+  \item $\bsubvec{y}{t}$: o vetor de medidas no instante \emph{t}
+  \item $\bsubvec{y}{1:t} = \{ \bsubvec{y}{1}, \bsubvec{y}{2}, \dots, 
+  \bsubvec{y}{t-1}, \bsubvec{y}{t} \}$: o conjunto de todas as medidas realizadas até o instante \emph{t}.
   \item $\bvec{m}$: o vetor de mapa, constituído pelas posições das características do ambiente consideradas pelo robô.
 \end{itemize}
 
 De maneira bastante sucinta, os problemas de SLAM consistem em estimar uma das 
 seguintes distribuições de probabilidade:
 \begin{gather}
-  \pr{\robotstate{t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, 
+  \pr{\robotstate{t}, \bvec{m} \given \bsubvec{y}{1:t} , \bsubvec{u}{1:t}, 
     \robotstate{0}}
   \label{eq:online-slam-probability} \\
-  \pr{\robotstate{1:t}, \bvec{m} \given \bsubvec{z}{1:t} , \bsubvec{u}{1:t}, 
+  \pr{\robotstate{1:t}, \bvec{m} \given \bsubvec{y}{1:t} , \bsubvec{u}{1:t}, 
     \robotstate{0}}
   \label{eq:full-slam-probability}
 \end{gather}
