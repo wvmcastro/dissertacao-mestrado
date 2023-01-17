@@ -12,21 +12,24 @@ pode se tornar mais ou menos complexa.
 
 Este trabalho investiga uma solução multiagente distribuída e descentralizada em ambiente simulado 
 para o problema SLAM 2D. Para isso emprega o uso do Filtro de Informação 
-Esparso, juntamente com outros algoritmos de navegação, associação de 
+Estendido Esparso, juntamente com outros algoritmos de navegação, associação de 
 dados e de representação de mapas. As vantagens da solução distribuída do 
 problema SLAM, em relação ao problema original, são a divisão da carga 
-de trabalho entre os agentes e a redundância de informação.
+de trabalho entre os agentes e a redundância de informação. O objetivo deste trabalho é simular um grupo de 
+robôs que mapeiem o ambiente onde estão inseridos, de maneira ativa e 
+descentralizada, considerando restrições de memória e processamento.
+
+Portanto, além de produzir algoritmos que capacitem os robôs a resolverem o 
+problema SLAM Ativo Descentralizado e Distribuído, é preciso criar uma 
+infraestrutura de software na qual o ambiente e os agentes serão simulados. Para 
+isso utilizou-se o Sistema Operacional de Robô, ROS do inglês \textit{Robot 
+Operating System}, que provê um conjunto de bibliotecas e ferramentas pertinentes 
+ao desenvolvimento em robótica, além de uma camada de comunicação 
+utilizada pelos diferentes módulos do sistema (mapeamento, navegação, 
+visão) para trocarem informações. Para a simulação do ambiente, sensores e agentes, utilizou-se o simulador Gazebo.
 
 A solução desenvolvida apresenta uso de memória significativamente 
 reduzido, mais de 50\%, em relação à abordagem clássica EKF-SLAM. 
 Além disso, apesar de não possuir coordenação entre os agentes, 
 observaram-se ganhos no tempo de exploração no cenário com dois agentes 
 em comparação com um único agente.
-
-Porém, justamente pela falta de 
-coordenação entre os robôs, o desempenho de tempo no cenário com 
-três agentes foi inferior ao com um único agente. Outra limitação ocorre 
-quando a pose inicial dos agentes não é informada, pois o método de 
-estimação da pose relativa entre os agentes não se mostrou robusto o 
-suficiente para garantir a troca dos mapas com sucesso sempre que eles se 
-aproximam.

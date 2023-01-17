@@ -13,16 +13,22 @@ We examine a distributed and decentralized multi-agent solution in a simulated e
 for the 2D SLAM problem. For such purpose, the solution uses the Sparse Extended Information Filter, along with other algorithms for navigation,
 data association and map representation. The advantages of the distributed solution of the
 SLAM problem, in comparison with the original problem, are workload sharing
-between the agents and information redundancy.
+between the agents and information redundancy. Our goal is simulate a 
+group of mobile robots mapping the environment where they were placed, 
+in an active and decentralized fashion, while taking into account 
+processing and memory constraints.
+
+Therefore, besides implement algorithms that enable robots to solve the 
+Distributed and Decentralized Active SLAM problem, it is needed a 
+software infrastructure where the environment and the agents will be 
+simulated. For that we used the Robot Operating System (ROS), that 
+provides a set of software libraries and tools relevant to robotics 
+development, and also a communication layer used by the many system 
+modules (mapping, navigation, vision) in information exchanging. For 
+simulation of the environment, sensors and agents, the Gazebo simulator 
+was used.
 
 The developed solution has significantly less memory usage,
 presenting a reduction of more than 50\% when compared to the classic EKF-SLAM approach.
 In addition, despite the lack of coordination between the agents
 gains, in exploration time were observed in the scenario with two agents with respect to a single agent.
-
-However, precisely because of the lack of
-coordination between them, we observe a degraded time performance in the scenario with
-three agents relative to just a single agent. Another limitation occurs
-when the agents' initial poses are unknown, as the method estimating the relative pose between agents did not prove to be robust
-enough to ensure a successful map exchange whenever agents are in close 
-proximity of one another.
