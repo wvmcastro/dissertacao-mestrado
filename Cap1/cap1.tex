@@ -5,7 +5,7 @@ em ambientes sem uma infraestrutura de mapeamento global exigem técnicas
 de mapeamento e percepção robustas para capacitar agente móveis a 
 navegar de maneira autônoma em ambientes complexos \cite{saeedi2016multiple}. Aplicações dessa 
 natureza não surgem apenas da exploração de outros planetas onde não há 
-GPS, por exemplo. Pelo contrário, há diversos cenários na Terra onde o 
+um Sistema de Posicionamento Global (GPS), por exemplo. Pelo contrário, há diversos cenários na Terra onde o 
 GPS não funciona adequadamente, como debaixo d'água, 
 em minas subterrâneas e dentro de construções. Este problema é denominado SLAM e resolvê-lo implica em empoderar soluções de robótica móvel, 
 que atuem nesses cenários, com aplicações reais e comerciais.
@@ -85,7 +85,7 @@ tarefa de mapeamento.
 Contudo, para que um robô consiga estimar precisamente sua pose $\bvec{x}$, é 
 necessário alimentar os algoritmos com as medidas $\bvec{u}$, provenientes dos 
 sensores intrínsecos (\textit{encoders}, giroscópios e acelerômetros), e, 
-também, com as medidas $\bvec{z}$ do ambiente obtidas por sensores extrínsecos. O erro 
+também, com as medidas $\bvec{y}$ do ambiente obtidas por sensores extrínsecos. O erro 
 entre a posição esperada pelo robô de um objeto, dada a estimativa que o robô tem da sua pose, e a posição desse objeto lida pelo sensor extrínseco pode ser 
 utilizado para atualizar a confiança que o robô tem sobre a sua pose, por 
 exemplo. Aqui, objeto significa qualquer aspecto do ambiente com características 
@@ -94,7 +94,7 @@ propriamente ditos como móveis e árvores, a pontos e quinas.
 
 Essas medidas relacionadas ao ambiente, lidas pelos sensores extrínsecos 
 (sonares, câmeras RGB, scanner laser, entre outros), possuem, em geral, duas 
-componentes comumente denominados \textit{Range} e \textit{Bearing} ou, Distância e Azimute, respectivamente. 
+componentes (no caso 2D) comumente denominados \textit{Range} e \textit{Bearing} ou, Distância e Azimute, respectivamente. 
 A componente de \textit{Range} é a distância do sensor até o objeto medido, 
 enquanto \textit{Bearing} é a direção angular do objeto em relação ao sensor. 
 Porém, nem todo sensor é capaz de fornecer essas duas medidas; câmeras RGB, por 
@@ -258,8 +258,10 @@ O Capítulo \ref{ch:front-end} é sobre os diversos componentes do \textit{front
 a estimação de posição relativa entre os agentes. Tanto esse cálculo 
 quanto a troca de mapas do \textit{back-end} são concentrados no 
 Capítulo \ref{ch:distributed-slam} por comporem a característica fundamental de 
-sistemas multiagentes.
+sistemas multiagentes. No Capítulo \ref{ch:methodology} são apresentados 
+o ambinete e o robô utilizados nas investigações e também é 
+disponibilizado um apontamento para a implementação.
 
 Por fim, o Capítulo \ref{ch:experiments-and-results} avalia e discute o sistema desenvolvido através de 
-experimentos no ambiente simulado. O Capítulo \ref{ch:conclusion}, a Conclusão, sumariza 
-os resultados e sugere melhorias para trabalhos futuros.
+experimentos preliminares no ambiente simulado. O Capítulo \ref{ch:conclusion}, a Conclusão, sumariza 
+os resultados, elenca as contribuições deste trabalho e sugere melhorias para trabalhos futuros.
