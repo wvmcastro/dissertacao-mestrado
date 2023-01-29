@@ -1,7 +1,4 @@
-Os experimentos apresentados nessa Seção servem como indício do correto 
-funcionamento do sistema, mas não servem para atestar sua robustez pois 
-não foram repetidos sistematicamente e não foram geradas estatísticas 
-dos resultados utilizando simulação de Montecarlo.
+Nesta Seção são apresentados experimentos repetidos a exaustão para avaliar o desempenho médio esperado do sistema. E também outros experimentos preliminares.
 
 \section{Comparação SEIF vs Odometria}
 \label{sec:exp-estimate-comparison}
@@ -77,15 +74,16 @@ Como esperado, ambas as configurações do SEIF estimaram
 de maneira satisfatória tanto a posição quanto a 
 orientação do robô quando comparadas com a estimação da 
 odometria. Porém, nota-se que a configuração com 
-o cardinalidade do conjunto $\{\bupvec{m}{+}\}$ menor estimou 
+a cardinalidade do conjunto $\{\bupvec{m}{+}\}$ menor estimou 
 melhor tanto a posição quanto a orientação, o que vai 
 contra o consenso geral e a observação de \citeonline[p.~408]{thrun2005probabilistic} de que quanto maior o conjunto 
 $\bupvec{m}{+}$ melhor é a estimativa. A causa dessa divergência não foi 
-entendida até o momento da escrita deste texto.
+entendida até o momento da escrita deste texto, além disso precisa ser 
+verificada de maneira sistemática através de repetidas simulações.
 
 \section{Comparações sobre uso de memória}
 Neste experimento foram comparados o uso de memória de diferentes 
-configurações do SEIF num mapa com 36 \textit{landmarks} e comparado com 
+configurações do SEIF num mapa com 36 \textit{landmarks} com 
 o uso que a abordagem mais clássica EKF-SLAM utilizaria. Nesse ensaio o 
 robô foi teleoperado, e para garantir a reprodução exata do mesmo cenário 
 as entradas e leituras foram novamente gravadas para alimentar as 
@@ -155,6 +153,7 @@ Economia em relação ao EKF-SLAM\footnotemark{} \\
 
 
 \section{Desempenho de mapeamento de um único agente}
+\label{sec:exp-single-robot}
 Para avaliar o desempenho de mapeamento de dois ou mais agentes 
 resolvendo o problema SLAM de maneira distribuída e descentralizada, 
 primeiro é necessário entender o desempenho de um único agente 
@@ -164,7 +163,7 @@ Para isso um único agente foi submetido, repetidamente, à tarefa de mapeamento
 Cada uma dessas simulações poderia assumir um dos seguintes resultados:
 \begin{enumerate}
   \item \textbf{Sucesso}: o robô conseguiu mapear 90\% ou mais da área sem 
-  divergência na estimação de sua posição.
+  divergência na estimação de sua posição dentro de um tempo limite estipulado.
   \item \textbf{Falha por tempo limite excedido}: O robô não conseguiu mapear ao 
   menos 90\% da área antes do limite de tempo (foram dados 17 
   minutos).
@@ -177,18 +176,18 @@ por ele ao longo do tempo. A área coberta é definida como a soma das
 áreas de todas as células da grade de ocupação que possuem probabilidade 
 de ocupação diferente de 50\%.
 
-No total foram realizadas 111 simulações variando-se aleatoriamente (seguindo uma distribuição uniforme) a posição inicial do agente, em 60 foi obtido 
+No total foram realizadas 111 simulações variando-se aleatoriamente (seguindo uma distribuição uniforme) a posição inicial do agente. Em 60 foi obtido 
 sucesso, 9 falharam por tempo limite excedido e 42 falharam por 
 divergência. O comparativo pode ser observado na Figura \ref{fig:exp-single-robot-sucess-rate}.
 \begin{figure}
   \centering
   \includegraphics[width=.7\textwidth]{figs/success_rate_bar_single_robot.pdf}
-  \caption[Taxas de sucesso e falha pra simulações com um único agente]{Taxas de sucesso e falha por tempo limite excedido ou divergência para o cenário com um único agente.}
+  \caption[Taxas de sucesso e falha para simulações com um único agente]{Taxas de sucesso e falha por tempo limite excedido ou divergência para o cenário com um único agente.}
   \label{fig:exp-single-robot-sucess-rate}
 \end{figure}
 
 Com o objetivo de obter-se o desempenho médio do sistema com um único 
-agente foram colhidos o tempo de mapeamento de cada simulação em que o
+agente foi colhido o tempo de mapeamento de cada simulação em que o
 robô obteve sucesso, esses dados se encontram nas tabelas \ref{tab:single-agent-experiment-tab1} e \ref{tab:single-agent-experiment-tab2} no Apêndice 
 \ref{app:single-agent-data}. A distribuição dos tempos de mapeamento 
 registrados encontra-se ilustrada na Figura \ref{fig:time-coverage-single-agent}, o tempo de mapeamento médio foi de 
@@ -231,7 +230,7 @@ realizações do mapeamento por um único agente.
 
 Durante a realização destes experimentos criou-se a impressão de que agentes com posição inicial longe das extremidades do ambiente obtinham 
 melhor tempo de mapeamento. Para analisar essa hipótese foi feita a Figura \ref{fig:single-agent-initial-pos-and-time}, que relaciona a 
-posição inicial do agente com o tempo de mapeamento através da cor. 
+posição inicial do agente com seu tempo de mapeamento através da cor. 
 
 \begin{figure}
   \centering
@@ -239,11 +238,11 @@ posição inicial do agente com o tempo de mapeamento através da cor.
   \caption[Posição inicial e tempo de mapeamento das simulações com um único agente.]{Posição inicial e tempo de mapeamento das simulações com um único agente. Cada partícula representa uma posição inicial, o tempo é expressado pela sua cor.}
   \label{fig:single-agent-initial-pos-and-time}
 \end{figure}
-A Figura confirma essa tendência por nela é possível notar que a maior parte dos pontos azul claros (representando menor tempo de mapeamento) se 
+A Figura confirma essa tendência pois nela é possível notar que a maior parte dos pontos azul claros (representando menor tempo de mapeamento) se 
 encontram longe das bordas, enquanto há poucos pontos avermelhados (maior tempo de mapeamento) na região central do mapa.
 
 \section{Mapeamento conjunto e descentralizado}
-Esse experimento avalia cenários com mais de um robô desempenhando SLAM 
+Esse experimento avalia o cenário com dois robôs desempenhando SLAM 
 e trocando mapas entre si como mostrado na Seção \ref{sec:seif-map-exchange}. Como tanto o vetor e a matriz de informação 
 quanto as grades de ocupação são compartilhados entre os agentes, esse 
 experimento é dividido em duas partes.
@@ -261,77 +260,159 @@ mínimo de 60 segundos entre duas comunicações consecutivas de um mesmo
 par de robôs. Erros de comunicação ou degeneração de mensagens não são 
 simulados.
 
-
-
 \subsection{Pose inicial conhecida}
 \label{sec:exp-known-initial-pose}
 Além do ganho de redundância, sistemas multiagentes também podem 
 apresentar ganho de eficiência ao dividir a carga de trabalho entre os 
-robôs. Para efeitos de comparação, primeiro foi realizado o mapeamento 
-com apenas um robô; a curva da área coberta pelo tempo é ilustrada na 
-Figura \ref{fig:area-coverage-single-robot}. Logo após o experimento foi repetido no mesmo ambiente com dois e três 
-robôs, as curvas estão ilustradas na Figura \ref{fig:know-initial-pose-area-coverage}.
+robôs. Para analisar o desempenho de mapeamento com dois agentes, 
+foram realizadas diversas simulações variando a posição inicial dos 
+agentes, nos moldes do experimento anterior com um único agente.
+
+Neste experimento foram realizadas 126 simulações das quais em 46 os 
+agentes obtiveram sucesso ao mapear o ambiente sem que a estimação de 
+nenhum divergisse, 22 falharam por tempo limite excedido e 58 
+falharam por erro de estimação (divergência), o comparativo está na 
+Figura \ref{fig:exp-two-robot-sucess-rate}. Os dados das realizações 
+que obtiveram sucesso estão registrados nas tabelas \ref{tab:two-agent-experiment-pos-and-time-tab1}, \ref{tab:two-agent-experiment-pos-and-time-tab2}, \ref{tab:two-agent-experiment-iae-tab1} e \ref{tab:two-agent-experiment-iae-tab2} no Apêndice \ref{app:two-agent-data}.
+
+Constata-se então que houve aumento de falhas 
+tanto por divergência quanto por tempo limite excedido em comparação 
+com o cenário com um único agente. O aumento das falhas por tempo limite 
+excedido pode ser explicado pelo aumento de cenários em que a navegação do 
+ROS fica presa, um problema mais comum em ambientes dinâmicos \cite{zheng2021ros}. Já o aumento de falhas por divergência do filtro ocorre 
+pois a chance de um \emph{ou} outro agente falhar é maior do que a de um único agente.
 
 \begin{figure}
   \centering
-  \includegraphics[width=.6\textwidth]{figs/area_coverage_single_robot.pdf}
-  \caption[Evolução da área coberta por um único robô]{Evolução da área coberta ao longo do tempo por um único robô, 
-  no ambiente representado na Figura \ref{fig:environment} com área total 
-  de 100 $m^2$. O robô iniciou na posição $(2.5, 2.5)$, em relação ao centro do ambiente. Os platôs correspondem a intervalos nos quais o robô está atravessando uma área já mapeada para explorar uma nova fronteira.}
-  \label{fig:area-coverage-single-robot}
+  \includegraphics[width=.7\textwidth]{figs/success_rate_bar_two_agents.pdf}
+  \caption[Taxas de sucesso e falha para simulações com dois agentes]{Taxas de sucesso e falha por tempo limite excedido ou divergência para o cenário com dois agentes.}
+  \label{fig:exp-two-robot-sucess-rate}
+\end{figure}
+
+A distribuição do tempo de mapeamento das simulações com dois agentes se 
+encontra na Figura \ref{fig:time-coverage-two-agents}, o tempo de 
+mapeamento médio foi de 321 segundos com desvio padrão de 62 segundos. 
+Esse tempo representa 75\% do tempo de mapeamento médio de um único 
+agente, mostrado na Figura \ref{fig:time-coverage-single-agent}. A 
+relação das posições iniciais com o tempo de mapeamento pode ser 
+observada na Figura \ref{fig:two-agent-initial-pos-and-time}.  Na Figura \ref{fig:two-agent-path} são também apresentados, como no experimento anterior, 
+os caminhos percorridos pelos robôs em quatro realizações das 
+simulações com dois agentes.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.7\textwidth]{figs/time-coverage_two_agents.pdf}
+  \caption[Distribuição do tempo de mapeamento de dois agentes]{Histograma de distribuição dos tempos de mapeamento das simulações com dois agentes.}
+  \label{fig:time-coverage-two-agents}
 \end{figure}
 
 \begin{figure}
   \centering
-  \begin{subfigure}{0.49\textwidth}
-    \includegraphics[width=\textwidth]{figs/area_coverage_two_robots-with-known-positions.pdf}
-    \caption{Evolução da área coberta ao longo do tempo por dois robôs. 
-    }
-    \label{}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}{0.49\textwidth}
-    \includegraphics[width=\textwidth]{figs/area_coverage_three_robots-with-known-positions.pdf}
-    \caption{Evolução da área coberta ao longo do tempo por três robôs. }
-    \label{}
-  \end{subfigure}
-  \caption[Comparação da evolução das áreas cobertas por dois e três agentes com pose inicial conhecida]{Evolução da área coberta por dois e três agentes com pose inicial conhecida. Os momentos de comunicação e troca de mapas entre os agentes podem ser identificados por saltos verticais nas curvas de área coberta por cada agente.}
-  \label{fig:know-initial-pose-area-coverage}
+  \includegraphics[width=0.7\textwidth]{figs/two-agents/initial_positions_and_time_two_agents.pdf}
+  \caption[Posição inicial e tempo de mapeamento das simulações com dois agentes.]{Posição inicial e tempo de mapeamento das simulações com dois agentes. Cada partícula representa uma posição inicial, o tempo é expressado pela sua cor.}
+  \label{fig:two-agent-initial-pos-and-time}
 \end{figure}
 
-A Tabela \ref{table:multiagent-exploration-know-initial-pose} registra o momento em que todos os agentes 
-dos diferentes sistemas alcançam a marca de 90\% de área mapeada. Como é 
-possível notar, quando houve ganho de eficiência com dois robôs ele não fez o tempo 
-cair pela metade. E, ainda no cenário com três robôs, esse ganho foi negativo; o sistema levou mais tempo que o sistema com um único agente. 
-Isso pode ser explicado por dois motivos: o primeiro é que não há uma 
+\begin{figure}
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{figs/two-agents/robots-path-best-time.pdf} 
+    \caption{Mapeamento médio em 220 segundos}
+    \label{fig:two-agent-path-best}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{figs/two-agents/robots-path-medium-low.pdf} 
+    \caption{Mapeamento médio em 317 segundos}
+    \label{fig:two-agente-path-medium-low}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{figs/two-agents/robots-path-medium-high.pdf} 
+    \caption{Mapeamento médio em 324 segundos}
+    \label{fig:two-agent-path-medium-high}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{figs/two-agents/robots-path-worst.pdf} 
+    \caption{Mapeamento médio em 451 segundos}
+    \label{fig:two-agent-path-worst}
+  \end{subfigure}
+  \caption[Caminhos percorridos durante mapeamento com dois agentes]{Caminhos percorridos em diferentes realizações do mapeamento com dois agentes em que (a) melhor tempo médio de mapeamento; (b) realização com tempo médio levemente inferior ao tempo médio geral; (c) realização com tempo médio levemente 
+  superior ao tempo médio geral; (d) pior tempo de mapeamento. Os caminhos 
+  real e estimado podem aparecer sobrepostos na escala da figura. As estrelas representam os pontos de referência (\textit{landmarks}) do ambiente.}
+  \label{fig:two-agent-path}
+\end{figure}
+
+Embora com o dobro de agentes, o sistema não obteve o dobro do 
+desempenho no tempo de exploração. Isso pode ser explicado por dois motivos: o primeiro é que não há uma 
 política de exploração conjunta acordada entre os agentes; cada um 
 explora o ambiente com base nas fronteiras presentes nos seus mapas 
-individuais sem levar em consideração a posição de seus pares em relação 
+individuais sem levar em consideração a posição de seu par em relação 
 a essas fronteiras; o segundo motivo é que a navegação se torna mais 
 complexa pois agora um agente deve se desviar do outro durante a 
 exploração e também não fazem isso de maneira sincronizada e/ou combinada.
 
-\begin{table}[]
-\center
-\caption{Comparação entre o tempo levado para atingir a marca de 90\% de área coberta, de um ambiente de 100 $m^2$, entre os sistemas de múltiplos agentes e agente único.}
-\label{table:multiagent-exploration-know-initial-pose}
-\begin{tabularx}{\textwidth}{@{}YYY@{}}
-\hline
-Quantidade de agentes & Tempo para 90\% de área coberta (s) & Eficiência em relação a um agente \\ \hline
-1 & 516 & - \\
-2 & 368 & +40.21\% \\
-3 & 600 & -14\% \\ \hline
-\end{tabularx}
-\end{table}
+% a curva da área coberta pelo tempo é ilustrada na 
+% Figura \ref{fig:area-coverage-single-robot}. Logo após o experimento foi repetido no mesmo ambiente com dois e três 
+% robôs, as curvas estão ilustradas na Figura \ref{fig:know-initial-pose-area-coverage}.
 
-Apesar do ganho ficar abaixo do 
-esperado, observando as Figuras \ref{fig:area-coverage-single-robot} e 
-\ref{fig:know-initial-pose-area-coverage} é possível ver que o tempo 
-levado pelo primeiro agente dos sistemas multiagentes para atingir a 
-marca de 90\% de área coberta foi sempre menor que o tempo levado 
-pelo sistema de agente único, com destaque para o sistema de dois agentes 
-no qual o primeiro agente atingiu a marca em menos da metade do tempo 
-do sistema de agente único.
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=.6\textwidth]{figs/area_coverage_single_robot.pdf}
+%   \caption[Evolução da área coberta por um único robô]{Evolução da área coberta ao longo do tempo por um único robô, 
+%   no ambiente representado na Figura \ref{fig:environment} com área total 
+%   de 100 $m^2$. O robô iniciou na posição $(2.5, 2.5)$, em relação ao centro do ambiente. Os platôs correspondem a intervalos nos quais o robô está atravessando uma área já mapeada para explorar uma nova fronteira.}
+%   \label{fig:area-coverage-single-robot}
+% \end{figure}
+
+% \begin{figure}
+%   \centering
+%   \begin{subfigure}{0.49\textwidth}
+%     \includegraphics[width=\textwidth]{figs/area_coverage_two_robots-with-known-positions.pdf}
+%     \caption{Evolução da área coberta ao longo do tempo por dois robôs. 
+%     }
+%     \label{}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}{0.49\textwidth}
+%     \includegraphics[width=\textwidth]{figs/area_coverage_three_robots-with-known-positions.pdf}
+%     \caption{Evolução da área coberta ao longo do tempo por três robôs. }
+%     \label{}
+%   \end{subfigure}
+%   \caption[Comparação da evolução das áreas cobertas por dois e três agentes com pose inicial conhecida]{Evolução da área coberta por dois e três agentes com pose inicial conhecida. Os momentos de comunicação e troca de mapas entre os agentes podem ser identificados por saltos verticais nas curvas de área coberta por cada agente.}
+%   \label{fig:know-initial-pose-area-coverage}
+% \end{figure}
+
+% A Tabela \ref{table:multiagent-exploration-know-initial-pose} registra o momento em que todos os agentes 
+% dos diferentes sistemas alcançam a marca de 90\% de área mapeada. Como é 
+% possível notar, quando houve ganho de eficiência com dois robôs ele não fez o tempo 
+% cair pela metade. E, ainda no cenário com três robôs, esse ganho foi negativo; o sistema levou mais tempo que o sistema com um único agente. 
+% Isso pode ser explicado por dois motivos: o primeiro é que não há uma 
+% política de exploração conjunta acordada entre os agentes; cada um 
+% explora o ambiente com base nas fronteiras presentes nos seus mapas 
+% individuais sem levar em consideração a posição de seus pares em relação 
+% a essas fronteiras; o segundo motivo é que a navegação se torna mais 
+% complexa pois agora um agente deve se desviar do outro durante a 
+% exploração e também não fazem isso de maneira sincronizada e/ou combinada.
+
+% \begin{table}[]
+% \center
+% \caption{Comparação entre o tempo levado para atingir a marca de 90\% de área coberta, de um ambiente de 100 $m^2$, entre os sistemas de múltiplos agentes e agente único.}
+% \label{table:multiagent-exploration-know-initial-pose}
+% \begin{tabularx}{\textwidth}{@{}YYY@{}}
+% \hline
+% Quantidade de agentes & Tempo para 90\% de área coberta (s) & Eficiência em relação a um agente \\ \hline
+% 1 & 516 & - \\
+% 2 & 368 & +40.21\% \\
+% 3 & 600 & -14\% \\ \hline
+% \end{tabularx}
+% \end{table}
+
+% Apesar do ganho ficar abaixo do 
+% esperado, observando as Figuras \ref{fig:area-coverage-single-robot} e 
+% \ref{fig:know-initial-pose-area-coverage} é possível ver que o tempo 
+% levado pelo primeiro agente dos sistemas multiagentes para atingir a 
+% marca de 90\% de área coberta foi sempre menor que o tempo levado 
+% pelo sistema de agente único, com destaque para o sistema de dois agentes 
+% no qual o primeiro agente atingiu a marca em menos da metade do tempo 
+% do sistema de agente único.
 
 
 \subsection{Pose inicial desconhecida}
@@ -374,8 +455,10 @@ robôs resultou em troca dos mapas, pois muitas vezes eles não conseguiram
 estimar a transformação.
 
 Este experimento também teve que ser repetido mais de uma vez, pois em 
-algumas execuções os robôs estimavam a transformação errada, incorporando 
+muitas execuções os robôs estimavam a transformação errada, incorporando 
 a informação do outro robô de maneira errada e provocando divergência do 
 filtro. Desse modo, a técnica de registro de nuvem de pontos utilizada 
-não se mostrou robusta para estimar a transformação entre os mapas dos robôs.
+não se mostrou robusta para estimar a transformação entre os mapas dos robôs. Por conta da alta taxa de falha na estimação da transformação 
+relativa, que leva a divergência, não foram realizadas simulações 
+repetidas neste experimento.
 

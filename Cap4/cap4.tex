@@ -10,7 +10,7 @@ sem a necessidade de adquirir licenças, esse fato somado à
 disponibilização integral da implementação realizada neste trabalho\footnote{Implementação disponível em: \url{https://github.com/wvmcastro/slam}} potencializa a 
 possibilidade de reuso e melhoramento deste por outros. 
 
-Outra contribuição são as deduções e ilustrações que 
+Outras contribuições são as deduções e ilustrações que 
 foram produzidas para preencher lacunas dos livros e artigos 
 consultados ao longo do desenvolvimento deste trabalho. Sendo as mais importantes: (I) A 
 Seção \ref{sec:ekf-slam-landmark-insertion} que apresenta dedução da 
@@ -39,7 +39,9 @@ um sistema com mais de um robô, como discutido na Seção \ref{sec:exp-known-in
 no cenário onde a pose inicial dos agentes não é fornecida como debatido na Seção \ref{sec:exp-unknown-initial-pose}. 
   \item \textbf{Recuperação após falsa associação}: Outro aspecto que merece ser contemplado num trabalho futuro, é a recuperação após uma falsa associação de medida e \textit{landamark} e/ou a 
 utilização de uma técnica de associação de dados mais robusta. Apesar da 
-lista de \textit{landmarks} provisórias ter evitado esse problema, notou-se que as \textit{landmarks} demoram a ser inicializadas no filtro, perdendo-se informação.
+lista de \textit{landmarks} provisórias ter evitado esse problema, não foi 
+suficiente para resolvê-lo, como mostram as taxas de falha por divergência das 
+simulações apresentadas nos experimentos das Seções \ref{sec:exp-single-robot}  e \ref{sec:exp-known-initial-pose}.
 \end{itemize}
 
 
