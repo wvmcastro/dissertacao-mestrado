@@ -154,6 +154,94 @@ Economia em relação ao EKF-SLAM\footnotemark{} \\
 \end{figure}
 
 
+\section{Desempenho de mapeamento de um único agente}
+Para avaliar o desempenho de mapeamento de dois ou mais agentes 
+resolvendo o problema SLAM de maneira distribuída e descentralizada, 
+primeiro é necessário entender o desempenho de um único agente 
+resolvendo a mesma tarefa para assim possuirmos uma base de comparação.
+
+Para isso um único agente foi submetido, repetidamente, à tarefa de mapeamento do ambiente apresentado na Figura \ref{fig:environment}. 
+Cada uma dessas simulações poderia assumir um dos seguintes resultados:
+\begin{enumerate}
+  \item \textbf{Sucesso}: o robô conseguiu mapear 90\% ou mais da área sem 
+  divergência na estimação de sua posição.
+  \item \textbf{Falha por tempo limite excedido}: O robô não conseguiu mapear ao 
+  menos 90\% da área antes do limite de tempo (foram dados 17 
+  minutos).
+  \item \textbf{Falha por divergência}: Quando ao longo da exploração a posição estimada pelo SEIF diferiu em mais de um metro da posição real do robô.
+\end{enumerate}
+
+Para medir o desempenho de mapeamento do robô, 
+computa-se a área coberta 
+por ele ao longo do tempo. A área coberta é definida como a soma das 
+áreas de todas as células da grade de ocupação que possuem probabilidade 
+de ocupação diferente de 50\%.
+
+No total foram realizadas 111 simulações variando-se aleatoriamente (seguindo uma distribuição uniforme) a posição inicial do agente, em 60 foi obtido 
+sucesso, 9 falharam por tempo limite excedido e 42 falharam por 
+divergência. O comparativo pode ser observado na Figura \ref{fig:exp-single-robot-sucess-rate}.
+\begin{figure}
+  \centering
+  \includegraphics[width=.7\textwidth]{figs/success_rate_bar_single_robot.pdf}
+  \caption[Taxas de sucesso e falha pra simulações com um único agente]{Taxas de sucesso e falha por tempo limite excedido ou divergência para o cenário com um único agente.}
+  \label{fig:exp-single-robot-sucess-rate}
+\end{figure}
+
+Com o objetivo de obter-se o desempenho médio do sistema com um único 
+agente foram colhidos o tempo de mapeamento de cada simulação em que o
+robô obteve sucesso, esses dados se encontram nas tabelas \ref{tab:single-agent-experiment-tab1} e \ref{tab:single-agent-experiment-tab2} no Apêndice 
+\ref{app:single-agent-data}. A distribuição dos tempos de mapeamento 
+registrados encontra-se ilustrada na Figura \ref{fig:time-coverage-single-agent}, o tempo de mapeamento médio foi de 
+429 segundos com desvio padrão de 58 segundos. A Figura \ref{fig:single-agent-path} apresenta o caminho percorrido por quatro 
+realizações do mapeamento por um único agente.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.7\textwidth]{figs/time-coverage-single-agent.pdf}
+  \caption[Distribuição do tempo de mapeamento de um único agente]{Histograma de distribuição dos tempos de mapeamento das simulações com um único agente.}
+  \label{fig:time-coverage-single-agent}
+\end{figure}
+
+\begin{figure}
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{figs/single-agent/rb1-path-best-time.pdf} 
+    \caption{Mapeamento em 302 segundos}
+    \label{fig:single-agent-path-best}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{figs/single-agent/rb1-path-medium-low.pdf} 
+    \caption{Mapeamento em 427 segundos}
+    \label{fig:single-agente-path-medium-low}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{figs/single-agent/rb1-path-medium-high.pdf} 
+    \caption{Mapeamento em 429 segundos}
+    \label{fig:single-agent-path-medium-high}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{figs/single-agent/rb1-path-worst.pdf} 
+    \caption{Mapeamento em 551 segundos}
+    \label{fig:single-agent-path-worst}
+  \end{subfigure}
+  \caption[Caminhos percorridos durante mapeamento com um único agente]{Caminhos percorridos em diferentes realizações do mapeamento com um único agente em que (a) melhor tempo de mapeamento; (b) realização com tempo levemente inferior ao tempo médio; (c) realização com tempo levemente 
+  superior ao tempo médio; (d) pior tempo de mapeamento. Os caminhos 
+  real e estimado aparecem sobrepostos na escala da figura. As estrelas representam os pontos de referência (\textit{landmarks}) do ambiente.}
+  \label{fig:single-agent-path}
+\end{figure}
+
+Durante a realização destes experimentos criou-se a impressão de que agentes com posição inicial longe das extremidades do ambiente obtinham 
+melhor tempo de mapeamento. Para analisar essa hipótese foi feita a Figura \ref{fig:single-agent-initial-pos-and-time}, que relaciona a 
+posição inicial do agente com o tempo de mapeamento através da cor. 
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.7\textwidth]{figs/single-agent/initial_positions_and_time_single_agent.pdf}
+  \caption[Posição inicial e tempo de mapeamento das simulações com um único agente.]{Posição inicial e tempo de mapeamento das simulações com um único agente. Cada partícula representa uma posição inicial, o tempo é expressado pela sua cor.}
+  \label{fig:single-agent-initial-pos-and-time}
+\end{figure}
+A Figura confirma essa tendência por nela é possível notar que a maior parte dos pontos azul claros (representando menor tempo de mapeamento) se 
+encontram longe das bordas, enquanto há poucos pontos avermelhados (maior tempo de mapeamento) na região central do mapa.
+
 \section{Mapeamento conjunto e descentralizado}
 Esse experimento avalia cenários com mais de um robô desempenhando SLAM 
 e trocando mapas entre si como mostrado na Seção \ref{sec:seif-map-exchange}. Como tanto o vetor e a matriz de informação 
@@ -173,11 +261,7 @@ mínimo de 60 segundos entre duas comunicações consecutivas de um mesmo
 par de robôs. Erros de comunicação ou degeneração de mensagens não são 
 simulados.
 
-Para medir o desempenho de mapeamento dos robôs, 
-computa-se a área coberta 
-por eles ao longo do tempo. A área coberta é definida como a soma das 
-áreas de todas as células da grade de ocupação que possuem probabilidade 
-de ocupação diferente de 50\%.
+
 
 \subsection{Pose inicial conhecida}
 \label{sec:exp-known-initial-pose}
