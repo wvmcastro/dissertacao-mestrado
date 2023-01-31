@@ -166,7 +166,7 @@ Cada uma dessas simulações poderia assumir um dos seguintes resultados:
   divergência na estimação de sua posição dentro de um tempo limite estipulado.
   \item \textbf{Falha por tempo limite excedido}: O robô não conseguiu mapear ao 
   menos 90\% da área antes do limite de tempo (foram dados 17 
-  minutos)\footnote{Esse tempo foi escolhido após sucessivas observações do robô desempenhando SLAM no ambiente utilizado, em nenhuma dessas observações o robô levou mais do que 10 minutos; então foi definido o valor de 17 minutos considerando-se uma margem de segurança}.
+  minutos)\footnote{Esse tempo foi escolhido após sucessivas observações do robô desempenhando SLAM no ambiente utilizado; em nenhuma dessas observações o robô levou mais do que 10 minutos; então foi definido o valor de 17 minutos considerando-se uma margem de segurança}.
   \item \textbf{Falha por divergência}: Quando ao longo da exploração a posição estimada pelo SEIF diferiu em mais de um metro da posição real do robô.
 \end{enumerate}
 
@@ -176,7 +176,7 @@ por ele ao longo do tempo. A área coberta é definida como a soma das
 áreas de todas as células da grade de ocupação que possuem probabilidade 
 de ocupação diferente de 50\%.
 
-No total foram realizadas 111 (cento e onze\footnote{O objetivo era realizar ao menos 100 simulações, porém, como as simulações foram executadas em \textit{loop} e não eram supervisionadas em alguns períodos, acabou-se executando algumas extras até que fossem paradas; resolvemos então utilizar todos os dados disponíveis.}) simulações variando-se aleatoriamente (seguindo uma distribuição uniforme) a posição inicial do agente. Em 60 foi obtido 
+No total foram realizadas 111 (cento e onze\footnote{O objetivo era realizar ao menos 100 simulações, pois de acordo com \citeonline{paula2014metodo} é um bom número base de repetições, sendo que mais repetições podem ser executadas de conforme a necessidade imposta pelo valor de desvio-padrão desejado do estimador. Porém, como as simulações foram executadas em \textit{loop} e não eram supervisionadas em alguns períodos, acabou-se executando algumas extras até que fossem paradas; resolvemos então utilizar todos os dados disponíveis.}) simulações variando-se aleatoriamente (seguindo uma distribuição uniforme) a posição inicial do agente. Em 60 foi obtido 
 sucesso, 9 falharam por tempo limite excedido e 42 falharam por 
 divergência. O comparativo pode ser observado na Figura \ref{fig:exp-single-robot-sucess-rate}.
 \begin{figure}
@@ -268,7 +268,7 @@ robôs. Para analisar o desempenho de mapeamento com dois agentes,
 foram realizadas diversas simulações variando a posição inicial dos 
 agentes, nos moldes do experimento anterior com um único agente.
 
-Neste experimento foram realizadas 126 simulações das quais em 46 os 
+Neste experimento foram realizadas 126 simulações, pois assim como no experimento anterior o objetivo era realizar aos menos 100 repetições conforme os passos apresentados em \cite[p.~52]{paula2014metodo}; destas, em 46 os 
 agentes obtiveram sucesso ao mapear o ambiente sem que a estimação de 
 nenhum divergisse, 22 falharam por tempo limite excedido e 58 
 falharam por erro de estimação (divergência), o comparativo está na 
@@ -278,8 +278,8 @@ que obtiveram sucesso estão registrados nas tabelas \ref{tab:two-agent-experime
 Constata-se então que houve aumento de falhas 
 tanto por divergência quanto por tempo limite excedido em comparação 
 com o cenário com um único agente. O aumento das falhas por tempo limite 
-excedido pode ser explicado pelo aumento de cenários em que a navegação do 
-ROS fica presa, isso ocorre quando um robô fica a uma distância de um obstáculo abaixo de um limiar de segurança e para de se movimentar para evitar uma colisão, esse problema é mais comum em ambientes dinâmicos \cite{zheng2021ros}. Já o aumento de falhas por divergência do filtro ocorre 
+excedido pode ser explicado pelo aumento de cenários em que a biblioteca de navegação do 
+ROS fica presa. Isso ocorre quando um robô fica a uma distância de um obstáculo abaixo de um limiar de segurança e para de se movimentar para evitar uma colisão, sendo que esse problema é mais comum em ambientes dinâmicos \cite{zheng2021ros}. Já o aumento de falhas por divergência do filtro ocorre 
 pois a chance de um \emph{ou} outro agente falhar é maior do que a de um único agente.
 
 \begin{figure}
@@ -289,7 +289,7 @@ pois a chance de um \emph{ou} outro agente falhar é maior do que a de um único
   \label{fig:exp-two-robot-sucess-rate}
 \end{figure}
 
-A distribuição do tempo de mapeamento das simulações bem sucedidas com dois agentes se 
+A distribuição do tempo de mapeamento das simulações bem-sucedidas com dois agentes se 
 encontra na Figura \ref{fig:time-coverage-two-agents}; o tempo de 
 mapeamento médio foi de 321 segundos com desvio padrão de 62 segundos. 
 Esse tempo representa 75\% do tempo de mapeamento médio de um único 
@@ -346,7 +346,7 @@ política de exploração conjunta acordada entre os agentes; cada um
 explora o ambiente com base nas fronteiras presentes nos seus mapas 
 individuais sem levar em consideração a posição de seu par em relação 
 a essas fronteiras; o segundo motivo é que a navegação se torna mais 
-complexa pois, agora um agente deve se desviar do outro durante a 
+complexa, pois agora um agente deve se desviar do outro durante a 
 exploração e também não fazem isso de maneira sincronizada e/ou combinada.
 
 % a curva da área coberta pelo tempo é ilustrada na 

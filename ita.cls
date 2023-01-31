@@ -193,7 +193,7 @@
 
 %==============================================================================
 %%% ABNTeX ...
-\RequirePackage[alf,abnt-emphasize=bf,abnt-etal-cite=2,abnt-etal-list=0,abnt-etal-text=it]{abntcite}
+\RequirePackage[alf,abnt-emphasize=bf,abnt-etal-cite=2,abnt-etal-list=0,abnt-etal-text=it]{abntex2cite}
 %\RequirePackage{natbib}
 
 %==============================================================================
