@@ -8,25 +8,29 @@ mediante comparação da estimativa
 com a odometria das rodas. Além disso, compara-se a estimativa do SEIF 
 variando a cardinalidade do conjunto de \textit{landmarks} 
 ativas $\{\bupvec{m}{+}\}$. O critério de comparação utilizado foi o 
-Erro Absoluto Integral (IAE) (Equação \ref{eq:iae-error}) da posição estimada $\bvec{\hat{x}}$, em 
+Integral do Erro Absoluto (IAE) (Equação \ref{eq:iae-error}) da posição estimada $\bvec{\hat{x}}$, em 
 relação à pose real $\bvec{x}$ colhida do simulador. Para repetir o experimento com outro tamanho de $\{\bupvec{m}{+}\}$ foram gravadas a sequência de entradas $\bsubvec{u}{1:t}$ 
 (posição angular das rodas) e a sequência de leituras $\bsubvec{y}{1:t}$ 
 do sensor LiDAR.
 \begin{equation}
-  \IAE(\bvec{\hat{x}}, \bvec{x}) = \sum{
-    \left\Vert \bsubvec{\hat{x}}{i} - \bsubvec{x}{i} \right\Vert_2
+  \IAE(\bvec{\hat{x}}, \bvec{x}) = \int{
+    \sqrt{(\hat{x} - x)^2 + (\hat{y} - y)^2} \, \partial t
   }
   \label{eq:iae-error}
 \end{equation}
+em que: \begin{itemize}
+  \item $(x, y)$ são as componentes de posição do estado real $\bvec{x}$ do agente
+  \item $(\hat{x}, \hat{y})$ são as componentes de posição do estado estimado $\bvec{\hat{x}}$
+\end{itemize}
 
 A Tabela \ref{table:iae} lista os valores obtidos para o IAE e a Figura \ref{fig:iae} ilustra a evolução 
 temporal do erro da estimativa de posição do robô. Além 
-da posição, também foi avaliado o erro na estimação da 
+da posição, também foi avaliada a evolução do erro na estimação da 
 orientação, ilustrado na Figura \ref{fig:theta-error}. Em ambas as 
 Figuras, os valores obtidos pelo SEIF são mostrados separadamente, pois aparecem sobrepostos na escala do erro da odometria.
 
 \begin{table}[]
-\caption{Erro Integral Absoluto da trajetória do robô para diferentes estimadores}
+\caption{Integral do Erro Absoluto da trajetória do robô para diferentes estimadores}
 \label{table:iae}
 \center
 \begin{tabular}{cc}
@@ -176,7 +180,7 @@ por ele ao longo do tempo. A área coberta é definida como a soma das
 áreas de todas as células da grade de ocupação que possuem probabilidade 
 de ocupação diferente de 50\%.
 
-No total foram realizadas 111 (cento e onze\footnote{O objetivo era realizar ao menos 100 simulações, pois de acordo com \citeonline{paula2014metodo} é um bom número base de repetições, sendo que mais repetições podem ser executadas de conforme a necessidade imposta pelo valor de desvio-padrão desejado do estimador. Porém, como as simulações foram executadas em \textit{loop} e não eram supervisionadas em alguns períodos, acabou-se executando algumas extras até que fossem paradas; resolvemos então utilizar todos os dados disponíveis.}) simulações variando-se aleatoriamente (seguindo uma distribuição uniforme) a posição inicial do agente. Em 60 foi obtido 
+No total foram realizadas 111 (cento e onze\footnote{O objetivo era realizar ao menos 100 simulações, pois de acordo com \citeonline{paula2014metodo} é uma boa escolha inicial de repetições, sendo que mais repetições podem ser executadas conforme o desvio-padrão desejado do estimador. Porém, como as simulações foram executadas em \textit{loop} e não eram supervisionadas em alguns períodos, acabou-se executando algumas extras até que fossem paradas; resolvemos então utilizar todos os dados disponíveis.}) simulações variando-se aleatoriamente (seguindo uma distribuição uniforme) a posição inicial do agente. Em 60 foi obtido 
 sucesso, 9 falharam por tempo limite excedido e 42 falharam por 
 divergência. O comparativo pode ser observado na Figura \ref{fig:exp-single-robot-sucess-rate}.
 \begin{figure}
@@ -268,7 +272,7 @@ robôs. Para analisar o desempenho de mapeamento com dois agentes,
 foram realizadas diversas simulações variando a posição inicial dos 
 agentes, nos moldes do experimento anterior com um único agente.
 
-Neste experimento foram realizadas 126 simulações, pois assim como no experimento anterior o objetivo era realizar aos menos 100 repetições conforme os passos apresentados em \cite[p.~52]{paula2014metodo}; destas, em 46 os 
+Neste experimento foram realizadas 126 simulações, pois, assim como no experimento anterior, o objetivo era realizar aos menos 100 repetições conforme os passos apresentados em \cite[p.~52]{paula2014metodo}; destas, em 46 os 
 agentes obtiveram sucesso ao mapear o ambiente sem que a estimação de 
 nenhum divergisse, 22 falharam por tempo limite excedido e 58 
 falharam por erro de estimação (divergência), o comparativo está na 
