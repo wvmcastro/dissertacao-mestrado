@@ -10,7 +10,7 @@ GPS não funciona adequadamente, como debaixo d'água,
 em minas subterrâneas e dentro de construções. Este problema é denominado SLAM e resolvê-lo implica em empoderar soluções de robótica móvel, 
 que atuem nesses cenários, com aplicações reais e comerciais.
 
-O problema de Mapeamento e Localização Simultâneos, conhecido pela sigla SLAM por conta do termo em inglês \textit{Simultaneous Localization and Mapping}, pergunta se é possível para um robô móvel ser colocado em um ambiente desconhecido a priori e incrementalmente construir um mapa deste ambiente enquanto simultaneamente se localiza neste mapa. Ou seja, tanto a trajetória da plataforma móvel quanto a localização das características do mapa (também conhecidas por \textit{landmarks} ou ainda, pontos de referência) são estimadas em tempo real sem a necessidade de nenhum conhecimento a priori de suas localizações \cite{durrant2006simultaneous}, ou infra estrutura de localização prévia, como GPS.
+O problema de Mapeamento e Localização Simultâneos, conhecido pela sigla SLAM por conta do termo em inglês \textit{Simultaneous Localization and Mapping}, pergunta se é possível para um robô móvel ser colocado em um ambiente desconhecido a priori e incrementalmente construir um mapa deste ambiente enquanto simultaneamente se localiza neste mapa. Ou seja, tanto a trajetória da plataforma móvel quanto a localização das características do mapa (também conhecidas por \textit{landmarks} ou, ainda, pontos de referência) são estimadas em tempo real sem a necessidade de nenhum conhecimento a priori de suas localizações \cite{durrant2006simultaneous}, ou infra estrutura de localização prévia, como GPS.
 
 SLAM também já foi conhecido como Mapeamento e Localização Concorrentes (CML, do inglês \textit{Concurrent Mapping and Localization}), porém este termo caiu em desuso a partir de 1995 quando o termo SLAM foi cunhando por \citeonline{durrant1996localization} no Simpósio Internacional de Pesquisa em Robótica, ISSR, onde originalmente era chamado \textit{Simultaneous Localization and Map Building}. A solução do problema SLAM é fundamental para atingir a robótica móvel autônoma e independente de operadores \cite{durrant2006simultaneous}. Entretanto resolver o problema de localização e mapeamento simultâneos, apesar de solucionado, não é uma tarefa trivial tanto do ponto de vista teórico como do ponto de vista da implementação \cite{durrant1996localization}.
 
@@ -223,7 +223,7 @@ responsabilidades força que as alterações no sistema sejam pontuais,
 tornando mais fácil o isolamento e identificação de erros decorrentes 
 dessas alterações.
 
-É comum agrupar esses módulos em dois macro grupos denominados 
+É comum agrupar esses módulos em dois macrogrupos denominados 
 \textit{back-end} e \textit{front-end}. O \textit{front-end} abstrai dados de 
 sensores em modelos úteis para a estimação e também é onde geralmente são colocados os módulos de comportamento de alto nível como a exploração, enquanto o \textit{back-end} utiliza 
 o dado abstrato produzido pelo \textit{front-end} para estimar o estado do 
@@ -259,9 +259,9 @@ a estimação de posição relativa entre os agentes. Tanto esse cálculo
 quanto a troca de mapas do \textit{back-end} são concentrados no 
 Capítulo \ref{ch:distributed-slam} por comporem a característica fundamental de 
 sistemas multiagentes. No Capítulo \ref{ch:methodology} são apresentados 
-o ambinete e o robô utilizados nas investigações e também é 
+o ambiente e o robô utilizados nas investigações e também é 
 disponibilizado um apontamento para a implementação.
 
 Por fim, o Capítulo \ref{ch:experiments-and-results} avalia e discute o sistema desenvolvido através de 
-experimentos preliminares e simulações sistemáticas no ambiente simulado. O Capítulo \ref{ch:conclusion}, a Conclusão, sumariza 
+experimentos no ambiente simulado. O Capítulo \ref{ch:conclusion}, a Conclusão, sumariza 
 os resultados, elenca as contribuições deste trabalho e sugere melhorias para trabalhos futuros.

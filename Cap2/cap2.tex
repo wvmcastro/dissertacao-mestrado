@@ -11,8 +11,8 @@ pose do robô, no instante $t$, é definida como:
   \end{bmatrix}^T
   \label{eq:robot-pose}
 \end{equation}
-em que $\phi$ é o ângulo do eixo $\hat{x}_r$, do sistema de coordenadas móvel 
-do robô, com o eixo $\hat{x}$ do sistema de coordenadas estático $\{s\}$. E $(x, y)$ é origem do sistema de coordenadas do robô, no sistema estático.
+em que $\phi$ é o ângulo do eixo $\hat{x}_r$ do sistema de coordenadas móvel 
+do robô com o eixo $\hat{x}$ do sistema de coordenadas estático $\{s\}$ e $(x, y)$ é a origem do sistema de coordenadas do robô representada no sistema estático.
 \begin{figure}[h]
   \centering
   \includestandalone[width=0.54\textwidth]{figs/diff-drive}
@@ -39,7 +39,7 @@ $\bsubvec{u}{t}$ é composta pelos deslocamentos angulares, $u_t^L$ e $u_t^R$, d
       \factor \parentheses{\sin(\phi_{t-1} + \alpha_t) - \sin(\phi_{t-1})} 
       \\
       \factor \parentheses{-\cos(\phi_{t-1} + \alpha_t) + \cos(\phi_{t-1})}
-    \end{bmatrix}, \text{Se } u_t^L \neq u_t^R \\ 
+    \end{bmatrix} \text{se } u_t^L \neq u_t^R \\ 
     \\
     \renewcommand{\arraystretch}{1.1}
     \begin{bmatrix}
@@ -48,13 +48,13 @@ $\bsubvec{u}{t}$ é composta pelos deslocamentos angulares, $u_t^L$ e $u_t^R$, d
       r\cdot u_t^R \cos(\phi_{t-1}) 
       \\
       r\cdot u_t^R \sin(\phi_{t-1}) 
-    \end{bmatrix}, \text{Caso contrário}
+    \end{bmatrix} \text{caso contrário}
   \end{cases}
 \end{aligned}
 \label{eq:motion-model}
 \end{equation}
 \renewcommand{\arraystretch}{1}
-Onde:
+em que:
 \begin{equation}
   \alpha_t = \dfrac{r}{2d} \parentheses{u_t^L - u_t^R}
 \end{equation}
@@ -70,14 +70,14 @@ mais adiante. O jacobiano do modelo \robotModel{} está na Equação
       0 & 0 & 0 \\
       \factor \parentheses{\cos(\phi_{t-1} + \alpha_{t-1}) - \cos(\phi_{t-1})} & 0 & 0 \\
       \factor \parentheses{\sin(\phi_{t-1} + \alpha_{t-1}) - \sin(\phi_{t-1})} & 0 & 0  
-    \end{bmatrix}, \text{Se } u_t^L \neq u_t^R \\
+    \end{bmatrix} \text{se } u_t^L \neq u_t^R \\
     \\
     \renewcommand{\arraystretch}{1}
     \begin{bmatrix}
       0 & 0 & 0 \\
       -r\cdot u_t^R \sin(\phi_{t-1}) & 0 & 0 \\
       r\cdot u_t^R \cos(\phi_{t-1}) & 0 & 0  
-    \end{bmatrix}, \text{Caso contrário}
+    \end{bmatrix} \text{caso contrário}
   \end{cases}
   \label{eq:motion-model-jacobian}
 \end{equation}

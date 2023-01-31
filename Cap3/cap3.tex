@@ -26,7 +26,7 @@ modela a transição de estado do sistema a partir do estado anterior e da entra
 Como o modelo do sistema \EKFSystemModel{}, e o modelo de medida \measurementModel{} não são exatos, suas incertezas e erros de modelagem são aproximados por ruídos gaussianos $\mb{\epsilon}_t \sim \normal{\bvec{0}}{\bsubvec{R}{t}}$ e $\mb{\delta}_t \sim \normal{\bvec{0}}{\bsubvec{Q}{t}}$. Quando \EKFSystemModel{} e/ou \measurementModel{} não são lineares, o EKF pode ser utilizado para estimar o estado 
 do sistema. 
 
-As Equações de \ref{eq:ekf-prediction} até \ref{eq:ekf-estimate-error-covariance} definem o EKF \footnote{O leitor pode estanhar a Equação \ref{eq:ekf-estimate-error-covariance} do erro da estimativa. Normalmente ela é escrita na forma $\cov{t} = (\bvec{I} - \bsubvec{K}{t} \bsubvec{H}{t}) \predcov{t}$, porém de acordo com \citeonline[p.~ 73]{lewis2017optimal}, a forma em \ref{eq:ekf-estimate-error-covariance} é uma alternativa melhor na presença de erros de arredondamento, e é frequentemente utilizada em implementações de software.} para o sistema não linear acima. Sendo $\bsubvec{G}{t}$ o jacobiano do modelo do sistema no estado estimado atualizado prévio $\mean{t-1}$ e $\bsubvec{H}{t}$ é o jacobiano do modelo de medida no estado estimado predito $\predmean{t}$.
+As Equações de \ref{eq:ekf-prediction} até \ref{eq:ekf-estimate-error-covariance} definem o EKF \footnote{O leitor pode estranhar a Equação \ref{eq:ekf-estimate-error-covariance}. Normalmente ela é escrita na forma $\cov{t} = (\bvec{I} - \bsubvec{K}{t} \bsubvec{H}{t}) \predcov{t}$, porém, de acordo com \citeonline[p.~ 73]{lewis2017optimal}, a forma em \ref{eq:ekf-estimate-error-covariance} é uma alternativa melhor na presença de erros de arredondamento e é frequentemente utilizada em implementações de software.} para o sistema não linear acima. Sendo $\bsubvec{G}{t}$ o jacobiano do modelo do sistema no estado estimado atualizado prévio $\mean{t-1}$ e $\bsubvec{H}{t}$ é o jacobiano do modelo de medida no estado estimado predito $\predmean{t}$.
 \begin{align}
   \predmean{t} &= \mb{g}(\mean{t-1}, \bsubvec{u}{t})
   \label{eq:ekf-prediction}\\
@@ -43,7 +43,7 @@ As Equações de \ref{eq:ekf-prediction} até \ref{eq:ekf-estimate-error-covaria
   \cov{t} &= \predcov{t} - \bsubvec{K}{t}\bsubvec{Z}{t}\bsubvecT{K}{t}
   \label{eq:ekf-estimate-error-covariance}
 \end{align}
-Em que: 
+em que: 
 \begin{itemize}
   \item $\predcov{t}$ é a matriz de covariância do estado predito
   \item $\bsubvec{z}{t}$ é o vetor de inovação
@@ -57,7 +57,7 @@ direta das Equações acima. São necessárias algumas alterações, pois em SLA
 \section{EKF-SLAM}
 Para aplicar o EKF na solução de SLAM, é necessário entender 
 como o vetor de estados $\bvec{x}$ é composto (aqui o subíndice $t$ é omitido, pois não é importante para esta discussão). Como tanto a pose do 
-robô, quanto o mapa são estimados, o vetor de estados é composto por ambos como apresentado na Equação \ref{eq:slam-state-vector}.
+robô quanto o mapa são estimados, o vetor de estados é composto por ambos como apresentado na Equação \ref{eq:slam-state-vector}.
 \begin{equation}
   \bvec{x} = \begin{bmatrix}
     \bsubvec{x}{\mathrm{r}} \\
@@ -293,7 +293,7 @@ covariância do sistema antes da inserção da nova \textit{landmark},
 concatenadas as covariâncias cruzadas $\cov{t} \bvec{F}_X^T$ e $\bvec{F}_X \cov{t}$, e a covariância $\bvec{F}_X \cov{t} \bvec{F}_X^T + \bvec{F}_Y 
 \bvec{Q} \bvec{F}_Y^T$ da nova \textit{landmark} inserida no mapa. 
 
-Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-measurement-model-jacobian-state-part} é esparso; logo, a complexidade de $\cov{t}\bvecT{F}_X$ pode ser reduzida de $\bigO{n^2}$ para $\bigO{n}$ se as computações envolvendo produtos com o elemento nulo forem ignoradas. Portanto a operação de inserção de \textit{landmark} tem custo $\bigO{n}$. A Figura \ref{fig:ekf-slam-landmark-insertion} mostra o vetor de média do estado e a matriz de covariância com as novas inserções destacadas.
+Vale notar que o jacobiano $\bvec{F}_X$ descrito na Equação \ref{eq:inverse-measurement-model-jacobian-state-part} é esparso; logo, a complexidade de $\cov{t}\bvecT{F}_X$ pode ser reduzida de $\bigO{n^2}$ para $\bigO{n}$ se as computações envolvendo produtos com o elemento nulo forem ignoradas. Portanto, a operação de inserção de \textit{landmark} tem custo $\bigO{n}$. A Figura \ref{fig:ekf-slam-landmark-insertion} mostra o vetor de média do estado e a matriz de covariância com as novas inserções destacadas.
 
 \begin{figure}[h]
   \centering
@@ -374,7 +374,7 @@ resultando em alta correlação.
 
 \begin{figure}
   \includegraphics[width=.95\textwidth]{figs/seif-motivation.png}
-  \caption[Comparação entre a matriz de covariância e a matriz de informação se um sistema com 50 \textit{landmarks}]{Comparação entre a matriz de covariância e a matriz de informação se um sistema com 50 \textit{landmarks}. À esquerda mapa de \textit{landmarks} do sistema, ao centro a matriz de covariância do EKF-SLAM e à direita a matriz de informação. Retirado de \citeonline{thrun2004simultaneousbook}.} 
+  \caption[Comparação entre a matriz de covariância e a matriz de informação se um sistema com 50 \textit{landmarks}]{Comparação entre a matriz de covariância e a matriz de informação de um sistema com 50 \textit{landmarks}. À esquerda, mapa de \textit{landmarks} do sistema; ao centro, a matriz de covariância do EKF-SLAM e, à direita, a matriz de informação. Retirado de \citeonline{thrun2004simultaneousbook}.} 
   \label{fig:cov-and-info-matrix-comparison}
 \end{figure}
 
@@ -435,11 +435,11 @@ Embora o conceito dos conjuntos de \textit{landmarks} ativas e passivas
 seja introduzido por \citeonline{thrun2004simultaneous}, não é dada uma 
 descrição detalhada de política para construir e manter esses conjuntos 
 ao longo do tempo. O único trabalho encontrado que descreve uma 
-política para esses conjuntos consiste em uma proposta mais recente do 
+política para esses conjuntos consiste em uma proposta do 
 SEIF denotada Filtro de Informação Estendido Exato (ESEIF) \cite{walter2007exactly}.
 
-No entanto, neste trabalho é implementada uma política diferente de \citeonline{walter2007exactly}, aqui o conjunto $\bsubvec{m}{t}^+$ contém as $k$ últimas \textit{landmarks} 
-observadas até o instante $t$, onde $k$ é a cardinalidade do conjunto. As 
+No entanto, neste trabalho é implementada uma política diferente de \citeonline{walter2007exactly}; aqui o conjunto $\bsubvec{m}{t}^+$ contém as $k$ últimas \textit{landmarks} 
+observadas até o instante $t$, em que $k$ é a cardinalidade do conjunto. As 
 \textit{landmarks} vão entrando e saindo desse conjunto conforme o robô 
 navega no ambiente e novas \textit{landmarks} vão sendo observadas enquanto outras deixam de sê-lo, conforme exemplo na Tabela \ref{tab:active-landmarks-buffer}.
 
@@ -484,9 +484,9 @@ tempo constante de atualização e predição.
 \newcommand{\lambdatvalue}{\bsubvecT{\Psi}{t}\infom{t-1} + \bsubvecT{\Psi}{t}\infom{t-1}\bsubvec{\Psi}{t} + \infom{t-1}\bsubvec{\Psi}{t}}
 \newcommand{\predXiTValue}{\parentheses{\mb{\lambda}_t - \mb{\kappa}_t}\mean{t-1} + \infov{t-1} + \predinfom{t}\bsubvecT{M}{x_\mathrm{r}} \mb{\delta}_{r,t}}
 \newcommand{\predmeanTValue}{\mean{t-1} + \bsubvecT{M}{x_\mathrm{r}} \mb{\delta}_{r,t}}
-As Seções que se seguem derivam as equações do passo de predição do SEIF-SLAM a partir das equações de predição do EIF, \ref{eq:eif-info-matrix-prediction}, \ref{eq:eif-info-vector-prediction} e \ref{eq:eif-mean-prediction}. A esparsidade da matriz de informação é 
+As Seções que se seguem derivam as equações do passo de predição do SEIF-SLAM a partir das equações \ref{eq:eif-info-matrix-prediction} a \ref{eq:eif-info-vector-prediction} de predição do EIF. A esparsidade da matriz de informação é 
 usada como premissa para garantir o tempo de execução constante. 
-A esparsificação em si será tratada mais adiante; por hora vamos assumir que a matriz é esparsa.
+A esparsificação em si será tratada mais adiante; por hora, vamos assumir que a matriz é esparsa.
 
 
 Antes é importante relembrar que o jacobiano do sistema SLAM tem a seguinte 
@@ -516,7 +516,7 @@ Além disso, vamos definir o ruído do modelo do sistema, $\bsubvec{R}{t}$, como
 \label{eq:slam-system-error}
 \end{equation}
 em que $\bvec{M}$ é uma a matriz de projeção de um subconjunto dos 
-elementos do vetor de estados estimados.
+elementos do vetor de estado estimado.
 
 \subsubsection{Predição da Matriz de Informação}
 Primeiro, vamos reescrever a Equação \ref{eq:eif-info-matrix-prediction} em 
@@ -654,9 +654,9 @@ temos como resultado um vetor esparso
 \cite[p.~398]{thrun2005probabilistic}. Portanto, é necessário um número 
 constante de operações, que independe do tamanho do mapa, para calcular o 
 vetor de informação predito \footnote{Comumente a orientação do robô é 
-normalizada para o intervalo $[-\pi, \pi[$ no vetor de média do estado, portanto é necessário 
+normalizada para o intervalo $[-\pi, \pi[$ no vetor de média do estado; portanto é necessário 
 ajustar alguns elementos do vetor de informação para que ele continue 
-obedecendo a identidade $\infov{} = \infom{}\mean{}$. Porém esse ajuste não viola o caráter constante do passo de atualização, pois a quantidade de elementos é fixa de acordo com $\lvert \bupvec{m}{+} \rvert$.}. O passo de predição do SEIF-SLAM está compilado no Algoritmo \ref{alg:seif-slam-prediction}. 
+obedecendo a identidade $\infov{} = \infom{}\mean{}$. Porém, esse ajuste não viola o caráter constante do passo de atualização, pois a quantidade de elementos é fixa de acordo com $\lvert \bupvec{m}{+} \rvert$.}. O passo de predição do SEIF-SLAM é apresentado no Algoritmo \ref{alg:seif-slam-prediction}. 
 \begin{algorithm}[h]
   \setstretch{1.4}
   \caption{SEIF-SLAM passo de predição}

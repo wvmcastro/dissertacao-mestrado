@@ -1,9 +1,12 @@
-\section{Resultados de mapeamento com agente único}
+\section{Resultados de mapeamento bem sucedido com agente único}
 \label{app:single-agent-data}
 As tabelas \ref{tab:single-agent-experiment-tab1} e \ref{tab:single-agent-experiment-tab2} registram a posição inicial, tempo de 
 mapeamento de 90\% da área total do ambiente representado na Figura \ref{fig:environment}, o erro integral absoluto (IAE) médio da posição e da 
 orientação para cada uma das simulações nas quais o robô conseguiu 
-cumprir a tarefa com sucesso.
+cumprir a tarefa com sucesso. Como o IAE aumenta conforme maior o tempo 
+de simulação e como esse tempo é variável entre as diferentes 
+realizações, calculou-se o IAE médio obtido pela razão do IAE pela quantidade 
+de passos de simulação executados naquela realização.
 
 \begin{table}[h]
 \caption[Resultados mapeamento com agente único]{Resultados de mapeamento de cenário com um único agente}
@@ -11,7 +14,7 @@ cumprir a tarefa com sucesso.
 \center
 \begin{tabularx}{\textwidth}{@{}YYYYY@{}}
 \hline
-\# Simulação & Posição inicial (m) & Tempo mapeamento 90\% da área (s) & IAE médio de posição (m) & IAE médio de orientação (rad)\\ \hline
+\# Realização & Posição inicial (m) & Tempo mapeamento 90\% da área (s) & IAE médio de posição (m) & IAE médio de orientação (rad)\\ \hline
 1 & (2.7, -1.4)&       397& 0.019&         0.026 \\
 2 & (1.1, 2.9)&       456& 0.044&         0.120 \\
 3 & (3.0, -4.1)&       482& 0.034&         0.043 \\
@@ -30,9 +33,6 @@ cumprir a tarefa com sucesso.
 16 &(0.2, 1.3)&       493& 0.059&         0.097 \\
 17 &(-3.1, -0.1)&       376& 0.026&         0.027 \\
 18 &(-3.2, 3.9)&       355& 0.052&         0.060 \\
-19 &(4.4, 1.3)&       486& 0.086&         0.101 \\
-20 &(2.8, 0.2)&       410& 0.014&         0.016 \\
-
 \hline
 \end{tabularx}
 \end{table}
@@ -43,7 +43,9 @@ cumprir a tarefa com sucesso.
 \center
 \begin{tabularx}{\textwidth}{@{}YYYYY@{}}
 \hline
-\# Simulação & Posição inicial (m) & Tempo mapeamento 90\% da área (s) & IAE médio de posição (m) & IAE médio de orientação (rad)\\ \hline
+\# Realização & Posição inicial (m) & Tempo mapeamento 90\% da área (s) & IAE médio de posição (m) & IAE médio de orientação (rad)\\ \hline
+19 &(4.4, 1.3)&       486& 0.086&         0.101 \\
+20 &(2.8, 0.2)&       410& 0.014&         0.016 \\
 21 &(3.1, 4.3)&       357& 0.009&         0.009 \\
 22 &(0.0, 1.7)&       322& 0.015&         0.016 \\
 23 &(3.8, 1.2)&       485& 0.010&         0.009 \\
@@ -91,7 +93,7 @@ cumprir a tarefa com sucesso.
 
 \clearpage
 
-\section{Resultados de mapeamento com dois agentes}
+\section{Resultados de mapeamento bem sucedido com dois agentes}
 \label{app:two-agent-data}
 
 As Tabelas \ref{tab:two-agent-experiment-pos-and-time-tab1} e \ref{tab:two-agent-experiment-pos-and-time-tab2} registram as posições 
@@ -106,7 +108,7 @@ integral médio da posição e da orientação.
 \center
 \begin{tabularx}{\textwidth}{@{}YYYYY@{}}
 \hline \\
-\multirow{2}{*}{Simulação} & \multicolumn{2}{c}{Posição inicial (m)} & \multicolumn{2}{c}{\begin{tabular}[c]{@{}c@{}}Tempo mapeamento \\ de 90\% da área (s)\end{tabular}} \\ \cline{2-5} 
+\multirow{2}{*}{Realização} & \multicolumn{2}{c}{Posição inicial (m)} & \multicolumn{2}{c}{\begin{tabular}[c]{@{}c@{}}Tempo mapeamento \\ de 90\% da área (s)\end{tabular}} \\ \cline{2-5} 
  & Robô 1 & Robô 2 & Robô 1 & Robô 2 \\ \hline
 1& (-1.7, 3.9)& (2.2, 1.9)&346&373 \\
 2& (-4.2, -1.1)& (1.9, 1.5)&409&409 \\
@@ -137,7 +139,7 @@ integral médio da posição e da orientação.
 \center
 \begin{tabularx}{\textwidth}{@{}YYYYY@{}}
 \hline \\
-\multirow{2}{*}{Simulação} & \multicolumn{2}{c}{Posição inicial (m)} & \multicolumn{2}{c}{\begin{tabular}[c]{@{}c@{}}Tempo mapeamento \\ de 90\% da área (s)\end{tabular}} \\ \cline{2-5} 
+\multirow{2}{*}{Realização} & \multicolumn{2}{c}{Posição inicial (m)} & \multicolumn{2}{c}{\begin{tabular}[c]{@{}c@{}}Tempo mapeamento \\ de 90\% da área (s)\end{tabular}} \\ \cline{2-5} 
  & Robô 1 & Robô 2 & Robô 1 & Robô 2 \\ \hline
 21& (0.0, 0.8)& (-2.7, 3.7)&375&399 \\
 22& (-3.2, 3.9)& (1.1, 0.9)&447&452 \\
@@ -177,7 +179,7 @@ integral médio da posição e da orientação.
 \center
 \begin{tabularx}{\textwidth}{@{}YYYYY@{}}
 \hline \\
-\multirow{2}{*}{Simulação} & \multicolumn{2}{c}{IAE médio de posição (m)} & \multicolumn{2}{c}{IAE médio de orientação (rad)} \\ \cline{2-5} 
+\multirow{2}{*}{Realização} & \multicolumn{2}{c}{IAE médio de posição (m)} & \multicolumn{2}{c}{IAE médio de orientação (rad)} \\ \cline{2-5} 
  & Robô 1 & Robô 2 & Robô 1 & Robô 2 \\ \hline
 1&0.018&0.02&0.034&0.012 \\
 2&0.026&0.02&0.037&0.031 \\
@@ -209,7 +211,7 @@ integral médio da posição e da orientação.
 \center
 \begin{tabularx}{\textwidth}{@{}YYYYY@{}}
 \hline \\
-\multirow{2}{*}{Simulação} & \multicolumn{2}{c}{IAE médio de posição (m)} & \multicolumn{2}{c}{IAE médio de orientação (rad)} \\ \cline{2-5} 
+\multirow{2}{*}{Realização} & \multicolumn{2}{c}{IAE médio de posição (m)} & \multicolumn{2}{c}{IAE médio de orientação (rad)} \\ \cline{2-5} 
  & Robô 1 & Robô 2 & Robô 1 & Robô 2 \\ \hline
 21&0.011&0.007&0.009&0.008 \\
 22&0.028&0.013&0.018&0.022 \\

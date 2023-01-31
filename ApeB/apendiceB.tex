@@ -35,20 +35,20 @@ Pelo lema da inversão na forma de blocos (Anexo \ref{annex:blockwise-inversion-
 \begingroup
 \begin{align}
   &\begin{aligned}
-    \blue{\bvec{U}} &=  \brac{\bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y} - \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}} \,\eqOmegaInv \bsubvecT{F}{X}}^{-1}\\
+    \bvec{U} &=  \brac{\bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y} - \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}} \,\eqOmegaInv \bsubvecT{F}{X}}^{-1}\\
     &= \brac{\cancel{\bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X}} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y} - \cancel{\bsubvec{F}{X} \eqOmegaInv \bsubvecT{F}{X}}}^{-1}\\
     &= \eqU
   \end{aligned}\\
   &\begin{aligned}
-    \bvec{Y} &= -\cancel{\brac{\eqOmegaInv}^{-1} \eqOmegaInv}\bsubvecT{F}{X} \blue{\bvec{U}}\\
+    \bvec{Y} &= -\cancel{\brac{\eqOmegaInv}^{-1} \eqOmegaInv}\bsubvecT{F}{X} \bvec{U}\\
     &= \bsubvecT{F}{X} \parentheses{\eqU} \\
   \end{aligned}\\
   &\begin{aligned}
-    \bvec{Z} &= -\blue{\bvec{U}} \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}}\\
+    \bvec{Z} &= -\bvec{U} \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}}\\
     &= -\parentheses{\eqU} \bsubvec{F}{X}
   \end{aligned}\\
   &\begin{aligned}
-    \bvec{X} &= \brac{\eqOmegaInv}^{-1} + \cancel{\brac{\eqOmegaInv}^{-1} \eqOmegaInv}\bsubvecT{F}{X} \,\blue{\bvec{U}} \, \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}}\\
+    \bvec{X} &= \brac{\eqOmegaInv}^{-1} + \cancel{\brac{\eqOmegaInv}^{-1} \eqOmegaInv}\bsubvecT{F}{X} \,\bvec{U} \, \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}}\\
     &= \bsubvec{\Omega}{t} + \bsubvecT{F}{X} \parentheses{\eqU} \bsubvec{F}{X}
   \end{aligned}
 \end{align}

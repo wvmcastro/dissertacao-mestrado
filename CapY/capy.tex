@@ -28,7 +28,7 @@ das razões de chances (\textit{log odds}), do mapa do outro ao seu
 próprio. Isso é muito simples por conta da natureza aditiva da 
 representação em \textit{log odds}, como mostrado na Equação \ref{eq:occupancy-grid-log-odds}.
 
-No entanto, para que um robô incorpore os mapas (grade e \textit{landmarks}) do outro aos seus própios, é necessário antes que se determine a posição relativa entre eles para transformar os 
+No entanto, para que um robô incorpore os mapas (grade e \textit{landmarks}) do outro aos seus próprios, é necessário antes que se determine a posição relativa entre eles para transformar os 
 mapas que estão no sistema de referência local do outro para o seu 
 próprio sistema de referência local, alinhando assim os elementos comuns 
 que aparecem em ambos.
@@ -65,7 +65,7 @@ de rotação e um vetor de translação entre dois sistemas de referência:
   \label{eq:rigid-transform}
 \end{equation}
 
-A premissa para utilizar essa técnica é que ao 
+A premissa para utilizar essa técnica é que, ao 
 explorar o mesmo ambiente, o mapa criado por cada robô possui 
 elementos (\textit{landmarks}) em comum com 
 os mapas dos demais e, portanto, é possível identificar e estabelecer 
@@ -231,16 +231,20 @@ desenvolvimento:
   \blue{\eta} \exp \Biggl( &\blue{\underbrace{-\frac{1}{2} \bvecT{\Delta}\infom{}^{j\to k} \bvec{\Delta}}_{\text{constante}}} - \frac{1}{2}\bvecT{\Delta}\infom{}^{j\to k}\bvec{A}\bupvec{x}{j} - \frac{1}{2}\bupvecT{x}{j}\bvecT{A}\infom{}^{j\to k}\bvec{\Delta} \\
     & -\frac{1}{2} \bupvecT{x}{j}\bvecT{A}\infom{}^{j\to k}\bvec{A}\bupvec{x}{j} + \blue{\underbrace{\bvecT{\Delta}\infov{}^{j\to k}}_{\text{constante}}} + \bupvecT{x}{j}\bvecT{A}\infov{}^{j\to k} \Biggr)
   \end{split}\\
-  &= \blue{\eta}\exp\parentheses{-\frac{1}{2}\bupvecT{x}{j}\parentheses{
+  &= \blue{\eta^*}\exp\parentheses{-\frac{1}{2}\bupvecT{x}{j}\parentheses{
     \bvecT{A} \infom{}^{j\to k} \bvec{A}}\bupvec{x}{j} - \bupvecT{x}{j}\bvecT{A}\infom{}^{j\to k}\bvec{\Delta} + \bupvecT{x}{j}\bvecT{A}\infov{}^{j\to k}}\\
   &= \begin{split}
-    \blue{\eta}\exp\Biggl(-\frac{1}{2}&\bupvecT{x}{j}\underbrace{\parentheses{
+    \blue{\eta^*}\exp\Biggl(-\frac{1}{2}&\bupvecT{x}{j}\underbrace{\parentheses{
     \bvecT{A} \infom{}^{j\to k} \bvec{A}}}_{\infom{}^j}\bupvec{x}{j}\\
     &+ \bupvecT{x}{j}\bigl(\underbrace{-\bvecT{A}\infom{}^{j\to k}\bvec{\Delta} + \bvecT{A}\infov{}^{j\to k}}_{\infov{}^j}\bigr)\Biggr)
   \end{split}
   \end{aligned}
   \label{eq:seif-reference-transform}
 \end{equation} 
+a cor azul é utilizada para mostrar ao leitor a correspondência de termos entre as 
+linhas. Na Equação \ref{eq:seif-reference-transform} foi utilizada para 
+mostrar como os termos constantes (invariantes no tempo) saem do expoente 
+e são incorporados à constante de normalização.
 
 Utilizando a equivalência da Equação \ref{eq:map-exchange-equivalence}, 
 têm-se:

@@ -89,7 +89,7 @@ erro médio quadrático da estimação ($\sigma$) de cada círculo.
   \label{fig:sensor-data-cartesian}
 \end{figure}
 
-São considerados apenas os círculos cujo erro médio quadrático $\sigma < \epsilon$ é inferior ao limiar $\epsilon = 10^{-3}$ e 
+São considerados apenas os círculos cujo erro médio quadrático $\sigma < \epsilon$ é inferior ao limiar $\epsilon = 10^{-3}$ metros e 
 cujo raio seja superior a 6.5 cm. Essa última condição é especialmente útil no 
 cenário multiagente, pois evita que um robô confunda o sensor LiDAR (que 
 fica montado no topo do robô, conforme visto na Figura \ref{fig:turtlebot-digital-twin}) do outro com uma \textit{landmark}.
@@ -290,5 +290,5 @@ resultado pode ser visualizado como um ``mapa de calor'' na Figura
 
 Para obter o caminho com menor custo, o mapa de custo é modelado como 
 um grafo com os custos das arestas iguais aos custos da células e então 
-o menor caminho é obtido utilizando o algoritmo de Dijkstra, ou sua 
-variante com heurística o A*.
+o menor caminho é obtido utilizando o algoritmo de Dijkstra ou, sua 
+variante com heurística, o algoritmo A*.

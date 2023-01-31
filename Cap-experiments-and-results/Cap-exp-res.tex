@@ -78,7 +78,7 @@ a cardinalidade do conjunto $\{\bupvec{m}{+}\}$ menor estimou
 melhor tanto a posição quanto a orientação, o que vai 
 contra o consenso geral e a observação de \citeonline[p.~408]{thrun2005probabilistic} de que quanto maior o conjunto 
 $\bupvec{m}{+}$ melhor é a estimativa. A causa dessa divergência não foi 
-entendida até o momento da escrita deste texto, além disso precisa ser 
+entendida até o momento da escrita deste texto; além disso, precisa ser 
 verificada de maneira sistemática através de repetidas simulações.
 
 \section{Comparações sobre uso de memória}
@@ -166,7 +166,7 @@ Cada uma dessas simulações poderia assumir um dos seguintes resultados:
   divergência na estimação de sua posição dentro de um tempo limite estipulado.
   \item \textbf{Falha por tempo limite excedido}: O robô não conseguiu mapear ao 
   menos 90\% da área antes do limite de tempo (foram dados 17 
-  minutos).
+  minutos)\footnote{Esse tempo foi escolhido após sucessivas observações do robô desempenhando SLAM no ambiente utilizado, em nenhuma dessas observações o robô levou mais do que 10 minutos; então foi definido o valor de 17 minutos considerando-se uma margem de segurança}.
   \item \textbf{Falha por divergência}: Quando ao longo da exploração a posição estimada pelo SEIF diferiu em mais de um metro da posição real do robô.
 \end{enumerate}
 
@@ -176,7 +176,7 @@ por ele ao longo do tempo. A área coberta é definida como a soma das
 áreas de todas as células da grade de ocupação que possuem probabilidade 
 de ocupação diferente de 50\%.
 
-No total foram realizadas 111 simulações variando-se aleatoriamente (seguindo uma distribuição uniforme) a posição inicial do agente. Em 60 foi obtido 
+No total foram realizadas 111 (cento e onze\footnote{O objetivo era realizar ao menos 100 simulações, porém, como as simulações foram executadas em \textit{loop} e não eram supervisionadas em alguns períodos, acabou-se executando algumas extras até que fossem paradas; resolvemos então utilizar todos os dados disponíveis.}) simulações variando-se aleatoriamente (seguindo uma distribuição uniforme) a posição inicial do agente. Em 60 foi obtido 
 sucesso, 9 falharam por tempo limite excedido e 42 falharam por 
 divergência. O comparativo pode ser observado na Figura \ref{fig:exp-single-robot-sucess-rate}.
 \begin{figure}
@@ -190,7 +190,7 @@ Com o objetivo de obter-se o desempenho médio do sistema com um único
 agente foi colhido o tempo de mapeamento de cada simulação em que o
 robô obteve sucesso, esses dados se encontram nas tabelas \ref{tab:single-agent-experiment-tab1} e \ref{tab:single-agent-experiment-tab2} no Apêndice 
 \ref{app:single-agent-data}. A distribuição dos tempos de mapeamento 
-registrados encontra-se ilustrada na Figura \ref{fig:time-coverage-single-agent}, o tempo de mapeamento médio foi de 
+registrados encontra-se ilustrada na Figura \ref{fig:time-coverage-single-agent}; o tempo de mapeamento médio foi de 
 429 segundos com desvio padrão de 58 segundos. A Figura \ref{fig:single-agent-path} apresenta o caminho percorrido por quatro 
 realizações do mapeamento por um único agente.
 
@@ -228,7 +228,7 @@ realizações do mapeamento por um único agente.
   \label{fig:single-agent-path}
 \end{figure}
 
-Durante a realização destes experimentos criou-se a impressão de que agentes com posição inicial longe das extremidades do ambiente obtinham 
+Durante a realização destes experimentos, criou-se a impressão de que agentes com posição inicial longe das extremidades do ambiente obtinham 
 melhor tempo de mapeamento. Para analisar essa hipótese foi feita a Figura \ref{fig:single-agent-initial-pos-and-time}, que relaciona a 
 posição inicial do agente com seu tempo de mapeamento através da cor. 
 
@@ -279,7 +279,7 @@ Constata-se então que houve aumento de falhas
 tanto por divergência quanto por tempo limite excedido em comparação 
 com o cenário com um único agente. O aumento das falhas por tempo limite 
 excedido pode ser explicado pelo aumento de cenários em que a navegação do 
-ROS fica presa, um problema mais comum em ambientes dinâmicos \cite{zheng2021ros}. Já o aumento de falhas por divergência do filtro ocorre 
+ROS fica presa, isso ocorre quando um robô fica a uma distância de um obstáculo abaixo de um limiar de segurança e para de se movimentar para evitar uma colisão, esse problema é mais comum em ambientes dinâmicos \cite{zheng2021ros}. Já o aumento de falhas por divergência do filtro ocorre 
 pois a chance de um \emph{ou} outro agente falhar é maior do que a de um único agente.
 
 \begin{figure}
@@ -289,12 +289,12 @@ pois a chance de um \emph{ou} outro agente falhar é maior do que a de um único
   \label{fig:exp-two-robot-sucess-rate}
 \end{figure}
 
-A distribuição do tempo de mapeamento das simulações com dois agentes se 
-encontra na Figura \ref{fig:time-coverage-two-agents}, o tempo de 
+A distribuição do tempo de mapeamento das simulações bem sucedidas com dois agentes se 
+encontra na Figura \ref{fig:time-coverage-two-agents}; o tempo de 
 mapeamento médio foi de 321 segundos com desvio padrão de 62 segundos. 
 Esse tempo representa 75\% do tempo de mapeamento médio de um único 
 agente, mostrado na Figura \ref{fig:time-coverage-single-agent}. A 
-relação das posições iniciais com o tempo de mapeamento pode ser 
+relação das posições iniciais, de ambos os robôs em todas as realizações, com o tempo de mapeamento pode ser 
 observada na Figura \ref{fig:two-agent-initial-pos-and-time}.  Na Figura \ref{fig:two-agent-path} são também apresentados, como no experimento anterior, 
 os caminhos percorridos pelos robôs em quatro realizações das 
 simulações com dois agentes.
@@ -309,7 +309,7 @@ simulações com dois agentes.
 \begin{figure}
   \centering
   \includegraphics[width=0.7\textwidth]{figs/two-agents/initial_positions_and_time_two_agents.pdf}
-  \caption[Posição inicial e tempo de mapeamento das simulações com dois agentes.]{Posição inicial e tempo de mapeamento das simulações com dois agentes. Cada partícula representa uma posição inicial, o tempo é expressado pela sua cor.}
+  \caption[Posição inicial e tempo de mapeamento das simulações com dois agentes.]{Posição inicial e tempo de mapeamento de ambos os robôs nas simulações com dois agentes. Cada partícula representa uma posição inicial, o tempo é expressado pela sua cor.}
   \label{fig:two-agent-initial-pos-and-time}
 \end{figure}
 
@@ -346,7 +346,7 @@ política de exploração conjunta acordada entre os agentes; cada um
 explora o ambiente com base nas fronteiras presentes nos seus mapas 
 individuais sem levar em consideração a posição de seu par em relação 
 a essas fronteiras; o segundo motivo é que a navegação se torna mais 
-complexa pois agora um agente deve se desviar do outro durante a 
+complexa pois, agora um agente deve se desviar do outro durante a 
 exploração e também não fazem isso de maneira sincronizada e/ou combinada.
 
 % a curva da área coberta pelo tempo é ilustrada na 
@@ -422,8 +422,8 @@ fornecidas, como no experimento anterior. Dessa forma para incorporarem
 um o mapa do outro é necessário que calculem a transformação entre seus 
 mapas de \textit{landmarks} utilizando a técnica de registro de nuvem de 
 pontos discutida na Seção \ref{sec:point-cloud-registration}. A Figura 
-\ref{fig:unknown-initial-pose-area-coverage} mostra duas execuções do 
-sistema SLAM com dois robôs, entre elas variou-se apenas as posições 
+\ref{fig:unknown-initial-pose-area-coverage} mostra duas simulações do 
+sistema SLAM com dois robôs; entre elas variou-se apenas as posições 
 iniciais dos agentes.
 
 \begin{figure}
@@ -440,8 +440,8 @@ iniciais dos agentes.
     \label{fig:}
   \end{subfigure}
   \caption[Comparação da evolução das áreas cobertas por dois agentes com pose inicial desconhecida]{Diferentes execuções do mapeamento com dois agentes com pose inicial desconhecida. Entre as execuções variou-se a pose inicial dos 
-  agentes. As curvas da Figura da direta estão defasadas pois o segundo 
-  agente foi colocado no ambiente alguns instantes depois que o primeiro.}
+  agentes. As curvas da Figura da direta estão defasadas, pois o segundo 
+  agente foi colocado no ambiente alguns instantes depois que o primeiro. Isso ocorreu pois neste experimento especificamente o processo de inicialização da simulação foi feito manualmente, o que provocou diferença no tempo em que os agente foram colocados no ambiente.}
   \label{fig:unknown-initial-pose-area-coverage}
 \end{figure}
 
@@ -459,6 +459,6 @@ muitas execuções os robôs estimavam a transformação errada, incorporando
 a informação do outro robô de maneira errada e provocando divergência do 
 filtro. Desse modo, a técnica de registro de nuvem de pontos utilizada 
 não se mostrou robusta para estimar a transformação entre os mapas dos robôs. Por conta da alta taxa de falha na estimação da transformação 
-relativa, que leva a divergência, não foram realizadas simulações 
-repetidas neste experimento.
+relativa, que leva à divergência, não foram feitas realizações 
+repetidas neste experimento para avaliar o desempenho.
 

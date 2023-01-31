@@ -100,14 +100,13 @@ intervalo $\brac{-\pi, \pi}$, é omitida tanto no Algoritmo \ref{alg:ekf-slam-pr
 
 \clearpage
 
-\section{Análise multiplicação ingênua de matrizes}
+\section{Complexidade da multiplicação ingênua de matrizes}
 \label{app:matrix-product-analysis}
-O Algoritmo \ref{alg:dummy-mat-product} realiza o produto ``ingênuo'', ou seja, sem nenhum tipo de otimização, de dua matrizes de dimensões $m\times n$ e $n\times p$. Como é evidenciado pelos três laços de 
-repetição aninhados, entre as linhas 3-9, a complexidade assintótica do algoritmo é $\bigO{mnp}$. Cabe ressaltar que caso as matrizes tenham 
+O Algoritmo \ref{alg:dummy-mat-product} realiza o produto ``ingênuo'', ou seja, sem nenhum tipo de otimização, de duas matrizes de dimensões $m\times n$ e $n\times p$. Como é evidenciado pelos três laços de 
+repetição aninhados, entre as linhas 3-9, a complexidade assintótica do algoritmo é $\bigO{mnp}$. Cabe ressaltar que, caso as matrizes tenham 
 alguma dimensão conhecida, ou seja, constante, essa dimensão deixa 
-de ser considerada na notação assintótica a medida que deixa de ser 
-uma variável de entrada.
-
+de ser considerada na notação assintótica pois passa a ser uma constante do problema, deixando de ser uma variável de entrada. Porém, isso não quer dizer que essa dimensão não tenha tamanho relevante para a complexidade da 
+computação.
 \begin{algorithm}
   \setstretch{1.25}
   \caption{Produto ingênuo de matrizes}
