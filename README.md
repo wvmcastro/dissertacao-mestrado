@@ -1,5 +1,7 @@
 # Distributed SLAM involving navigation, guidance and sensor fusion for 2D reconstruction
 
+[[pdf]](https://github.com/wvmcastro/dissertacao-mestrado/blob/main/tese.pdf) [[code]](https://github.com/wvmcastro/slam)
+
 ## Abstract
 The Simultaneous Localization and Mapping problem, known by the acronym SLAM, asks whether it is possible for a robot to be placed in an environment
 unknown a priori, and incrementally build a map of this
@@ -27,5 +29,3 @@ The developed solution has significantly less memory usage,
 presenting a reduction of more than 50\% when compared to the classic EKF-SLAM approach.
 In addition, despite the lack of coordination between the agents,
 gains in exploration time were observed in the scenario with two agents with respect to a single agent.
-
-[pdf](https://github.com/wvmcastro/dissertacao-mestrado/blob/main/tese.pdf)
