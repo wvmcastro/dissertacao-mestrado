@@ -1,3 +1,13 @@
+@article{al2009error,
+  title={Error analysis for circle fitting algorithms},
+  author={Al-Sharadqah, Ali and Chernov, Nikolai},
+  journal={Electronic Journal of Statistics},
+  volume={3},
+  pages={886--911},
+  year={2009},
+  publisher={Institute of Mathematical Statistics and Bernoulli Society}
+}
+
 @misc{jsola,
   title = {Simulataneous localization and mapping with the extended Kalman filter. A very quick guide... with Matlab code!},
   year=2014,
@@ -15,23 +25,26 @@ year={2021},
 }
 
 @book{lewis2017optimal,
-  title={Optimal and robust estimation: with an introduction to stochastic control theory},
+  title={Optimal and Robust Estimation: With an Introduction to Stochastic Control Theory},
   author={Lewis, Frank L and Xie, Lihua and Popa, Dan},
   year={2017},
   publisher={CRC press}
 }
 
-@book{bongard2006probabilistic,
-  title={Probabilistic robotics. sebastian thrun, wolfram burgard, and dieter fox.(2006, mit press.) 647 pages},
-  author={Bongard, Josh},
-  year={2006},
+@book{thrun2005probabilistic,
+  title={Probabilistic Robotics},
+  author={Thrun, S. and Burgard, W. and Fox, D.},
+  isbn={9780262303804},
+  series={Intelligent Robotics and Autonomous Agents series},
+  url={https://books.google.com.br/books?id=wjM3AgAAQBAJ},
+  year={2005},
   publisher={MIT Press}
 }
 
 @ARTICLE{durrant2006simultaneous,
   title={Simultaneous localization and mapping: part I},
   author={Durrant-Whyte, Hugh and Bailey, Tim},
-  journal={IEEE robotics \& automation magazine},
+  journal={IEEE Robotics \& Automation Magazine},
   volume={13},
   number={2},
   pages={99--110},
@@ -51,7 +64,7 @@ year={2021},
 @article{cadena2016past,
   title={Past, present, and future of simultaneous localization and mapping: Toward the robust-perception age},
   author={Cadena, Cesar and Carlone, Luca and Carrillo, Henry and Latif, Yasir and Scaramuzza, Davide and Neira, Jos{\'e} and Reid, Ian and Leonard, John J},
-  journal={IEEE Transactions on robotics},
+  journal={IEEE Transactions on Robotics},
   volume={32},
   number={6},
   pages={1309--1332},
@@ -62,7 +75,7 @@ year={2021},
 @inproceedings{quigley2009ros,
   title={ROS: an open-source Robot Operating System},
   author={Quigley, Morgan and Conley, Ken and Gerkey, Brian and Faust, Josh and Foote, Tully and Leibs, Jeremy and Wheeler, Rob and Ng, Andrew Y and others},
-  booktitle={ICRA workshop on open source software},
+  booktitle={ICRA Workshop on Open Source Software},
   volume={3},
   number={3.2},
   pages={5},
@@ -70,15 +83,21 @@ year={2021},
   organization={Kobe, Japan}
 }
 
-@inproceedings{Koenig-2004-394,
-  author = "Nathan Koenig and Andrew Howard",
-  title = "Design and Use Paradigms for Gazebo, An Open-Source Multi-Robot Simulator",
-  booktitle = "IEEE/RSJ International Conference on Intelligent Robots and Systems",
-  pages = "2149-2154",
-  address = "Sendai, Japan",
-  month = "Sep",
-  year = "2004",
-}
+
+@INPROCEEDINGS{Koenig-2004-394,
+  author={Koenig, N. and Howard, A.},
+  booktitle={2004 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) (IEEE Cat. No.04CH37566)}, 
+  title={Design and use paradigms for Gazebo, an open-source multi-robot simulator}, 
+  year={2004},
+  volume={3},
+  number={},
+  pages={2149-2154 vol.3},
+  abstract={Simulators have played a critical role in robotics research as tools for quick and efficient testing of new concepts, strategies, and algorithms. To date, most simulators have been restricted to 2D worlds, and few have matured to the point where they are both highly capable and easily adaptable. Gazebo is designed to fill this niche by creating a 3D dynamic multi-robot environment capable of recreating the complex worlds that would be encountered by the next generation of mobile robots. Its open source status, fine grained control, and high fidelity place Gazebo in a unique position to become more than just a stepping stone between the drawing board and real hardware: data visualization, simulation of remote environments, and even reverse engineering of blackbox systems are all possible applications. Gazebo is developed in cooperation with the Player and Stage projects (Gerkey, B. P., et al., July 2003), (Gerkey, B. P., et al., May 2001), (Vaughan, R. T., et al., Oct. 2003), and is available from http://playerstage.sourceforge.net/gazebo/ gazebo.html.},
+  keywords={},
+  doi={10.1109/IROS.2004.1389727},
+  ISSN={},
+  month={Sep.},}
+
 
 @article{saeedi2016multiple,
   title={Multiple-robot simultaneous localization and mapping: A review},
@@ -89,4 +108,214 @@ year={2021},
   pages={3--46},
   year={2016},
   publisher={Wiley Online Library}
+}
+
+@article{mclachlan1999mahalanobis,
+  title={Mahalanobis distance},
+  author={McLachlan, Goeffrey J},
+  journal={Resonance},
+  volume={4},
+  number={6},
+  pages={20--26},
+  year={1999}
+}
+
+
+@article{coppersmith1987matrix,
+title = {Matrix multiplication via arithmetic progressions},
+journal = {Journal of Symbolic Computation},
+volume = {9},
+number = {3},
+pages = {251-280},
+year = {1990},
+note = {Computational algebraic complexity editorial},
+issn = {0747-7171},
+doi = {https://doi.org/10.1016/S0747-7171(08)80013-2},
+url = {https://www.sciencedirect.com/science/article/pii/S0747717108800132},
+author = {Don Coppersmith and Shmuel Winograd},
+abstract = {We present a new method for accelerating matrix multiplication asymptotically. Thiswork builds on recent ideas of Volker Strassen, by using a basic trilinear form which is not a matrix product. We make novel use of the Salem-Spencer Theorem, which gives a fairly dense set of integers with no three-term arithmetic progression. Our resulting matrix exponent is 2.376.}
+}
+
+@INPROCEEDINGS{liu2003results,
+  author={Yufeng Liu and Thrun, S.},
+  booktitle={2003 IEEE International Conference on Robotics and Automation (Cat. No.03CH37422)}, 
+  title={Results for outdoor-SLAM using sparse extended information filters}, 
+  year={2003},
+  volume={1},
+  number={},
+  pages={1227-1233 vol.1},
+  doi={10.1109/ROBOT.2003.1241760}}
+
+@article{saputra2019implementation,
+  title={Implementation 2d ekf-based simultaneous localisation and mapping for mobile robot},
+  author={Saputra, Roni Permana},
+  journal={arXiv preprint arXiv:1905.06529},
+  year={2019}
+}
+
+@article{neira2001data,
+  title={Data association in stochastic mapping using the joint compatibility test},
+  author={Neira, Jos{\'e} and Tard{\'o}s, Juan D},
+  journal={IEEE Transactions on robotics and automation},
+  volume={17},
+  number={6},
+  pages={890--897},
+  year={2001},
+  publisher={IEEE}
+}
+
+@article{elfes1989using,
+  title={Using occupancy grids for mobile robot perception and navigation},
+  author={Elfes, Alberto},
+  journal={Computer},
+  volume={22},
+  number={6},
+  pages={46--57},
+  year={1989},
+  publisher={IEEE}
+}
+
+@article{bresenham1965algorithm,
+  title={Algorithm for computer control of a digital plotter},
+  author={Bresenham, Jack E},
+  journal={IBM Systems Journal},
+  volume={4},
+  number={1},
+  pages={25--30},
+  year={1965},
+  publisher={IBM}
+}
+
+@article{johnson1999using,
+  title={Using spin images for efficient object recognition in cluttered 3D scenes},
+  author={Johnson, Andrew E and Hebert, Martial},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume={21},
+  number={5},
+  pages={433--449},
+  year={1999},
+  publisher={IEEE}
+}
+
+@article{fischler1981random,
+  title={Random sample consensus: a paradigm for model fitting with applications to image analysis and automated cartography},
+  author={Fischler, Martin A and Bolles, Robert C},
+  journal={Communications of the ACM},
+  volume={24},
+  number={6},
+  pages={381--395},
+  year={1981},
+  publisher={ACM New York, NY, USA}
+}
+
+@article{thrun2004simultaneous,
+  title={Simultaneous localization and mapping with sparse extended information filters},
+  author={Thrun, Sebastian and Liu, Yufeng and Koller, Daphne and Ng, Andrew Y and Ghahramani, Zoubin and Durrant-Whyte, Hugh},
+  journal={The International Journal of Robotics Research},
+  volume={23},
+  number={7-8},
+  pages={693--716},
+  year={2004},
+  publisher={SAGE Publications}
+}
+
+@incollection{thrun2004simultaneousbook,
+  title={Simultaneous mapping and localization with sparse extended information filters: Theory and initial results},
+  author={Thrun, Sebastian and Koller, Daphne and Ghahramani, Zoubin and Durrant-Whyte, Hugh and Ng, Andrew Y},
+  booktitle={Algorithmic Foundations of Robotics V},
+  pages={363--380},
+  year={2004},
+  publisher={Springer}
+}
+
+@misc{youtube-clauss-brenner,
+  title={Slam Lectures, SLAM A 06},
+  year=2012,
+  author = {Brenner, Claus},
+  url  =  {https://www.youtube.com/playlist list=PLpUPoM7Rgzi_7YWn14Va2FODh7LzADBSm},
+  urlaccessdate = {02/05/2022},
+}
+
+@misc{matt-circle-fit,
+  title={Circle Fitting},
+  year=2021,
+  author = {Elwin, Matthew L.},
+  url  =  {https://web.archive.org/web/20230131094934/https://nu-msr.github.io/navigation_site/lectures/circle_fit.html},
+  urlaccessdate = {31/01/2023},
+}
+
+@INPROCEEDINGS{marder2010office,
+  author={Marder-Eppstein, Eitan and Berger, Eric and Foote, Tully and Gerkey, Brian and Konolige, Kurt},
+  booktitle={2010 IEEE International Conference on Robotics and Automation}, 
+  title={The Office Marathon: Robust navigation in an indoor office environment}, 
+  year={2010},
+  volume={},
+  number={},
+  pages={300-307},
+  doi={10.1109/ROBOT.2010.5509725}}
+
+
+@misc{eigen-lib,
+  title={Eigen library version 3.3.7},
+  year=2018,
+  author = {Jacob, Benoît and Guennebaud, Gaël},
+  url  =  {https://eigen.tuxfamily.org/},
+  urlaccessdate = {01/14/2023},
+}
+
+@article{hunter2007matplotlib,
+  title={Matplotlib: A 2D graphics environment},
+  author={Hunter, John D},
+  journal={Computing in Science \& Engineering},
+  volume={9},
+  number={03},
+  pages={90--95},
+  year={2007},
+  publisher={IEEE Computer Society}
+}
+
+@article{smith1986representation,
+  title={On the representation and estimation of spatial uncertainty},
+  author={Smith, Randall C and Cheeseman, Peter},
+  journal={The International Journal of Robotics Research},
+  volume={5},
+  number={4},
+  pages={56--68},
+  year={1986},
+  publisher={Sage Publications Sage CA: Thousand Oaks, CA}
+}
+
+@article{walter2007exactly,
+  title={Exactly sparse extended information filters for feature-based SLAM},
+  author={Walter, Matthew R and Eustice, Ryan M and Leonard, John J},
+  journal={The International Journal of Robotics Research},
+  volume={26},
+  number={4},
+  pages={335--359},
+  year={2007},
+  publisher={Sage Publications Sage UK: London, England}
+}
+
+@inproceedings{tipaldi2010flirt,
+  title={Flirt-interest regions for 2d range data},
+  author={Tipaldi, Gian Diego and Arras, Kai O},
+  booktitle={2010 IEEE International Conference on Robotics and Automation},
+  pages={3616--3622},
+  year={2010},
+  organization={IEEE}
+}
+
+@article{zheng2021ros,
+  title={Ros navigation tuning guide},
+  author={Zheng, Kaiyu},
+  journal={Robot Operating System (ROS) The Complete Reference (Volume 6)},
+  pages={197--226},
+  year={2021},
+  publisher={Springer}
+}
+
+@article{paula2014metodo,
+  title={M{\'e}todo de Monte Carlo e aplica{\c{c}}{\~o}es},
+  author={Paula, Renato Ricardo de and others},
+  year={2014}
 }

@@ -1,25 +1,43 @@
+\newcommand{\brac}[1]{\left[#1\right]} % brackets
 \newcommand{\given}[0]{\,|\,}
 \newcommand{\parentheses}[1]{\left(#1\right)}
 \newcommand{\pr}[1]{p\parentheses{#1}}
 \newcommand{\bvec}[1]{\mathbf{#1}}
 \newcommand{\bvecT}[1]{\mathbf{#1}^T}
 \newcommand{\bsubvec}[2]{\mathbf{#1}_{#2}}
+\newcommand{\bupvec}[2]{\mathbf{#1}^{#2}}
+\newcommand{\bupvecT}[2]{\brac{\mathbf{#1}^{#2}}^T}
 \newcommand{\bsubvecT}[2]{\mathbf{#1}_{#2}^{T}}
 \newcommand{\mb}[1]{{\boldsymbol{#1}}} %math bold
 \newcommand{\predmean}[1]{\overline{\mb{\mu}}_{#1}}
 \newcommand{\mean}[1]{\mb{\mu}_{#1}}
 \newcommand{\infov}[1]{\mb{\xi}_{#1}}
+\newcommand{\sinfov}[1]{\tilde{\mb{\xi}}_{#1}}
 \newcommand{\predinfov}[1]{\overline{\mb{\xi}}_{#1}}
 \newcommand{\infom}[1]{\mb{\Omega}_{#1}}
+\newcommand{\sinfom}[1]{\tilde{\mb{\Omega}}_{#1}}
 \newcommand{\predinfom}[1]{\overline{\mb{\Omega}}_{#1}}
 \newcommand{\cov}[1]{\bsubvec{P}{#1}}
+\newcommand{\approxcov}[1]{\bsubvec{\tilde{P}}{#1}}
 \newcommand{\predcov}[1]{\bsubvec{\overline{P}}{#1}}
 \newcommand{\normal}[2]{\mathcal{N}\parentheses{#1, #2}}
 \newcommand{\bigO}[1]{\mathcal{O}\parentheses{#1}}
-\newcommand{\brac}[1]{\left[#1\right]} % brackets
+\newcommand{\mat}[3]{\bvec{#1}_{#2\times#3}} % null matrix
 \newcommand{\nullmat}[2]{\bvec{0}_{#1\times#2}} % null matrix
 \newcommand{\expv}[1]{\mathbb{E}\brac{#1}} % expectation value
 \newcommand{\covf}[1]{\mathop{Cov}\parentheses{#1}}
+
+\newcommand{\robotstate}[1]{\bsubvec{x}{#1}^{\mathrm{r}}}
+\newcommand{\proj}[1]{\bsubvec{M}{#1}}
+\newcommand{\projT}[1]{\bsubvecT{M}{#1}}
+\newcommand{\marginalize}[2]{#1 - #1\,#2^T  \parentheses{#2 \, #1 \, #2^T}^{-1} #2\,#1}
+
+\newcommand{\tr}{\mathcal{T}}
+\newcommand{\trr}[1]{\mathcal{T}_r^{#1}}
+
+\newcommand{\lscore}[2]{\mathcal{Q}_{#1}\parentheses{\bupvec{m}{#2}}}
+
+\newcommand{\dataTh}{\chi^2_{2,\alpha}}
 % colors
 \newcommand{\blue}[1]{\color{blue}#1\color{black}}
 \newcommand{\magenta}[1]{\color{magenta}#1\color{black}}

@@ -40,7 +40,7 @@
 %   \documentclass[dsc, eng]{ita}
 %		\documentclass[dsc, eng, dv]{ita}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\documentclass[msc, dv]{ita}
+\documentclass[msc]{ita}
 % Quando alterar a classe, por exemplo de [msc] para [msc, eng]) rode mais uma vez o botão BUILD OUTPUT caso haja erro
 \usepackage{ae}
 \usepackage{graphicx}
@@ -91,7 +91,7 @@
 % Autor do trabalho: Nome Sobrenome
 \authorgender{masc}                     %sexo: masc ou fem
 \author{Wellington Vieira Martins}{de Castro}
-\itaauthoraddress{Av. Engenheiro Francisco José Longo, 633. Apartamento 113}{12.245-906}{São José dos Campos--SP}
+\itaauthoraddress{Av. Tívoli, 550. Apartamento 65}{12.245-481}{São José dos Campos--SP}
 
 % Titulo da Tese/Dissertação
 \title{SLAM distribuído envolvendo navegação, guiamento e fusão sensorial para reconstrução 2D}
@@ -105,28 +105,32 @@
 % \coadvisor{Prof$^\textnormal{a}$.~Dr$^\textnormal{a}$.}{Doralice Serra}{OVNI}
 
 % Pró-reitor da Pós-graduação
-\bossgender{masc}												% masc ou fem
-\boss{Prof.~Dr.}{John von Neumann}
+\bossgender{fem}												% masc ou fem
+\boss{Profa.~Dra.}{Emília Villani}
 
 %Coordenador do curso no caso de TG
-% \bosscoursegender{masc}									% masc ou fem
-% \bosscourse{Prof.~Dr.}{John Walker}
+\bosscoursegender{masc}									% masc ou fem
+\bosscourse{Prof.~Dr.}{Eduardo Lenz}
 
 % Palavras-Chaves informadas pela Biblioteca -> utilizada na CIP
-\kwcip{Cupim}
-\kwcip{Dilema}
-\kwcip{Construção}
+\kwcip{Robôs}
+\kwcip{Dinâmica de robôs}
+\kwcip{Localização e mapeamento simultâneo}
+\kwcip{Sensores}
+\kwcip{Robótica}
+\kwcip{Computação}
+\kwcip{Controle}
 
 % membros da banca examinadora
 
-\examiner{Prof. Dr.}{Alan Turing}{Presidente}{ITA}
-\examiner{Prof. Dr.}{Linus Torwald}{}{UXXX}
-\examiner{Prof. Dr.}{Richard Stallman}{}{UYYY}
-\examiner{Prof. Dr.}{Donald Duck}{}{DYSNEY}
-\examiner{Prof. Dr.}{Mickey Mouse}{}{DISNEY}
+\examiner{Prof. Dr.}{Cairo Lúcio Nascimento Júnior}{Presidente}{ITA}
+\examiner{Prof. Dr.}{Marcelo da Silva Pinho}{Membro Interno}{ITA}
+% \examiner{Prof. Dr.}{Richard Stallman}{}{UYYY}
+% \examiner{Prof. Dr.}{Donald Duck}{}{DYSNEY}
+\examiner{Dr.}{Reinaldo Augusto da Costa Bianchi}{Membro Externo}{FEI}
 
 % Data da defesa (mês em maiúsculo, se trabalho em inglês, e minúsculo se trabalho em português) 
-\date{5}{março}{2015}
+\date{9}{dezembro}{2022}
 
 % Número CDU - (somente para TG)
 % \cdu{621.38}
@@ -135,13 +139,14 @@
 \makeglossary
 \frontmatter
 
+\DeclareMathOperator{\SVD}{SVD}
 \begin{document}
 % Folha de Rosto e Capa para o caso do TG
 \maketitle
 
 % Dedicatoria: Nao esqueca essa secao  ... :-)
 \begin{itadedication}
-Aos amigos da Graduação e Pós-Graduação do ITA.
+Aos meus pais e amigos.
 \end{itadedication}
 
 % Agradecimentos
@@ -203,16 +208,30 @@ Aos amigos da Graduação e Pós-Graduação do ITA.
 \chapter{Visão Geral do Sistema}
 \import{Cap2/}{cap2}
 
-\chapter{Aplicação da estimação no problema SLAM (\textit{Backend})}
+\chapter{Aplicação de estimação ao problema SLAM (\textit{Back-end})}
+\label{ch:back-end}
 \import{Cap3/}{cap3}
 
-\chapter{SLAM \textit{Frontend}}
+\chapter{SLAM \textit{Front-end}}
+\label{ch:front-end}
 \import{CapX/}{capx}
 
 \chapter{SLAM multiagente descentralizado}
+\label{ch:distributed-slam}
 \import{CapY/}{capy}
 
+% \chapter{Revisão Bibliográfica}
+
+\chapter{Metodologia}
+\label{ch:methodology}
+\import{Cap-methodology/}{methodology}
+
+\chapter{Experimentos e resultados}
+\label{ch:experiments-and-results}
+\import{Cap-experiments-and-results/}{Cap-exp-res}
+
 \chapter{Conclusão}
+\label{ch:conclusion}
 \import{Cap4/}{cap4}
 
 % REFERENCIAS BIBLIOGRAFICAS
@@ -224,13 +243,23 @@ Aos amigos da Graduação e Pós-Graduação do ITA.
 \chapter{Descrição detalhada de algoritmos}
 \import{ApeA/}{apendiceA}
 
-\chapter{Matrizes}
+\chapter{Desenvolvimento de Resultados}
 \import{ApeB/}{apendiceB}
 
+\chapter{Dados experimentais}
+\import{Cap-experiments-and-results/}{exp-data-appendix}
+
 % Anexos
-% \annex
-% \chapter{Exemplo de um Primeiro Anexo} %opcional
-% \input{AneA/anexoA}
+\annex
+\chapter{Matrizes}
+\import{AneA/}{anexoA}
+
+\chapter{Manipulações da distribuição de probabilidade gaussiana multivariada na forma canônica}
+\label{annex:info-gaussian-manipulation}
+\import{AneB/}{probabilistic-distribution-manipulation}
+
+\chapter{Algoritmos} %opcional
+\input{AneC/anexoC}
 
 % Glossario
 %\itaglossary
@@ -238,16 +267,16 @@ Aos amigos da Graduação e Pós-Graduação do ITA.
 
 % Folha de Registro do Documento
 % Valores dos campos do formulario
-\FRDitadata{25 de março de 2015}
-\FRDitadocnro{DCTA/ITA/DM-018/2015} %(o número de registro você solicita a biblioteca)
+\FRDitadata{26 de janeiro de 2023}
+\FRDitadocnro{DCTA/ITA/DM-167/2022} %(o número de registro você solicita a biblioteca)
 \FRDitaorgaointerno{Instituto Tecnológico de Aeronáutica -- ITA}
 %Exemplo no caso de pós-graduação: Instituto Tecnol{\'o}gico de Aeron{\'a}utica -- ITA
-\FRDitapalavrasautor{Cupim; Cimento; Estruturas}
-\FRDitapalavrasresult{Cupim; Dilema; Construção}
+\FRDitapalavrasautor{SLAM; Mapeamento; Localização; Robótica Móvel; Filtro de Informação}
+\FRDitapalavrasresult{Robôs; Dinâmica de robôs; Localização e mapeamento simultâneo; Sensores; Robótica; Computação; Controle.}
 %Exemplo no caso de graduação (TG):
 %\FRDitapalavraapresentacao{Trabalho de Graduação, ITA, São José dos Campos, 2015. \NumPenultimaPagina\ páginas.}
 %Exemplo no caso de pós-graduação (msc, dsc):
-\FRDitapalavraapresentacao{ITA, São José dos Campos. Curso de Mestrado. Programa de Pós-Graduação em Engenharia Aeronáutica e Mecânica. Área de Sistemas Aeroespaciais e Mecatrônica. Orientador: Prof.~Dr. Adalberto Santos Dupont. Coorientadora: Prof$^\textnormal{a}$.~Dr$^\textnormal{a}$. Doralice Serra. Defesa em 05/03/2015. Publicada em 25/03/2015.}
+\FRDitapalavraapresentacao{ITA, São José dos Campos. Curso de Mestrado. Programa de Pós-Graduação em Engenharia Eletrônica e Computação. Área de Sistemas e Controle. Orientador: Prof.~Dr. Jacques Waldmann. Defesa em 09/12/2022. Publicada em 2022.}
 \FRDitaresumo{\input{Cap0/resumo}}
 %  Primeiro Parametro: Nacional ou Internacional -- N/I
 %  Segundo parametro: Ostensivo, Reservado, Confidencial ou Secreto -- O/R/C/S

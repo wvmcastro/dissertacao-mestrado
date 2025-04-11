@@ -1,37 +1,64 @@
-\section{Lema da Inversão. Fórmula de  Sherman/Morrison}
-\label{app:inversion-lemma}
-A fórmula de Sherman/Morrison, também conhecida como lema da inversão especializado,
-é definido a seguir, retirado de \cite[p.~50]{bongard2006probabilistic}.
-
-\begin{lem}
-Para qualquer matrizez quadradas invertíveis $\bvec{R}$ e $\bvec{Q}$ e qualquer matriz $\bvec{P}$ com dimensões apropriadas, o seguinte é verdadeiro:
-\begin{equation}
-\parentheses{\bvec{R} + \bvec{PQ}\bvecT{P}}^\mathbf{{-1}} = \bvec{R^{-1}} - \bvec{R^{-1}}\bvec{P}\parentheses{\bvec{Q^{-1}} + \bvecT{P}\bvec{R^{-1}P}}^\mathbf{{-1}}\bvecT{P}\bvec{R^{-1}}
-\end{equation}
-assumindo que todas as matrizes acima podem ser invertidas como definido na premissa.
-\begin{proof}
-Defina $\bvec{\Psi} = \parentheses{\bvec{Q^{-1}} + \bvecT{P}\bvec{R^{-1}}\bvec{P}}^\mathbf{-1}$. É suficiente mostrar que:
+\section{Matriz de informação aumentada a partir da matriz de covariância}
+\label{app:dev-landmark-insertion-info-matrix}
+Para derivar a inserção de \textit{landmark} no EIF/SEIF, vamos partir 
+dos resultados da inserção de \textit{landmark} no EKF apresentados na 
+Seção \ref{sec:ekf-slam-landmark-insertion}. Por comodidade, repetiremos 
+a Equação \ref{eq:ekf-landmark-insertion-covariance} com o resultado 
+do aumento da matriz de covariância:
+\begingroup
+\renewcommand{\arraystretch}{1.5}
 \begin{equation*}
-\parentheses{\bvec{R^{-1}} - \bvec{R^{-1}}\bvec{P}\bvec{\Psi}\bvecT{P}\bvec{R^{-1}}} \parentheses{\bvec{R} + \bvec{PQ}\bvecT{P}} = \bvec{I}
+  \bsubvec{P}{t}^* = \eqCovarianceAugmented \tag{\ref{eq:ekf-landmark-insertion-covariance} repetida}
 \end{equation*}
-Isso é mostrado através de uma série de manipulações:
+\endgroup
+e aplicando a equivalência $\bvec{\Omega}^{-1} = \bvec{P}$, pode-se reescrever a expressão acima como:
+% \newcommand{\eqOmegaInv}{\bsubvec{\Omega}{t}^{-1}}
+\begingroup
+\renewcommand{\arraystretch}{1.5}
 \begin{equation}
-\begin{aligned}
-    &= \blue{\bvec{R^{-1} R}} + \bvec{R^{-1} P Q P^T} - \bvec{R^{-1} P \Psi P^T \magenta{R^{-1} R}} - \bvec{R^{-1} P \Psi P^T R^{-1} P Q P^T} \\
-    &= \blue{\bvec{I}} + \bvec{R^{-1} P Q P^T} - \bvec{R^{-1} P \Psi P^T \magenta{I}} - \bvec{R^{-1} P \Psi P^T R^{-1} P Q P^T}\\
-    &= \bvec{I} + \bvec{\magenta{R^{-1} P} Q P^T} - \bvec{\magenta{R^{-1} P} \Psi P^T} - \bvec{\magenta{R^{-1} P} \Psi P^T R^{-1} P Q P^T}\\
-    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\Psi P^T} - \bvec{\Psi P^T R^{-1} P Q P^T}\right]\\
-    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\Psi \blue{Q^{-1} Q} P^T} - \bvec{\Psi P^T R^{-1} P Q P^T}\right]\\
-    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\magenta{\Psi} Q^{-1}\blue{ Q P^T}} - \bvec{\magenta{\Psi} P^T R^{-1} P \blue{Q P^T}}\right]\\
-    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\magenta{\Psi}} \left(\bvec{ Q^{-1}} - \bvec{P^T R^{-1} P}\right)\bvec{\blue{Q P^T}}\right]\\
-    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\Psi} \blue{\left(\bvec{ Q^{-1}} - \bvec{P^T R^{-1} P}\right)}\bvec{Q P^T}\right]\\
-    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{\Psi} \blue{\bvec{\Psi^{-1}}}\bvec{Q P^T}\right]\\
-    &= \bvec{I} + \bvec{R^{-1} P} \left[\bvec{Q P^T} - \bvec{Q P^T}\right]\\
-    &= \bvec{I} 
-\end{aligned}
+  \brac{\bsubvec{\Omega}{t}^*}^{-1} = \begin{bmatrix}
+    \eqOmegaInv & \eqOmegaInv \bsubvecT{F}{X} \\
+    \bsubvec{F}{X} \eqOmegaInv & \bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y}
+  \end{bmatrix}
 \end{equation}
+Invertendo ambos os lados:
+\begin{equation*}
+  \bsubvec{\Omega}{t}^* = \begin{bmatrix}
+    \bvec{X} & \bvec{Y} \\
+    \bvec{Z} & \bvec{U}
+  \end{bmatrix}
+\end{equation*}
+\endgroup
 
-\end{proof}
-\label{lem:inversion-lemma}
-
-\end{lem}
+Pelo lema da inversão na forma de blocos (Anexo \ref{annex:blockwise-inversion-lemma}) temos:
+\addtolength{\jot}{1.4pt}
+\begingroup
+\begin{align}
+  &\begin{aligned}
+    \bvec{U} &=  \brac{\bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y} - \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}} \,\eqOmegaInv \bsubvecT{F}{X}}^{-1}\\
+    &= \brac{\cancel{\bsubvec{F}{X}\eqOmegaInv\bsubvecT{F}{X}} + \bsubvec{F}{Y} \bvec{Q} \bsubvecT{F}{Y} - \cancel{\bsubvec{F}{X} \eqOmegaInv \bsubvecT{F}{X}}}^{-1}\\
+    &= \eqU
+  \end{aligned}\\
+  &\begin{aligned}
+    \bvec{Y} &= -\cancel{\brac{\eqOmegaInv}^{-1} \eqOmegaInv}\bsubvecT{F}{X} \bvec{U}\\
+    &= \bsubvecT{F}{X} \parentheses{\eqU} \\
+  \end{aligned}\\
+  &\begin{aligned}
+    \bvec{Z} &= -\bvec{U} \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}}\\
+    &= -\parentheses{\eqU} \bsubvec{F}{X}
+  \end{aligned}\\
+  &\begin{aligned}
+    \bvec{X} &= \brac{\eqOmegaInv}^{-1} + \cancel{\brac{\eqOmegaInv}^{-1} \eqOmegaInv}\bsubvecT{F}{X} \,\bvec{U} \, \bsubvec{F}{X} \cancel{\eqOmegaInv \brac{\eqOmegaInv}^{-1}}\\
+    &= \bsubvec{\Omega}{t} + \bsubvecT{F}{X} \parentheses{\eqU} \bsubvec{F}{X}
+  \end{aligned}
+\end{align}
+Por fim, temos que a matriz de informação aumentada é dada por:
+\renewcommand{\arraystretch}{1.5}
+\begin{equation}
+  \bsubvec{\Omega}{t}^* = \begin{bmatrix}
+    \bsubvec{\Omega}{t} + \bsubvecT{F}{X} \parentheses{\eqU} \bsubvec{F}{X} & -\bsubvecT{F}{X} \parentheses{\eqU} \\
+    -\parentheses{\eqU} \bsubvec{F}{X} & \eqU
+  \end{bmatrix} 
+  \label{eq:seif-landmark-insertion-information-matrix-app}
+\end{equation}
+\endgroup

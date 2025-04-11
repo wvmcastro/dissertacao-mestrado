@@ -3,20 +3,20 @@
 As três operações principais do EKF-SLAM (predição, atualização e inserção de novas \textit{landmarks}) estão descritas nos Algoritmos \ref{alg:ekf-slam-prediction}, \ref{alg:ekf-slam-update} e \ref{alg:ekf-slam-landmark-insertion}, respectivamente. Por fim, o Algoritmo \ref{alg:ekf-slam-full} descreve o EKF-SLAM completo, composto pelas três operações. A correção na orientação, para que ela permaneça dentro do 
 intervalo $\brac{-\pi, \pi}$, é omitida tanto no Algoritmo \ref{alg:ekf-slam-prediction} quanto no \ref{alg:ekf-slam-update}.
 
-\begin{algorithm}
+\begin{algorithm}[h]
   \setstretch{1.5}
   \caption{Etapa de predição do EKF-SLAM}
   \label{alg:ekf-slam-prediction}
 \begin{algorithmic}[1]
 \Procedure{EKF-SLAM-Predição}{$\mean{t-1}, \cov{t-1}, \bsubvec{u}{t}$}
   \State $\predmean{t} \gets \begin{bmatrix}
-    \mb{g}_R(\mean{R,t-1}, \bsubvec{u}{t}) \\ \mean{M}
+    \mb{g}_\mathrm{r}(\mean{\mathrm{r},t-1}, \bsubvec{u}{t}) \\ \mean{\mathrm{m}}
   \end{bmatrix}$
   \State $\predcov{RR,t} \gets \bsubvec{G}{R, t}\cov{RR, t-1} \bsubvecT{G}{R,t}$
   \State $\predcov{RM, t} \gets \bsubvec{G}{R, t} \cov{RM, t-1}$
   \State $\predcov{t} \gets \begin{bmatrix}
     \predcov{RR, t} & \predcov{RM, t} \\
-    \predcov{RM, t}^T & \cov{MM}
+    \predcov{RM, t}^T & \cov{\mathrm{mm}}
   \end{bmatrix}$
   \State \Return $\predmean{t}, \predcov{t}$
 \EndProcedure
@@ -31,20 +31,20 @@ intervalo $\brac{-\pi, \pi}$, é omitida tanto no Algoritmo \ref{alg:ekf-slam-pr
   \Procedure{EKF-SLAM-Atualização}{$\predmean{t}, \predcov{t}, \bvec{y}, j = \text{índice da \textit{landmark}}$}
   \State $\bvec{z} \gets \bvec{y} - \mb{h}^j(\predmean{t})$
   \State $\bvec{Z} \gets \begin{bmatrix}
-    \bsubvec{H}{R}^j & \bsubvec{H}{M}^j
+    \bsubvec{H}{\mathrm{r}}^j & \bsubvec{H}{\mathrm{m}}^j
   \end{bmatrix}
   \begin{bmatrix}
-    \predcov{RR} & \predcov{RM_j} \\
-    \predcov{RM_j}^T & \predcov{M_j M_j}
+    \predcov{\mathrm{rr}} & \predcov{\mathrm{rm^j}} \\
+    \predcov{\mathrm{rm^j}}^T & \predcov{\mathrm{m^j m^j}}
   \end{bmatrix}
   \begin{bmatrix}
-    \bsubvec{H}{R}^j \\ \bsubvec{H}{M}^j
+    \bsubvec{H}{\mathrm{r}}^j \\ \bsubvec{H}{\mathrm{m}}^j
   \end{bmatrix} + \bsubvec{Q}{t}$
   \State $\bvec{K} \gets \begin{bmatrix} \cov{RR, t} & \cov{RM^j, t} \\ 
     \cov{MR, t} & \cov{MM^j, t} 
   \end{bmatrix}
   \begin{bmatrix}
-    \brac{\bsubvec{H}{R}^j}^T \\ \brac{\bsubvec{H}{M}^j}^T
+    \brac{\bsubvec{H}{\mathrm{r}}^j}^T \\ \brac{\bsubvec{H}{\mathrm{m}}^j}^T
   \end{bmatrix} \bvec{Z}^{-1}$
   \State $\mean{t} \gets \bvec{K} \bvec{z}$
   \State $\cov{t} \gets \predcov{t} - \bvec{K}\bvec{Z}\bvecT{K}$
@@ -53,7 +53,7 @@ intervalo $\brac{-\pi, \pi}$, é omitida tanto no Algoritmo \ref{alg:ekf-slam-pr
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
+\begin{algorithm}[h]
   \setstretch{1.5}
   \caption{Etapa de inserção de nova \textit{landmark} do EKF-SLAM}
   \label{alg:ekf-slam-landmark-insertion}
@@ -82,7 +82,7 @@ intervalo $\brac{-\pi, \pi}$, é omitida tanto no Algoritmo \ref{alg:ekf-slam-pr
     \State $\mathcal{L}^{*} \gets \{\}$ \Comment{Conjunto de novas landmarks}
     \For {$(\bvec{y}^i \in \bvec{y}^{1:k})$}
       \State $j \gets \bvec{c}^i$
-      \If {landmark $j$ está no mapa $\bsubvec{x}{M}$}
+      \If {landmark $j$ está no mapa $\bsubvec{x}{\mathrm{m}}$}
         \State $\predmean{t}, \predcov{t} \gets \textproc{EKF-SLAM-Atualização}(\predmean{t}, \predcov{t}, \bvec{y}^i, j)$
       \Else
         \State $\mathcal{L}^* \gets \mathcal{L}^* + \{(j, \bvec{y}^i)\}$
@@ -95,5 +95,33 @@ intervalo $\brac{-\pi, \pi}$, é omitida tanto no Algoritmo \ref{alg:ekf-slam-pr
     \State $\mean{t}, \cov{t} \gets \predmean{t}, \predcov{t}$
     \State \Return $\mean{t}, \cov{t}$
   \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\clearpage
+
+\section{Complexidade da multiplicação ingênua de matrizes}
+\label{app:matrix-product-analysis}
+O Algoritmo \ref{alg:dummy-mat-product} realiza o produto ``ingênuo'', ou seja, sem nenhum tipo de otimização, de duas matrizes de dimensões $m\times n$ e $n\times p$. Como é evidenciado pelos três laços de 
+repetição aninhados, entre as linhas 3-9, a complexidade assintótica do algoritmo é $\bigO{mnp}$. Cabe ressaltar que, caso as matrizes tenham 
+alguma dimensão conhecida, ou seja, constante, essa dimensão deixa 
+de ser considerada na notação assintótica pois passa a ser uma constante do problema, deixando de ser uma variável de entrada. Porém, isso não quer dizer que essa dimensão não tenha tamanho relevante para a complexidade da 
+computação.
+\begin{algorithm}
+  \setstretch{1.25}
+  \caption{Produto ingênuo de matrizes}
+  \label{alg:dummy-mat-product}
+\begin{algorithmic}[1]
+\Procedure{Produto-Ingênuo}{$\mat{A}{m}{n}, \mat{B}{n}{p}$}    
+\State $\mat{M}{m}{p} \gets \nullmat{m}{n}$
+\For {$i \in \{0, 1, \dots, m\}$}
+  \For {$j \in \{0, 1, \dots, p\}$}
+    \For {$k \in \{0, 1, \dots, n\}$}
+      \State $\bsubvec{M}{i,\, j} \gets \bsubvec{M}{i,\,j} + \bsubvec{A}{i,\,k} \cdot \bsubvec{B}{k,\,j}$
+    \EndFor
+  \EndFor
+\EndFor
+\State \Return $\bvec{M}$
+\EndProcedure
 \end{algorithmic}
 \end{algorithm}

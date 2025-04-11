@@ -1,0 +1,50 @@
+Neste trabalho foi desenvolvido um sistema SLAM multiagente distribuído e 
+descentralizado, no qual todo o processamento é feito pelos agentes sem a presença de uma figura reguladora central, utilizando o Filtro de Informação Estendido Esparso e explorando seu baixo uso de memória e tempo de processamento constante (desconsiderando-se associação de dados). Para seu desenvolvimento utilizou-se o \textit{framework} ROS e o 
+simulador Gazebo.
+
+Essas duas ferramentas contam com ampla base de usuários e portanto há 
+muito conteúdo em comunidades e fóruns que pode ser consultado ao longo 
+do desenvolvimento para sanar dúvidas de integração e funcionamento. 
+Além disso, como são ferramentas de código livre, podem ser utilizadas 
+sem a necessidade de adquirir licenças; esse fato, somado à 
+disponibilização integral da implementação realizada neste trabalho\footnote{Implementação disponível em: \url{https://github.com/wvmcastro/slam}}, potencializa a 
+possibilidade de reuso e melhoramento deste por outros. 
+
+Outras contribuições são as deduções e ilustrações que 
+foram produzidas para preencher lacunas dos livros e artigos 
+consultados ao longo do desenvolvimento deste trabalho. Sendo as mais importantes: (I) A 
+Seção \ref{sec:ekf-slam-landmark-insertion} que apresenta dedução da 
+covariância de uma nova \textit{landmark} no EKF-SLAM. (II) A Figura 
+\ref{fig:seif-slam-prediction-variables}, que ilustra a esparsidade das 
+matrizes intermediárias utilizadas na etapa de predição do SEIF-SLAM. 
+(III) A Seção \ref{fig:seif-slam-landmark-insertion} análoga ao que 
+foi feito para o EKF-SLAM, traz a dedução da informação de uma nova 
+\textit{landmark} no SEIF-SLAM. (IV) A combinação da sequência de passos 
+no processamento da leitura do sensor LiDAR, apresentada na Seção \ref{sec:lidar-data-processing}. (V) Errata da equação de transformação de 
+sistema de referência do vetor e matriz de informação do SEIF 
+apresentada em \cite[Seção.~12.11.2]{thrun2005probabilistic}, e aqui 
+deduzida na Equação \ref{eq:seif-reference-transform}.
+
+
+\section{Trabalhos futuros}
+\begin{itemize}
+  \item \textbf{Investigação de resultados}: É preciso confirmar, através da 
+  repetição sistemática de simulações, a degradação no desempenho de estimação do SEIF ao aumentar a cardinalidade do conjunto de \textit{landmarks} ativas, apresentada na Seção \ref{sec:exp-estimate-comparison}. Caso confirmado, é necessário revisar a 
+  implementação para procurar possíveis erros já que esse resultado 
+  destoa da literatura e compreender quais circunstâncias causam esse efeito.
+  \item \textbf{Coordenação entre agentes}: A falta de 
+coordenação entre os agentes limitou o ganho de eficiência esperado de 
+um sistema com mais de um robô, como discutido na Seção \ref{sec:exp-known-initial-pose}. Dessa forma, um trabalho futuro deve focar na coordenação entre agentes com o objetivo de dividir a carga de trabalho.
+  \item \textbf{Troca de mapas}: Em relação à troca de mapas, há espaço para melhorias na técnica de registro de nuvem de pontos utilizada, possibilitando maior taxa de sucesso na troca de mapas 
+no cenário onde a pose inicial dos agentes não é fornecida, como debatido na Seção \ref{sec:exp-unknown-initial-pose}. 
+  \item \textbf{Recuperação após falsa associação}: Outro aspecto que merece ser contemplado num trabalho futuro é a recuperação após uma falsa associação de medida e \textit{landmark} e/ou a 
+utilização de uma técnica de associação de dados mais robusta. Apesar da 
+lista de \textit{landmarks} provisórias ter atenuado esse problema, não foi 
+suficiente para resolvê-lo, como mostram as taxas de falha por divergência das 
+simulações apresentadas nos experimentos das Seções \ref{sec:exp-single-robot}  e \ref{sec:exp-known-initial-pose}.
+\end{itemize}
+
+
+
+
+% o que aprendi

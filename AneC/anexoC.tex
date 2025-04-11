@@ -1,0 +1,52 @@
+\section{Algoritmo de ajuste de círculos}
+\label{annex:circle-fit}
+O Algoritmo \ref{alg:circle-fit} é uma adaptação das notas de aula do 
+professor Matthew L. Elwin da disciplina ME495 (\textit{Sensing, Navigation, and Machine Learning for Robotics}) \cite{matt-circle-fit} ministrada na 
+Universidade Northwestern.
+\begin{algorithm}[h]
+  \setstretch{1.3}
+  \caption{}
+  \label{alg:circle-fit}
+\begin{algorithmic}[1]
+  \Procedure{Ajuste-Círculo}{$x_{0:n}, y_{0:n}$}
+    \If{$n+1 < 4$}
+      \State \Return $\{\emptyset\}$
+    \EndIf
+    \State $\hat{x} \gets \frac{1}{n+1} \sum x_i$
+    \State $\hat{y} \gets \frac{1}{n+1} \sum y_i$
+    \State $z_{1:n} \gets \{ \emptyset \}$
+    \For{$x_i, y_i$}
+      \State $x_i \gets x_i - \hat{x}$
+      \State $y_i \gets y_i - \hat{y}$
+      \State $z_i \gets x_i^2 + y_i^2$
+    \EndFor
+    \State $\displaystyle \bvec{Z} \gets \begin{bmatrix}
+      z_0 & x_0 & y_0 & 1 \\ 
+      \vdots & \vdots & \vdots & \vdots \\
+      z_{n+1} & x_{n+1} & y_{n+1} & 1 \\ 
+    \end{bmatrix}$
+    % \State $\bvec{M} \gets \frac{1}{n+1} \bvecT{Z} \bvec{Z}$
+    \State $\bvec{U \Sigma} \bvecT{V} \gets \SVD(\bvec{Z})$
+    \If{$\sigma_{44} \leq 10^{-4}$}
+      \State $ \bvec{a}\gets \begin{bmatrix}\sigma_{14}  & \sigma_{24} & \sigma_{34} & \sigma_{44} \end{bmatrix}^T$
+    \Else
+      \State $\hat{z} \gets \frac{1}{n+1} \sum z_i$
+      \State $\displaystyle \bupvec{H}{-1} \gets \begin{bmatrix}
+        0 & 0 & 0 & \frac{1}{2}\\
+        0 & 1 & 0 & 0\\
+        0 & 0 & 1 & 0\\
+        \frac{1}{2} & 0 & 0 & -2\hat{z}
+      \end{bmatrix}$
+      \State $\bvec{Y} \gets \bvec{V \Sigma}\bvecT{V}$
+      \State Encontre os autovetores e autovalores de $\bvec{Q} \gets \bvec{Y}\bupvec{H}{-1}\bvec{Y}$
+      \State Seja $\bsubvec{a}{*}$ o autovetor correspondente ao menor autovalor de $\bvec{Q}$
+      \State $\bvec{a} \gets \bupvec{Y}{-1} \bsubvec{a}{*}$
+    \EndIf
+    \State $c_x \gets -\frac{a_2}{2 a_1} + \hat{x}$
+    \State $c_y \gets -\frac{a_3}{2 a_1} + \hat{y}$
+    \State $r^2 \gets \frac{a_2^2 + a_3^2 - 4 a_1 a_4}{4 a_1^2}$
+    \State $\sigma^2 \gets \frac{1}{n+1} \sum \parentheses{(x_i - c_x)^2 + (y_i - c_y)^2 -r^2}^2$
+    \State \Return $\parentheses{c_x, c_y}, \sqrt{r^2}, \sqrt{\sigma^2}$
+  \EndProcedure
+\end{algorithmic}
+\end{algorithm}

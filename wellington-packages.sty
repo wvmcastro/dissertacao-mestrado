@@ -5,7 +5,21 @@
 \usetikzlibrary{math}
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric}
 \tikzset{>={Latex[round]}}
+
+\usetikzlibrary{positioning,fit,backgrounds}
+
+\tikzset{
+    module/.style={%
+        draw, rounded corners,
+        minimum width=#1,
+        minimum height=7mm,
+        font=\sffamily
+        },
+    module/.default=2cm,
+    >=LaTeX
+}
 
 \usepackage{relsize} % mathsmaller
 \usepackage{amsmath}
@@ -15,7 +29,11 @@
 \pgfplotsset{compat=1.12}
 \usepgfplotslibrary{fillbetween}
 
-\usepackage{algorithm}
+\usepackage[chapter]{algorithm}
+\makeatletter
+\renewcommand*{\ALG@name}{Algoritmo}
+\makeatother
+
 \usepackage{algpseudocode}
 \algrenewcommand\algorithmicprocedure{\textbf{function}}
 
@@ -24,3 +42,6 @@
 
 \usepackage{caption}
 \usepackage{subcaption}
+
+
+\DeclareMathOperator{\IAE}{IAE}

@@ -1,0 +1,26 @@
+The Simultaneous Localization and Mapping problem, known by the acronym SLAM, asks whether it is possible for a robot to be placed in an environment
+unknown a priori, and incrementally build a map of this
+environment while simultaneously locating itself on this map without the
+need for a location infrastructure such as GPS.
+Solving the SLAM problem is critical for mobile robotics
+autonomy. However, although already solved, it is not a trivial task
+both from theoretical and implementation points of view.
+Depending on robot dynamics, sensors used, computing power available or need for navigation and guidance, the solution
+becomes more or less complex. We examine a distributed and decentralized multi-agent solution in a simulated environment
+for the 2D SLAM problem. For such purpose, the solution uses the Sparse Extended Information Filter, along with other algorithms for navigation,
+data association and map representation. The advantages of the distributed solution of the
+SLAM problem, in comparison with the original problem, are workload sharing
+among the agents and information redundancy. Our goal is to simulate a 
+group of mobile robots mapping the environment where they were placed 
+in an active and decentralized fashion while taking into account 
+processing and memory constraints.
+Beyond implementing algorithms that enable robots to solve the 
+Distributed and Decentralized Active SLAM problem, a software framework is needed to simulate the environment and the agents. We used the Robot Operating System (ROS) to provide a set of software libraries and tools relevant to robotics 
+development, and also a communication layer used by the many system 
+modules (mapping, navigation, vision) in information exchanging. The 
+simulation of the environment, sensors and agents, the Gazebo simulator 
+was used.
+The developed solution has significantly less memory usage,
+presenting a reduction of more than 50\% when compared to the classic EKF-SLAM approach.
+In addition, despite the lack of coordination between the agents,
+gains in exploration time were observed in the scenario with two agents with respect to a single agent.

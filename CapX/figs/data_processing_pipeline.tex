@@ -1,0 +1,42 @@
+\documentclass{standalone}
+
+\usepackage{import}
+\usepackage{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.12}
+
+\begin{document}
+    \begin{tikzpicture}[]
+      \centering
+      \node[] (sensorRawSignal) {\includestandalone[width=0.4\textwidth]{raw_sensor_data}};
+
+      \node[below=of sensorRawSignal] (derivative) {\includestandalone[width=0.4\textwidth]{signal_derivative}};
+
+      \node[left=of derivative, align=center] (derivativeText) {Cálculo da derivada do sinal\\e extração de pontos de mínimo\\e máximo fora dos valores limiares.};
+      
+      \path[-latex, ultra thick] (sensorRawSignal) edge (derivative);
+      
+      \node[align=center] (inputText) at (sensorRawSignal -| derivativeText) {\textbf{ENTRADA}\\Sequência de distâncias\\lidas pelo sensor.};
+
+      \node[below=of derivative] (cartesianData) {\includestandalone[width=0.4\textwidth]{sensor_data_cartesian}};
+
+      \path[-latex, ultra thick] (derivative) edge (cartesianData);
+
+      \node[align=center] (cartesianDataText) at (cartesianData -| derivativeText) {Segmentação dos pontos entre\\os pontos de mínimo e máximo do\\sinal de derivada, transformação\\
+      para coordenadas cartesianas.};
+
+      \node[below=of cartesianData] (circleFit) {\includestandalone[width=0.4\textwidth]{circle_detection}};
+
+      \path[-latex, ultra thick] (cartesianData) edge (circleFit);
+      
+      \node[align=center] (circleFitText) at (cartesianDataText |- circleFit) {\textbf{SAÍDA}\\Estimação dos círculos que\\descrevem os conjuntos de pontos,\\com $r > 6.5cm$ e $\sigma < \epsilon$};
+
+      \node[circle, draw=black, ultra thick, left=of derivativeText] (2) {2};
+      \node[circle, draw=black, ultra thick, left=of cartesianDataText] {3};
+      \node[circle, draw=black, ultra thick, left=of circleFitText] {4};
+      \node[circle, draw=black, ultra thick] at (2 |- inputText) {1};
+    \end{tikzpicture}
+\end{document}
